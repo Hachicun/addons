@@ -1,0 +1,30 @@
+luc_khi_shop/views/product_views.xml:139:            <field name="view_mode">tree,form,kanban</field>
+luc_khi_shop/views/product_views.xml:150:            <field name="view_mode">tree,form</field>
+luc_khi_shop/views/product_views.xml:161:            <field name="view_mode">tree,form,calendar,pivot,graph</field>
+luc_khi_courses/models/luc_khi_course.py:150:                'view_mode': 'form',
+luc_khi_courses/models/luc_khi_course.py:158:                'view_mode': 'form',
+luc_khi_courses/models/luc_khi_course_tag.py:26:            'view_mode': 'tree,form',
+luc_khi_shop/views/order_views.xml:132:            <field name="view_mode">tree,form,calendar,pivot,graph</field>
+luc_khi_shop/views/order_views.xml:143:            <field name="view_mode">tree,form</field>
+luc_khi_shop/views/order_views.xml:154:            <field name="view_mode">tree,form</field>
+luc_khi_shop/views/order_views.xml:165:            <field name="view_mode">pivot,graph</field>
+luc_khi_blog/views/luc_khi_blog_post_views.xml:70:                            <tree>
+luc_khi_blog/views/luc_khi_blog_post_views.xml:134:            <field name="view_mode">kanban,tree,form</field>
+luc_khi_blog/views/luc_khi_blog_category_views.xml:9:                <tree string="Blog Categories">
+luc_khi_blog/views/luc_khi_blog_category_views.xml:134:            <field name="view_mode">kanban,tree,form</field>
+luc_khi_courses/views/luc_khi_course_tag_views.xml:9:                <tree string="Course Tags">
+luc_khi_courses/views/luc_khi_course_tag_views.xml:45:                                    <tree>
+luc_khi_courses/views/luc_khi_course_tag_views.xml:63:            <field name="view_mode">tree,form</field>
+luc_khi_courses/views/luc_khi_course_views.xml:9:                <tree string="Courses">
+luc_khi_courses/views/luc_khi_course_views.xml:184:            <field name="view_mode">kanban,tree,form</field>
+luc_khi_courses/views/luc_khi_course_category_views.xml:9:                <tree string="Course Categories">
+luc_khi_courses/views/luc_khi_course_category_views.xml:51:                                    <tree>
+luc_khi_courses/views/luc_khi_course_category_views.xml:69:            <field name="view_mode">tree,form</field>
+luc_khi_website/views/luc_khi_website_page_views.xml:9:                <tree string="Website Pages">
+luc_khi_website/views/luc_khi_website_page_views.xml:70:            <field name="view_mode">tree,form</field>
+luc_khi_website/views/luc_khi_team_member_views.xml:9:                <tree string="Team Members">
+luc_khi_website/views/luc_khi_team_member_views.xml:119:            <field name="view_mode">kanban,tree,form</field>
+luc_khi_crm/models/luc_khi_contact_form.py:276:            'view_mode': 'form',
+luc_khi_crm/models/luc_khi_crm_lead.py:297:            'view_mode': 'form',
+luc_khi_crm/views/luc_khi_contact_form_views.xml:9:                <tree>
+luc_khi_crm/views/luc_khi_contact_form_views.xml:82:            <field name="view_mode">tree,form</field>

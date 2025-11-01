@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Website Pages -->
+        <record id="page_about_luc_khi" model="luc_khi.website.page">
+            <field name="name">Về Lục Khí</field>
+            <field name="page_key">about-luc-khi</field>
+            <field name="title">Về Lục Khí - Hệ thống tri thức Đông Y hiện đại</field>
+            <field name="content"><![CDATA[
+                <h2>Lục Khí là gì?</h2>
+                <p>Lục Khí là hệ thống tri thức và phương pháp thực hành giúp con người tự hiểu, tự điều chỉnh sức khỏe theo nguyên lý Đông Y hiện đại hóa.</p>
+                
+                <h3>Tầm nhìn</h3>
+                <p>Trở thành nền tảng tri thức Đông Y hiện đại hóa hàng đầu Việt Nam, giúp hàng triệu người Việt Nam cải thiện sức khỏe.</p>
+                
+                <h3>Sứ mệnh</h3>
+                <p>Phổ biến kiến thức Đông Y hiện đại hóa, giúp người Việt tự chăm sóc sức khỏe thể chất và tinh thần.</p>
+                
+                <h3>Giá trị cốt lõi</h3>
+                <ul>
+                    <li>Chính trực - Luôn trung thực trong mọi hoạt động</li>
+                    <li>Chuyên nghiệp - Đưa ra dịch vụ chất lượng cao</li>
+                    <li>Hiệu quả - Tập trung vào kết quả thực tế</li>
+                    <li>Luôn đặt sức khỏe và lợi ích của học viên lên hàng đầu</li>
+                </ul>
+            ]]></field>
+            <field name="seo_title">Về Lục Khí - Tri thức Đông Y hiện đại</field>
+            <field name="seo_description">Tìm hiểu về Lục Khí - hệ thống tri thức và phương pháp thực hành giúp con người tự hiểu, tự điều chỉnh sức khỏe theo nguyên lý Đông Y hiện đại hóa.</field>
+            <field name="is_published">True</field>
+        </record>
+
+        <!-- Default Team Members -->
+        <record id="member_founder" model="luc_khi.team.member">
+            <field name="name">Nguyễn Văn A</field>
+            <field name="position">Nhà sáng lập &amp; Giảng viên chính</field>
+            <field name="bio"><![CDATA[
+                <p>Với hơn 15 năm kinh nghiệm nghiên cứu và thực hành Đông Y, ông Nguyễn Văn A đã dành trọn đời mình để tìm kiếm và phát triển các phương pháp chăm sóc sức khỏe hiệu quả, phù hợp với cuộc sống hiện đại.</p>
+                <p>Ông là người sáng lập ra hệ thống Lục Khí, kết hợp tinh hoa y học cổ truyền với khoa học hiện đại để tạo ra một phương pháp toàn diện giúp con người tự hiểu và tự điều chỉnh sức khỏe.</p>
+            ]]></field>
+            <field name="expertise">Đông Y truyền thống, Khí công, Dinh dưỡng chữa bệnh, Tâm lý học</field>
+            <field name="certifications">Tiến sĩ Y học cổ truyền, Chứng chỉ thực hành Khí công</field>
+            <field name="email">info@luckhi.vn</field>
+            <field name="phone">0909123456</field>
+            <field name="zalo">0909123456</field>
+            <field name="is_published">True</field>
+            <field name="featured">True</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="member_instructor" model="luc_khi.team.member">
+            <field name="name">Trần Thị B</field>
+            <field name="position">Giảng viên Cao cấp</field>
+            <field name="bio"><![CDATA[
+                <p>Bà Trần Thị B là một trong những giảng viên tâm huyết nhất của Lục Khí. Với chuyên môn sâu rộng về dinh dưỡng và sức khỏe phụ nữ, bà đã giúp hàng ngàn học viên cải thiện sức khỏe thông qua các phương pháp tự nhiên.</p>
+                <p>Bà có khả năng truyền đạt các kiến thức phức tạp một cách đơn giản, dễ hiểu, giúp học viên áp dụng hiệu quả vào cuộc sống hàng ngày.</p>
+            ]]></field>
+            <field name="expertise">Dinh dưỡng Đông Y, Sức khỏe phụ nữ, Dưỡng sinh</field>
+            <field name="certifications">Thạc sĩ Dinh dưỡng, Chứng chỉ thực hành Dưỡng sinh</field>
+            <field name="email">tranb@luckhi.vn</field>
+            <field name="phone">0909234567</field>
+            <field name="zalo">0909234567</field>
+            <field name="is_published">True</field>
+            <field name="featured">True</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="member_therapist" model="luc_khi.team.member">
+            <field name="name">Lê Văn C</field>
+            <field name="position">Chuyên gia Tư vấn</field>
+            <field name="bio"><![CDATA[
+                <p>Ông Lê Văn C là chuyên gia tư vấn với kinh nghiệm dày dặn trong việc hỗ trợ học viên giải quyết các vấn đề sức khỏe cụ thể. Ông có khả năng chẩn đoán chính xác và đưa ra các giải pháp phù hợp với từng cá nhân.</p>
+                <p>Với sự kiên nhẫn và thấu cảm, ông đã trở thành người đồng hành đáng tin cậy của nhiều học viên trên hành trình tìm lại sức khỏe.</p>
+            ]]></field>
+            <field name="expertise">Chẩn đoán Đông Y, Trị liệu cơ thể, Tư vấn tâm lý</field>
+            <field name="certifications">Chứng chỉ trị liệu Đông Y, Chứng chỉ tư vấn tâm lý</field>
+            <field name="email">levanc@luckhi.vn</field>
+            <field name="phone">0909345678</field>
+            <field name="zalo">0909345678</field>
+            <field name="is_published">True</field>
+            <field name="featured">False</field>
+            <field name="sequence">3</field>
+        </record>
+    </data>
+</odoo>

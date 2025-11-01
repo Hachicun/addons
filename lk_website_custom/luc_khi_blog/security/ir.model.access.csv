@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_luc_khi_blog_category_user,luc_khi.blog.category.user,model_luc_khi_blog_category,base.group_user,1,0,0,0
+access_luc_khi_blog_category_manager,luc_khi.blog.category.manager,model_luc_khi_blog_category,base.group_user,1,1,1,1
+access_luc_khi_blog_category_system,luc_khi.blog.category.system,model_luc_khi_blog_category,base.group_system,1,1,1,1
+access_blog_post_luc_khi_user,blog.post.luc_khi.user,model_blog_post,base.group_user,1,0,0,0
+access_blog_post_luc_khi_manager,blog.post.luc_khi.manager,model_blog_post,base.group_user,1,1,1,1
+access_blog_post_luc_khi_system,blog.post.luc_khi.system,model_blog_post,base.group_system,1,1,1,1

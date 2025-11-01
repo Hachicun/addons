@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sale Order Form View Extension -->
+        <record id="luc_khi_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='other_information']" position="inside">
+                    <group string="Lục Khí &amp; Việt Nam" name="vietnam_luc_khi_info">
+                        <group string="Phân tích Lục Khí" name="luc_khi_analysis">
+                            <field name="luc_khi_profile_analysis" widget="text"/>
+                            <field name="luc_khi_recommended_products" widget="many2many"/>
+                            <field name="luc_khi_energy_balance"/>
+                            <field name="luc_khi_notes"/>
+                        </group>
+                        <group string="Tuân thủ Việt Nam" name="vietnam_compliance">
+                            <field name="invoice_vat"/>
+                            <field name="electronic_invoice"/>
+                            <field name="tax_code"/>
+                            <field name="invoice_address"/>
+                            <field name="shipping_method"/>
+                            <field name="payment_method"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sale Order Tree View Extension -->
+        <record id="luc_khi_sale_order_tree_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.sale.order.tree.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="luc_khi_profile_analysis"/>
+                    <field name="invoice_vat"/>
+                    <field name="electronic_invoice"/>
+                    <field name="shipping_method"/>
+                    <field name="payment_method"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sale Order Search View Extension -->
+        <record id="luc_khi_sale_order_search_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.sale.order.search.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="luc_khi_profile_analysis"/>
+                    <field name="shipping_method"/>
+                    <field name="payment_method"/>
+                </xpath>
+                <xpath expr="//filter[@name='sales']" position="after">
+                    <separator/>
+                    <filter string="Có phân tích Lục Khí" name="has_luc_khi_analysis" domain="[('luc_khi_profile_analysis', '!=', False)]"/>
+                    <filter string="Hóa đơn VAT" name="vat_invoice" domain="[('invoice_vat', '=', True)]"/>
+                    <filter string="Hóa đơn điện tử" name="electronic_invoice" domain="[('electronic_invoice', '=', True)]"/>
+                    <filter string="Thanh toán COD" name="cod_payment" domain="[('payment_method', '=', 'cod')]"/>
+                    <filter string="Thanh toán VNPay" name="vnpay_payment" domain="[('payment_method', '=', 'vnpay')]"/>
+                    <filter string="Thanh toán MoMo" name="momo_payment" domain="[('payment_method', '=', 'momo')]"/>
+                    <separator/>
+                    <filter string="Giao hàng tiêu chuẩn" name="standard_shipping" domain="[('shipping_method', '=', 'standard')]"/>
+                    <filter string="Giao hàng nhanh" name="express_shipping" domain="[('shipping_method', '=', 'express')]"/>
+                </xpath>
+                <xpath expr="//group" position="inside">
+                    <filter string="Phương thức thanh toán" name="groupby_payment_method" context="{'group_by': 'payment_method'}"/>
+                    <filter string="Phương thức giao hàng" name="groupby_shipping_method" context="{'group_by': 'shipping_method'}"/>
+                    <filter string="Phân tích Lục Khí" name="groupby_luc_khi_analysis" context="{'group_by': 'luc_khi_profile_analysis'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Invoice Form View Extension -->
+        <record id="luc_khi_account_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.account.invoice.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='other_info']" position="inside">
+                    <group string="Lục Khí &amp; Việt Nam" name="vietnam_luc_khi_invoice">
+                        <group string="Thông tin Lục Khí" name="luc_khi_invoice_info">
+                            <field name="luc_khi_profile_analysis" readonly="1"/>
+                            <field name="luc_khi_energy_balance" readonly="1"/>
+                        </group>
+                        <group string="Tuân thủ Việt Nam" name="vietnam_invoice_compliance">
+                            <field name="invoice_vat"/>
+                            <field name="electronic_invoice"/>
+                            <field name="tax_code"/>
+                            <field name="invoice_address"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Delivery Order Form View Extension -->
+        <record id="luc_khi_stock_picking_form_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='extra']" position="inside">
+                    <group string="Lục Khí &amp; Việt Nam" name="vietnam_luc_khi_delivery">
+                        <field name="luc_khi_profile_analysis" readonly="1"/>
+                        <field name="shipping_method"/>
+                        <field name="tracking_number"/>
+                        <field name="delivery_notes"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Menu Items for Order Management -->
+        <menuitem id="luc_khi_orders_menu_root" name="Quản lý đơn hàng" parent="sale.sale_menu_root" sequence="15"/>
+
+        <menuitem id="luc_khi_sale_orders_menu" name="Đơn bán hàng Lục Khí" parent="luc_khi_orders_menu_root" action="sale.action_orders" sequence="1"/>
+
+        <menuitem id="luc_khi_invoices_menu" name="Hóa đơn Lục Khí" parent="luc_khi_orders_menu_root" action="account.action_move_out_invoice_type" sequence="2"/>
+
+        <menuitem id="luc_khi_deliveries_menu" name="Giao hàng Lục Khí" parent="luc_khi_orders_menu_root" action="stock.action_picking_tree_all" sequence="3"/>
+
+        <!-- Actions for Lục Khí Orders -->
+        <record id="action_luc_khi_sale_orders" model="ir.actions.act_window">
+            <field name="name">Đơn bán hàng Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list,form,calendar,pivot,graph</field>
+            <field name="domain">[('luc_khi_profile_analysis', '!=', False)]</field>
+            <field name="context">{'search_default_has_luc_khi_analysis': 1}</field>
+            <field name="help">Quản lý các đơn hàng có phân tích Lục Khí</field>
+        </record>
+
+        <!-- Actions for Vietnamese Compliance -->
+        <record id="action_vietnamese_invoices" model="ir.actions.act_window">
+            <field name="name">Hóa đơn Việt Nam</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('move_type', '=', 'out_invoice'), ('invoice_vat', '=', True)]</field>
+            <field name="context">{'default_move_type': 'out_invoice', 'default_invoice_vat': True}</field>
+            <field name="help">Quản lý hóa đơn VAT theo quy định Việt Nam</field>
+        </record>
+
+        <!-- Actions for Electronic Invoices -->
+        <record id="action_electronic_invoices" model="ir.actions.act_window">
+            <field name="name">Hóa đơn điện tử</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('move_type', '=', 'out_invoice'), ('electronic_invoice', '=', True)]</field>
+            <field name="context">{'default_move_type': 'out_invoice', 'default_electronic_invoice': True}</field>
+            <field name="help">Quản lý hóa đơn điện tử theo quy định Việt Nam</field>
+        </record>
+
+        <!-- Report Actions -->
+        <record id="action_luc_khi_sales_report" model="ir.actions.act_window">
+            <field name="name">Báo cáo bán hàng Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.report</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="domain">[('luc_khi_profile_analysis', '!=', False)]</field>
+            <field name="help">Báo cáo bán hàng cho các đơn hàng có phân tích Lục Khí</field>
+        </record>
+    </data>
+</odoo>

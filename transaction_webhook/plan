@@ -1,0 +1,324 @@
+• Mục Tiêu
+
+  - Nhận webhook Casso (tiền vào/ra), tự tạo bank statement line trong Odoo để dùng
+    reconcile.
+  - Tận dụng OCA: account_statement_base, account_reconcile_oca,
+    account_statement_import_file.
+
+  Khảo Sát Nhanh
+
+  - Addons hiện có: addons/account_statement_base, addons/account_statement_import_file,
+    addons/account_reconcile_oca, addons/account_reconcile_model_oca, addons/
+    base_transaction_id.
+  - Model Odoo dùng: account.bank.statement và account.bank.statement.line (đang được OCA
+    extend sẵn).
+  - Tài liệu Casso webhook (đã đọc): payload chứa các trường như reference/tid,
+    description, amount, when/transactionDateTime, accountNumber/bank_sub_acc_id, bankName/
+    bankAbbreviation, counterAccountNumber, virtualAccountNumber,… Có mục “Chống trùng lặp”.
+
+  Thiết Kế Tích Hợp
+
+  - Controller webhook
+      - Route: POST /casso/webhook (type='http', csrf=False, auth='public').
+      - Bảo mật: bắt buộc token (query string hoặc header) so khớp với cấu hình trong Odoo
+        (system parameter hoặc config model). Dự phòng thêm xác minh chữ ký sau nếu Casso có
+        signature header.
+      - Body: nhận JSON Casso, hỗ trợ 2 biến thể trường:
+          - V1: data.reference, data.description, data.amount, data.transactionDateTime,
+            data.accountNumber, …
+          - V2: data.tid, data.description, data.amount, data.when, data.bank_sub_acc_id, …
+  - Mapping đến Odoo
+      - Xác định journal:
+          - Ưu tiên map tường minh qua model cấu hình: “Casso Bank Mapping” (field
+            external_account_identifier = accountNumber/bank_sub_acc_id, journal_id).
+          - Nếu không có mapping: tìm res.partner.bank.acc_number khớp số tài khoản, rồi suy
+            ra account.journal liên kết.
+      - Statement:
+          - Tìm account.bank.statement “mở” của journal theo ngày giao dịch; nếu không có,
+            tạo mới (name theo ngày).
+      - Statement line:
+          - name: description hoặc reference.
+          - date: parse transactionDateTime hoặc when (UTC/local theo payload).
+          - amount: dương/âm tùy hướng giao dịch. Nếu payload không có chỉ dấu, mặc định coi
+            là tiền vào (dương). Thiết kế để nếu Casso bổ sung direction (credit/debit) sẽ
+            map chính xác.
+          - partner_id: để trống; để reconcile model OCA xử lý đề xuất. Sau giai đoạn 2 có
+            thể parse description để match invoice/partner.
+          - Lưu các metadata Casso (see below) để theo dõi và debug.
+  - Chống trùng lặp
+      - Thêm field tùy chỉnh ở account.bank.statement.line: x_casso_tid (Char, index),
+        x_casso_account_identifier (Char).
+      - Ràng buộc SQL unique: (journal_id, x_casso_tid) hoặc (x_casso_account_identifier,
+        x_casso_tid) để tránh tạo trùng.
+      - Kiểm tra tồn tại trước khi tạo mới.
+  - Cấu hình
+      - System Parameters:
+          - casso.webhook.token — token xác thực webhook.
+          - casso.default_statement_grouping — “by_day|single_open” (tạo theo ngày hoặc gom
+            về 1 statement mở).
+      - Model mapping: casso.bank.map(external_account_identifier, journal_id, active)
+  - Tự động đối soát
+      - Tận dụng account_reconcile_model_oca để thiết lập rule (match theo amount, ref, từ
+        khóa description).
+      - Không ghi trực tiếp entry kế toán; chỉ tạo statement line phục vụ reconcile “Bank
+        reconciliation”.
+
+  Cấu Trúc Module
+
+  - addons/casso_webhook/
+      - __init__.py, __manifest__.py (depends: account, account_statement_base,
+        account_reconcile_oca)
+      - controllers/: webhook.py (route nhận webhook)
+      - models/:
+          - statement_line.py (_inherit, thêm field x_casso_tid, x_casso_account_identifier,
+            unique constraint)
+          - casso_map.py (mapping external account → journal)
+          - ir_config_parameter helper hoặc res.config.settings để quản trị token
+      - security/ir.model.access.csv (quyền cho model mapping)
+      - views/: menu nhỏ trong Accounting > Configuration để quản lý mapping + settings
+      - data/: (optional) demo mapping
+  - Logging: ghi nhật ký khi payload không hợp lệ, không tìm thấy journal, hoặc duplicate.
+
+  Luồng Xử Lý Webhook
+
+  - Nhận request -> xác thực token -> đọc JSON -> xác định bản thể payload (fields
+    reference/tid; when/transactionDateTime).
+  - Tra mapping -> tìm/ tạo statement -> kiểm duplicate -> tạo account.bank.statement.line
+    với metadata:
+      - x_casso_tid, x_casso_account_identifier, x_casso_bank_name, x_casso_counter_account,
+        x_casso_virtual_account (tùy payload).
+  - Trả về JSON 200: { error: 0, message: "ok", tid: "<...>" }. Nếu lỗi trả 400/422 với
+    message.
+
+  Kiểm Thử
+
+  - Dùng tài liệu “Giả lập giao dịch đến” để gửi mẫu JSON.
+  - curl ví dụ:
+      - curl -X POST http://<host>/casso/webhook?token=<TOKEN> -H 'Content-Type:
+        application/json' -d '{ "data": { "reference": "BANK_REF_ID", "description": "test",
+        "amount": 599000, "transactionDateTime": "2025-02-12 15:36:21", "accountNumber":
+  - Tăng version trong __manifest__.py khi sửa view/logic.
+        casso_webhook --stop-after-init
+  - Làm mới assets nếu có view:
+      - Hard refresh hoặc ?debug=assets.
+
+  Giai Đoạn 2 (tùy chọn sau khi chạy ổn)
+
+  - Thêm bắt chữ ký nếu Casso hỗ trợ HMAC header.
+  - Ánh xạ partner/invoice tự động từ description (regex, số hóa đơn) + reconcile model OCA.
+  - Hàng đợi retry (queue_job) nếu muốn chống nghẽn/timeout.
+  - Webhook healthcheck endpoint.
+
+  Bạn muốn tôi scaffold module addons/casso_webhook và hiện thực controller + model (dedup +
+  mapping) ngay bây giờ không?
+
+• Model changed to gpt-5 with high reasoning
+
+
+› Hãy lập kế hoạch chi tiết, nếu nó còn hỗ trợ V1 thì dùng V1 cho dễ, còn nếu không thì
+  dùng V2. Môi trường dev là local cũng cần phải test trước khi đưa lên môi trường thực tế
+  là odoo selfhost Coolify tên VPS( heztzer).
+
+
+• Tổng Quan
+
+  - Mục tiêu: nhận webhook Casso và tự tạo bank statement line phục vụ reconcile trong Odoo
+    18, ưu tiên tái sử dụng OCA.
+  - Phiên bản webhook: ưu tiên V1 (trường reference, transactionDateTime). Nếu payload không
+    có V1 thì tự động rơi về V2 (tid, when, bank_sub_acc_id). Idempotency chống trùng là
+    bắt buộc.
+
+  Kiến Trúc & Thành Phần
+
+  - Module mới: addons/casso_webhook
+      - Depends: account, account_statement_base, account_reconcile_oca
+      - Controllers: POST /casso/webhook (auth='public', csrf=False, xác thực token)
+      - Models:
+          - account.bank.statement.line (inherit): thêm metadata Casso, dedup
+              - x_casso_tid (Char, index)
+              - x_casso_account_identifier (Char, index) — accountNumber (V1) |
+                bank_sub_acc_id (V2)
+              - x_casso_bank_abbrev, x_casso_bank_name, x_casso_counter_acc,
+                x_casso_virtual_acc (tùy payload)
+              - SQL constraint unique: (journal_id, x_casso_tid) hoặc
+                (x_casso_account_identifier, x_casso_tid) để chống trùng lặp
+          - casso.bank.map: ánh xạ external_account_identifier → journal_id (multi-company)
+      - Cấu hình:
+          - System parameter: casso.webhook.token (bắt buộc)
+          - Optional: casso.statement_grouping = by_day|single_open (gom line theo ngày hoặc
+            1 statement mở)
+          - res.config.settings để quản trị token và grouping
+      - Views: menu nhỏ trong Accounting > Configuration để quản lý casso.bank.map +
+        Settings
+      - Security: security/ir.model.access.csv cho casso.bank.map
+  - Xử lý webhook:
+      - Xác thực token (query ?token= hoặc header)
+      - Parse payload:
+          - V1: reference, description, amount, transactionDateTime, accountNumber,
+            bankAbbreviation, bankName, counterAccountNumber, virtualAccountNumber
+          - V2: tid, description, amount, when, bank_sub_acc_id, bankAbbreviation, bankName,
+            corresponsiveAccount/counterAccountNumber, virtualAccount
+      - Tìm journal_id:
+          - Ưu tiên theo casso.bank.map.external_account_identifier khớp accountNumber (V1)
+            | bank_sub_acc_id (V2)
+          - Fallback: tìm account.journal(type='bank') có bank_account_id.acc_number khớp
+      - Chọn/Tạo account.bank.statement:
+          - Theo casso.statement_grouping: by_day → 1 statement/ngày; single_open → 1
+            statement mở
+      - Dedup:
+          - Kiểm tra tồn tại line theo (journal_id, x_casso_tid[,
+            x_casso_account_identifier])
+      - Tạo line:
+          - date: từ transactionDateTime (V1) | when (V2) (parse timezone an toàn, mặc định
+            UTC+07 nếu không có TZ)
+          - amount: dương = tiền vào; âm = tiền ra. Nếu payload không có “direction”, mặc
+            định coi dương là tiền vào; hỗ trợ rule đảo dấu theo bankAbbreviation/mapping
+            nếu cần
+          - payment_ref/name: description hoặc reference/tid
+          - journal_id, statement_id theo trên; company_id theo journal
+      - Trả lời nhanh < 5s: { "error": 0, "message": "ok", "tid": "..." }; mọi lỗi trả 4xx
+        với thông điệp rõ ràng (để Casso retry hợp lệ)
+
+  Chi Tiết Mapping Dữ Liệu
+
+  - Nhận diện V1 vs V2:
+      - Nếu có reference và transactionDateTime → V1
+      - Ngược lại nếu có tid và when → V2
+  - TID lưu vào x_casso_tid: V1 dùng reference, V2 dùng tid
+  - Account identifier lưu vào x_casso_account_identifier: V1 dùng accountNumber, V2 dùng
+    bank_sub_acc_id
+  - Bank info: lưu x_casso_bank_abbrev, x_casso_bank_name để hỗ trợ rule sau này
+  - Counter/virtual account: lưu để hỗ trợ đối soát nâng cao
+
+  Bảo Mật & Độ Tin Cậy
+
+  - Auth: bắt buộc casso.webhook.token, so khớp với ir.config_parameter
+  - Idempotency: unique constraint + kiểm tra trước khi tạo
+  - Retry của Casso: endpoint idempotent, sẵn sàng nhận nhiều lần cùng tid
+  - Logging: ghi log cảnh báo khi không tìm thấy journal/map hoặc payload thiếu trường bắt
+    buộc
+
+  Tự Động Đối Soát
+
+  - Tận dụng account_reconcile_model_oca:
+      - Thiết lập rule đề xuất theo amount, payment_ref chứa mã hóa đơn/số ĐH
+      - Không auto-post entries; để kế toán chủ động reconcile trên màn hình chuẩn Odoo
+
+  Kế Hoạch Triển Khai Theo Pha
+
+  - Pha 0 — Chuẩn bị
+      - Xác nhận ngân hàng/số tài khoản sẽ dùng (để tạo mapping)
+      - Lấy token webhook riêng cho mỗi môi trường
+  - Pha 1 — Scaffold & Cấu hình cơ bản
+      - Tạo addons/casso_webhook
+      - Manifest + depends; models (mapping), settings, access CSV
+      - View cấu hình (Settings + Map)
+  - Pha 2 — Controller & Service
+      - Route POST /casso/webhook + token auth
+      - Service parse V1→V2 fallback, mapping journal, grouping statement, dedup, tạo line
+      - HTTP response tiêu chuẩn cho Casso
+  - Pha 3 — Ràng buộc & Ổn định
+      - Thêm SQL constraint unique
+      - Log chi tiết + mã lỗi có thể hành động
+      - Unit test: TransactionCase cho mapping + tạo line; HttpCase tối thiểu cho 200/4xx
+  - Pha 4 — Kiểm thử Local
+      - Tạo casso.bank.map (accountNumber/bank_sub_acc_id → journal)
+      - Đặt token: Settings → Technical → System Parameters → casso.webhook.token
+      - Gửi mẫu V1/V2 bằng curl
+      - Mở menu Accounting → Bank Statements để xác minh line xuất hiện
+  - Pha 5 — Bổ sung Reconcile Model
+      - Tạo vài rule trong account_reconcile_model_oca theo từ khóa/amount
+      - Thử reconcile mẫu
+  - Pha 6 — Đưa Lên Production (Coolify Hetzner)
+      - Thêm env var CASSO_WEBHOOK_TOKEN (hoặc tạo system parameter trong DB prod)
+      - Mở route public TLS: https://<domain>/casso/webhook
+      - Cấu hình Casso Webhook URL + Token
+      - Theo dõi log, thử một giao dịch giả lập
+
+  Bước Cụ Thể (Thực Thi)
+
+  1. Scaffold module
+
+  - Tạo cấu trúc chuẩn, manifest:
+      - depends: ['account', 'account_statement_base', 'account_reconcile_oca']
+      - data: access CSV, views settings + mapping
+
+  2. Models
+
+  - casso.bank.map(external_account_identifier: Char, journal_id: Many2one(account.journal),
+    active: Bool, company_id)
+  - Inherit account.bank.statement.line: các field x_casso_* và sql_constraints
+
+  3. Settings
+
+  - res.config.settings fields proxy đến ir.config_parameter:
+      - casso_webhook_token
+      - casso_statement_grouping (selection: day/single)
+
+  4. Controller
+
+  - POST /casso/webhook:
+      - Lấy token từ query/header, validate
+      - Parse JSON, detect V1/V2
+      - Gọi service: process_transaction(data_dict)
+      - Trả JSON 200 hoặc 4xx
+
+  5. Service
+
+  - Resolve journal từ mapping hoặc fallback theo bank_account_id.acc_number
+  - Lấy/ tạo statement (by day/single)
+  - Dedup theo tid + account identifier
+  - Tạo line với amount, date, payment_ref, metadata x_casso_*
+
+  6. Test cases
+
+  - Payload V1 hợp lệ → 200, tạo line
+  - Payload V2 hợp lệ → 200, tạo line
+  - Trùng TID → 200, không tạo thêm line
+  - Thiếu token/ sai token → 401/403
+  - Không tìm thấy journal → 422 với thông điệp
+
+  7. Tài liệu ngắn trong README + CHANGELOG
+
+  Kiểm Thử Local (Docker Compose)
+
+  - Nâng cấp module:
+      - docker compose run --rm web odoo -c /etc/odoo/odoo.conf -d company_dev -u
+        casso_webhook --stop-after-init
+  - Gửi mẫu JSON V1:
+      - curl -X POST "http://localhost:8069/casso/webhook?token=<TOKEN>" -H "Content-
+        Type: application/json" -d '{ "data": { "reference": "BANK_REF_ID", "description":
+        "test v1", "amount": 599000, "transactionDateTime": "2025-02-12 15:36:21",
+        "accountNumber": "88888888", "bankAbbreviation": "VPB", "bankName": "VPBank",
+        "counterAccountNumber": "", "virtualAccountNumber": "" } }'
+  - Gửi mẫu JSON V2:
+      - curl -X POST "http://localhost:8069/casso/webhook?token=<TOKEN>" -H "Content-Type:
+        application/json" -d '{ "data": { "tid": "BANK_REF_ID", "description": "test v2",
+        "amount": 79000, "when": "2020-10-14 00:34:57", "bank_sub_acc_id": "88888888",
+        "bankAbbreviation": "VPB", "bankName": "VPBank", "corresponsiveAccount": "",
+        "virtualAccount": "" } }'
+
+  Triển Khai Production (Coolify Hetzner)
+
+  - Cấu hình env var CASSO_WEBHOOK_TOKEN=<random-strong> hoặc đặt system parameter trong
+    prod DB
+  - Expose route https://<domain>/casso/webhook (TLS qua Coolify/Proxy)
+  - Thêm mapping casso.bank.map tương ứng tài khoản ngân hàng thật
+  - Cập nhật Casso Webhook URL: https://<domain>/casso/webhook?token=<TOKEN>
+  - Giả lập giao dịch từ trang Casso hoặc gửi curl để xác thực đầu-cuối
+  - Theo dõi log Odoo và bảng statements để xác nhận
+
+  Tiêu Chí Nghiệm Thu
+
+  - Nhận V1 và V2, ưu tiên V1 nếu cùng tồn tại
+  - Idempotent: gửi lại cùng tid không tạo line mới
+  - Đúng journal theo mapping; statement grouping đúng cấu hình
+  - Lines tạo có đầy đủ metadata cần thiết; hiển thị trong Bank Statements
+  - Reconcile hoạt động tốt với reconcile models OCA
+
+  Rủi Ro & Giảm Thiểu
+
+  - Sai timezone: mặc định +07 nếu payload không kèm TZ; có thể thêm config
+  - Trùng reference giữa các bank: unique ghép (journal_id, tid) và lưu
+    x_casso_account_identifier để tăng phân biệt
+

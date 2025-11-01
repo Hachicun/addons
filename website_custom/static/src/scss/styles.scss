@@ -1,0 +1,11 @@
+// Simple demo styles for the landing page
+.o_rtl .container {
+  direction: rtl;
+}
+
+.container {
+  h1.display-5 {
+    letter-spacing: 0.2px;
+  }
+}
+

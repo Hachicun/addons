@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Enhanced Contact Form Template -->
+        <template id="luc_khi_crm.contact_form" name="Lục Khí Contact Form">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'contact'"/>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="contact-form-container">
+                                <div class="text-center mb-5">
+                                    <h1 class="contact-title">Liên hệ với Lục Khí</h1>
+                                    <p class="contact-subtitle">Chúng tôi luôn sẵn sàng hỗ trợ bạn trên hành trình khám phá bản thân và cân bằng ngũ hành</p>
+                                </div>
+
+                                <form id="luc_khi_contact_form" action="/website_form/luc_khi.contact.form" method="post" class="contact-form">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                    <!-- Personal Information -->
+                                    <div class="form-section">
+                                        <h3 class="section-title">Thông tin cá nhân</h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name" class="required">Họ và tên</label>
+                                                    <input type="text" class="form-control" id="name" name="name" required="required"
+                                                           placeholder="Nhập họ và tên đầy đủ"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="email" class="required">Email</label>
+                                                    <input type="email" class="form-control" id="email" name="email" required="required"
+                                                           placeholder="example@email.com"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone" class="required">Số điện thoại</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required="required"
+                                                   placeholder="0xxx xxx xxx"/>
+                                            <small class="form-text text-muted">Ví dụ: 0987654321</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Preferences -->
+                                    <div class="form-section">
+                                        <h3 class="section-title">Tùy chọn liên lạc</h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="preferred_contact_method">Phương thức liên lạc ưa thích</label>
+                                                    <select class="form-control" id="preferred_contact_method" name="preferred_contact_method">
+                                                        <option value="phone">Điện thoại</option>
+                                                        <option value="email">Email</option>
+                                                        <option value="zalo">Zalo</option>
+                                                        <option value="facebook">Facebook</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="preferred_contact_time">Thời gian liên lạc ưa thích</label>
+                                                    <select class="form-control" id="preferred_contact_time" name="preferred_contact_time">
+                                                        <option value="anytime">Bất kỳ lúc nào</option>
+                                                        <option value="morning">Buổi sáng (8h-12h)</option>
+                                                        <option value="afternoon">Buổi chiều (12h-18h)</option>
+                                                        <option value="evening">Buổi tối (18h-22h)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Reason -->
+                                    <div class="form-section">
+                                        <h3 class="section-title">Lý do liên hệ</h3>
+                                        <div class="form-group">
+                                            <label for="contact_reason" class="required">Bạn liên hệ vì</label>
+                                            <select class="form-control" id="contact_reason" name="contact_reason" required="required">
+                                                <option value="general_inquiry">Thắc mắc chung</option>
+                                                <option value="course_inquiry">Hỏi về khóa học</option>
+                                                <option value="product_inquiry">Hỏi về sản phẩm</option>
+                                                <option value="consultation">Đăng ký tư vấn</option>
+                                                <option value="partnership">Hợp tác kinh doanh</option>
+                                                <option value="support">Hỗ trợ kỹ thuật</option>
+                                                <option value="complaint">Khiếu nại</option>
+                                                <option value="other">Khác</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subject" class="required">Tiêu đề</label>
+                                            <input type="text" class="form-control" id="subject" name="subject" required="required"
+                                                   placeholder="Tiêu đề ngắn gọn về nội dung liên hệ"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message" class="required">Nội dung chi tiết</label>
+                                            <textarea class="form-control" id="message" name="message" rows="5" required="required"
+                                                      placeholder="Mô tả chi tiết nội dung bạn muốn liên hệ..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lục Khí Interests -->
+                                    <div class="form-section">
+                                        <h3 class="section-title">Quan tâm đến ngũ hành nào?</h3>
+                                        <p class="section-description">Chọn các ngũ hành bạn quan tâm để chúng tôi tư vấn phù hợp hơn</p>
+                                        <div class="elements-grid">
+                                            <t t-foreach="luc_khi_elements" t-as="element">
+                                                <div class="element-checkbox">
+                                                    <input type="checkbox" class="form-check-input element-input"
+                                                           t-att-id="'element_' + element.code"
+                                                           t-att-name="'interested_elements'"
+                                                           t-att-value="element.id"/>
+                                                    <label class="element-label" t-att-for="'element_' + element.code">
+                                                        <span t-att-class="'element-icon element-' + element.code.lower()"/>
+                                                        <t t-esc="element.name"/>
+                                                    </label>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- Courses and Products Interest -->
+                                    <div class="form-section">
+                                        <h3 class="section-title">Quan tâm đến khóa học/sản phẩm nào?</h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Khóa học quan tâm</label>
+                                                    <div class="interest-list">
+                                                        <t t-foreach="courses" t-as="course">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                       t-att-id="'course_' + str(course.id)"
+                                                                       t-att-name="'interested_courses'"
+                                                                       t-att-value="course.id"/>
+                                                                <label class="form-check-label" t-att-for="'course_' + str(course.id)">
+                                                                    <t t-esc="course.name"/>
+                                                                </label>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Sản phẩm quan tâm</label>
+                                                    <div class="interest-list">
+                                                        <t t-foreach="products" t-as="product">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                       t-att-id="'product_' + str(product.id)"
+                                                                       t-att-name="'interested_products'"
+                                                                       t-att-value="product.id"/>
+                                                                <label class="form-check-label" t-att-for="'product_' + str(product.id)">
+                                                                    <t t-esc="product.name"/>
+                                                                </label>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="form-actions text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="submit_btn">
+                                            <i class="fa fa-paper-plane"/> Gửi liên hệ
+                                        </button>
+                                        <div id="loading_spinner" class="d-none">
+                                            <i class="fa fa-spinner fa-spin"/> Đang gửi...
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <!-- Success/Error Messages -->
+                                <div id="form_messages" class="mt-4">
+                                    <div id="success_message" class="alert alert-success d-none">
+                                        <i class="fa fa-check-circle"/> Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong vòng 24 giờ.
+                                    </div>
+                                    <div id="error_message" class="alert alert-danger d-none">
+                                        <i class="fa fa-exclamation-triangle"/> Có lỗi xảy ra. Vui lòng thử lại.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Consultation Booking Template -->
+        <template id="luc_khi_crm.consultation_form" name="Lục Khí Consultation Booking">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'consultation'"/>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <div class="consultation-container">
+                                <div class="text-center mb-5">
+                                    <h1 class="consultation-title">Đăng ký tư vấn Lục Khí</h1>
+                                    <p class="consultation-subtitle">Hãy để chuyên gia Lục Khí giúp bạn hiểu rõ hơn về bản thân và cân bằng ngũ hành</p>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Booking Form -->
+                                    <div class="col-lg-8">
+                                        <form id="consultation_form" action="/luc-khi/consultation/book" method="post" class="consultation-form">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                            <!-- Personal Information -->
+                                            <div class="form-section">
+                                                <h3 class="section-title">Thông tin cá nhân</h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="booking_name" class="required">Họ và tên</label>
+                                                            <input type="text" class="form-control" id="booking_name" name="name" required="required"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="booking_email" class="required">Email</label>
+                                                            <input type="email" class="form-control" id="booking_email" name="email" required="required"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="booking_phone" class="required">Số điện thoại</label>
+                                                    <input type="tel" class="form-control" id="booking_phone" name="phone" required="required"/>
+                                                </div>
+                                            </div>
+
+                                            <!-- Consultation Goals -->
+                                            <div class="form-section">
+                                                <h3 class="section-title">Mục tiêu tư vấn</h3>
+                                                <div class="form-group">
+                                                    <label for="consultation_goals" class="required">Bạn muốn đạt được gì từ buổi tư vấn?</label>
+                                                    <textarea class="form-control" id="consultation_goals" name="consultation_goals" rows="4" required="required"
+                                                              placeholder="Ví dụ: Hiểu rõ ngũ hành của bản thân, cân bằng năng lượng, tư vấn về sự nghiệp, sức khỏe..."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <!-- Element Interests -->
+                                            <div class="form-section">
+                                                <h3 class="section-title">Ngũ hành quan tâm</h3>
+                                                <p>Chọn các ngũ hành bạn muốn được tư vấn</p>
+                                                <div class="elements-selection">
+                                                    <t t-foreach="elements" t-as="element">
+                                                        <div class="element-option">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                   t-att-id="'consult_element_' + element.code"
+                                                                   t-att-name="'interested_elements'"
+                                                                   t-att-value="element.id"/>
+                                                            <label t-att-for="'consult_element_' + element.code">
+                                                                <span t-att-class="'element-badge element-' + element.code.lower()"/>
+                                                                <t t-esc="element.name"/>
+                                                            </label>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </div>
+
+                                            <!-- Preferred Consultant -->
+                                            <div class="form-section">
+                                                <h3 class="section-title">Chuyên gia tư vấn</h3>
+                                                <p>Chọn chuyên gia bạn muốn được tư vấn (tùy chọn)</p>
+                                                <div class="consultant-selection">
+                                                    <t t-foreach="consultants" t-as="consultant">
+                                                        <div class="consultant-card">
+                                                            <input type="radio" class="form-check-input"
+                                                                   t-att-id="'consultant_' + str(consultant.id)"
+                                                                   t-att-name="'consultant_id'"
+                                                                   t-att-value="consultant.id"/>
+                                                            <label class="consultant-label" t-att-for="'consultant_' + str(consultant.id)">
+                                                                <div class="consultant-info">
+                                                                    <img t-att-src="consultant.image_1920 or '/web/image/res.partner/' + str(consultant.id) + '/image_1920'"
+                                                                         class="consultant-avatar" alt="Consultant"/>
+                                                                    <div class="consultant-details">
+                                                                        <h4><t t-esc="consultant.name"/></h4>
+                                                                        <p><t t-esc="consultant.function or 'Chuyên gia Lục Khí'"/></p>
+                                                                        <div class="consultant-specialties">
+                                                                            <small>Chuyên về: <t t-esc="consultant.specialties or 'Tư vấn ngũ hành'"/></small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </div>
+
+                                            <!-- Contact Preferences -->
+                                            <div class="form-section">
+                                                <h3 class="section-title">Tùy chọn liên lạc</h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="booking_method">Phương thức liên lạc</label>
+                                                            <select class="form-control" id="booking_method" name="preferred_method">
+                                                                <option value="phone">Điện thoại</option>
+                                                                <option value="zalo">Zalo</option>
+                                                                <option value="email">Email</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="booking_time">Thời gian ưa thích</label>
+                                                            <select class="form-control" id="booking_time" name="preferred_time">
+                                                                <t t-foreach="available_times" t-as="time">
+                                                                    <option t-att-value="time.value"><t t-esc="time.label"/></option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Submit -->
+                                            <div class="form-actions">
+                                                <button type="submit" class="btn btn-primary btn-lg btn-block" id="book_btn">
+                                                    <i class="fa fa-calendar-check"/> Đăng ký tư vấn
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Information Sidebar -->
+                                    <div class="col-lg-4">
+                                        <div class="consultation-info">
+                                            <div class="info-card">
+                                                <h4><i class="fa fa-info-circle"/> Thông tin tư vấn</h4>
+                                                <ul class="info-list">
+                                                    <li><strong>Thời gian:</strong> 60 phút/buổi</li>
+                                                    <li><strong>Phí tư vấn:</strong> 500.000₫</li>
+                                                    <li><strong>Hình thức:</strong> Online qua Zoom</li>
+                                                    <li><strong>Ngôn ngữ:</strong> Tiếng Việt</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="info-card">
+                                                <h4><i class="fa fa-question-circle"/> Tư vấn bao gồm</h4>
+                                                <ul class="info-list">
+                                                    <li>Phân tích ngũ hành cá nhân</li>
+                                                    <li>Đánh giá cân bằng năng lượng</li>
+                                                    <li>Tư vấn giải pháp cụ thể</li>
+                                                    <li>Hướng dẫn thực hành tại nhà</li>
+                                                    <li>Báo cáo chi tiết sau tư vấn</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="info-card">
+                                                <h4><i class="fa fa-clock"/> Quy trình</h4>
+                                                <ol class="process-list">
+                                                    <li>Điền thông tin đăng ký</li>
+                                                    <li>Nhận xác nhận và hóa đơn</li>
+                                                    <li>Thanh toán phí tư vấn</li>
+                                                    <li>Nhận link Zoom và hướng dẫn</li>
+                                                    <li>Tham gia buổi tư vấn</li>
+                                                    <li>Nhận báo cáo kết quả</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Email Templates -->
+        <record id="email_template_contact_auto_reply" model="mail.template">
+            <field name="name">Lục Khí Contact Form Auto Reply</field>
+            <field name="model_id" ref="model_luc_khi_contact_form"/>
+            <field name="subject">Cảm ơn bạn đã liên hệ với Lục Khí</field>
+            <field name="email_from">${object.company_id.email or 'noreply@luc-khi.vn'}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: white; margin: 0; font-size: 28px;">Lục Khí</h1>
+        <p style="color: white; margin: 10px 0 0 0; opacity: 0.9;">Hành trình khám phá bản thân</p>
+    </div>
+
+    <div style="padding: 40px 30px; background: #ffffff;">
+        <h2 style="color: #333; margin-bottom: 20px;">Cảm ơn ${object.name} đã liên hệ!</h2>
+
+        <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+            Chúng tôi đã nhận được thông tin liên hệ của bạn và sẽ phản hồi trong vòng 24 giờ.
+        </p>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #333; margin-top: 0;">Thông tin của bạn:</h3>
+            <p><strong>Họ tên:</strong> ${object.name}</p>
+            <p><strong>Email:</strong> ${object.email}</p>
+            <p><strong>Điện thoại:</strong> ${object.phone}</p>
+            <p><strong>Tiêu đề:</strong> ${object.subject}</p>
+        </div>
+
+        <p style="color: #666; line-height: 1.6;">
+            Trong lúc chờ đợi, bạn có thể khám phá thêm về Lục Khí qua website của chúng tôi:
+        </p>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="${object.get_base_url()}/courses" style="background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 0 10px;">Khóa học</a>
+            <a href="${object.get_base_url()}/shop" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 0 10px;">Cửa hàng</a>
+            <a href="${object.get_base_url()}/blog" style="background: #ffc107; color: black; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 0 10px;">Blog</a>
+        </div>
+
+        <p style="color: #666; line-height: 1.6; margin-top: 30px;">
+            Trân trọng,<br/>
+            <strong>Đội ngũ Lục Khí</strong>
+        </p>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; text-align: center; color: #666; font-size: 12px;">
+        <p>Email này được gửi tự động từ hệ thống liên hệ của Lục Khí.</p>
+        <p>Nếu bạn không phải là người gửi yêu cầu, vui lòng bỏ qua email này.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+
+        <record id="email_template_luc_khi_recommendation" model="mail.template">
+            <field name="name">Lục Khí Personalized Recommendation</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="subject">Khuyến nghị Lục Khí cá nhân hóa dành cho ${object.name}</field>
+            <field name="email_from">${object.company_id.email or 'noreply@luc-khi.vn'}</field>
+            <field name="email_to">${object.email_from}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
+        <h1 style="color: white; margin: 0; font-size: 28px;">Lục Khí</h1>
+        <p style="color: white; margin: 10px 0 0 0; opacity: 0.9;">Khuyến nghị cá nhân hóa</p>
+    </div>
+
+    <div style="padding: 40px 30px; background: #ffffff;">
+        <h2 style="color: #333; margin-bottom: 20px;">Xin chào ${object.name}!</h2>
+
+        <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">
+            Dựa trên thông tin bạn đã cung cấp, chúng tôi đã phân tích và có những khuyến nghị Lục Khí phù hợp dành riêng cho bạn.
+        </p>
+
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #333; margin-top: 0;">Phân tích ngũ hành của bạn:</h3>
+            <div style="margin: 15px 0;">
+                <strong>Ngũ hành chủ đạo:</strong> ${object.luc_khi_dominant_element.name or 'Đang phân tích'}<br/>
+                <strong>Mức năng lượng:</strong> ${dict(object._fields['luc_khi_energy_level'].selection).get(object.luc_khi_energy_level, 'Đang đánh giá')}
+            </div>
+            <p style="margin: 15px 0 0 0; color: #666;">
+                ${object.luc_khi_profile_analysis or 'Chúng tôi đang phân tích hồ sơ của bạn để đưa ra khuyến nghị phù hợp nhất.'}
+            </p>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <h3 style="color: #333;">Khuyến nghị dành cho bạn:</h3>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
+                <a href="${object.get_base_url()}/courses" style="background: #667eea; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                    📚 Khóa học phù hợp
+                </a>
+                <a href="${object.get_base_url()}/shop" style="background: #28a745; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                    🛍️ Sản phẩm đề xuất
+                </a>
+                <a href="${object.get_base_url()}/luc-khi/consultation" style="background: #ffc107; color: black; padding: 12px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                    💬 Tư vấn chuyên sâu
+                </a>
+            </div>
+        </div>
+
+        <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 30px 0; border-left: 4px solid #28a745;">
+            <h4 style="color: #2e7d32; margin-top: 0;">Bước tiếp theo:</h4>
+            <p style="margin: 10px 0 0 0; color: #2e7d32;">
+                Hãy khám phá các khóa học và sản phẩm chúng tôi khuyến nghị để bắt đầu hành trình cân bằng ngũ hành của bạn.
+            </p>
+        </div>
+
+        <p style="color: #666; line-height: 1.6; margin-top: 30px;">
+            Nếu bạn có bất kỳ câu hỏi nào, đừng ngần ngại liên hệ với chúng tôi.<br/>
+            Chúc bạn có một hành trình khám phá bản thân thú vị!
+        </p>
+
+        <p style="color: #666; line-height: 1.6;">
+            Trân trọng,<br/>
+            <strong>Đội ngũ Lục Khí</strong>
+        </p>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; text-align: center; color: #666; font-size: 12px;">
+        <p>Email này được gửi từ hệ thống khuyến nghị cá nhân hóa của Lục Khí.</p>
+        <p>Nếu bạn không muốn nhận email khuyến nghị, vui lòng <a href="${object.get_base_url()}/contact">liên hệ với chúng tôi</a>.</p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

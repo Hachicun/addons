@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Blog Post List View (Extended) -->
+        <record id="view_blog_post_tree_luc_khi" model="ir.ui.view">
+            <field name="name">blog.post.list.luc_khi</field>
+            <field name="model">blog.post</field>
+            <field name="inherit_id" ref="website_blog.view_blog_post_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="inside">
+                    <field name="luc_khi_category_id"/>
+                    <field name="is_featured"/>
+                    <field name="view_count"/>
+                    <field name="like_count"/>
+                    <field name="reading_time"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Blog Post Form View (Extended) -->
+        <record id="view_blog_post_form_luc_khi" model="ir.ui.view">
+            <field name="name">blog.post.form.luc_khi</field>
+            <field name="model">blog.post</field>
+            <field name="inherit_id" ref="website_blog.view_blog_post_form"/>
+            <field name="arch" type="xml">
+                <!-- Add Lục Khí Category field -->
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="luc_khi_category_id"/>
+                </xpath>
+
+                <!-- Add Featured Post field -->
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="is_featured"/>
+                </xpath>
+
+                <!-- Add Featured Image field -->
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <group string="Lục Khí Settings">
+                        <group>
+                            <field name="featured_image" widget="image"/>
+                            <field name="summary"/>
+                        </group>
+                        <group>
+                            <field name="reading_time"/>
+                            <field name="view_count"/>
+                            <field name="like_count"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <!-- Add SEO Settings -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="SEO Settings">
+                        <group>
+                            <group>
+                                <field name="meta_title" placeholder="SEO Title (optional)"/>
+                                <field name="meta_keywords" placeholder="SEO Keywords (optional)"/>
+                            </group>
+                            <group>
+                                <field name="meta_description" nolabel="1" placeholder="SEO Description (optional)"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <!-- Add Related Courses -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Related Courses">
+                        <field name="related_course_ids">
+                            <list>
+                                <field name="name"/>
+                                <field name="category_id"/>
+                                <field name="difficulty_level"/>
+                                <field name="duration_hours"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+
+                <!-- Add Vietnamese Slug field (readonly) -->
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="vietnamese_slug" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Blog Post Search View (Extended) -->
+        <record id="view_blog_post_search_luc_khi" model="ir.ui.view">
+            <field name="name">blog.post.search.luc_khi</field>
+            <field name="model">blog.post</field>
+            <field name="inherit_id" ref="website_blog.view_blog_post_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="luc_khi_category_id"/>
+                    <filter string="Featured" name="featured" domain="[('is_featured', '=', True)]"/>
+                    <separator/>
+                    <filter string="Lục Khí Category" name="luc_khi_category" context="{'group_by': 'luc_khi_category_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Enhanced Blog Post Action -->
+        <record id="action_blog_post_luc_khi" model="ir.actions.act_window">
+            <field name="name">Blog Posts</field>
+            <field name="res_model">blog.post</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="context">{
+                'default_website_published': True,
+                'search_default_published': 1
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first blog post!
+                </p>
+                <p>
+                    Blog posts are great for sharing news, updates, and insights with your audience.
+                    Use Lục Khí categories to organize your content effectively.
+                </p>
+            </field>
+        </record>
+
+        <!-- Blog Menu Item -->
+        <menuitem id="menu_luc_khi_blog_post"
+                  name="Blog Posts"
+                  parent="website.menu_website_configuration"
+                  action="action_blog_post_luc_khi"
+                  sequence="11"/>
+    </data>
+</odoo>

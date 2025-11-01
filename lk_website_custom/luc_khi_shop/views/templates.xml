@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Shop Product Listing Template -->
+        <template id="luc_khi_shop.products" name="Lục Khí Shop - Danh sách sản phẩm">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'shop'"/>
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Sidebar Filters -->
+                        <div class="col-lg-3 col-md-4">
+                            <div class="shop-sidebar">
+                                <div class="sidebar-section">
+                                    <h4 class="sidebar-title">Ngũ Hành Lục Khí</h4>
+                                    <div class="element-filters">
+                                        <t t-foreach="elements" t-as="element">
+                                            <div class="form-check">
+                                                <input class="form-check-input element-filter"
+                                                       type="checkbox"
+                                                       t-att-id="'element-' + element.id"
+                                                       t-att-value="element.id"/>
+                                                <label class="form-check-label" t-att-for="'element-' + element.id">
+                                                    <span t-att-class="'element-icon element-' + element.code.lower()"/>
+                                                    <t t-esc="element.name"/>
+                                                </label>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <div class="sidebar-section">
+                                    <h4 class="sidebar-title">Danh mục sản phẩm</h4>
+                                    <div class="category-tree">
+                                        <t t-call="luc_khi_shop.category_tree"/>
+                                    </div>
+                                </div>
+
+                                <div class="sidebar-section">
+                                    <h4 class="sidebar-title">Giá sản phẩm</h4>
+                                    <div class="price-range">
+                                        <input type="range" class="form-range" id="priceRange" min="0" max="5000000" step="50000"/>
+                                        <div class="price-display">
+                                            <span id="priceMin">0₫</span> - <span id="priceMax">5.000.000₫</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content -->
+                        <div class="col-lg-9 col-md-8">
+                            <div class="shop-header">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h1 class="shop-title">Cửa hàng Lục Khí</h1>
+                                        <p class="shop-subtitle">Khám phá các sản phẩm phù hợp với ngũ hành của bạn</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="shop-controls">
+                                            <select class="form-select sort-select">
+                                                <option value="name">Sắp xếp theo tên</option>
+                                                <option value="price_asc">Giá thấp đến cao</option>
+                                                <option value="price_desc">Giá cao đến thấp</option>
+                                                <option value="rating">Đánh giá cao nhất</option>
+                                            </select>
+                                            <div class="view-toggle">
+                                                <button class="btn btn-outline-secondary view-grid active">
+                                                    <i class="fa fa-th"/>
+                                                </button>
+                                                <button class="btn btn-outline-secondary view-list">
+                                                    <i class="fa fa-list"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Products Grid -->
+                            <div class="products-grid" id="productsContainer">
+                                <t t-foreach="products" t-as="product">
+                                    <div class="product-card" t-att-data-product-id="product.id">
+                                        <div class="product-image">
+                                            <a t-att-href="product.website_url">
+                                                <img t-att-src="product.image_1920 or '/web/image/product.template/' + str(product.id) + '/image_1920'"
+                                                     t-att-alt="product.name"
+                                                     class="img-fluid"/>
+                                            </a>
+                                            <t t-if="product.luc_khi_element_ids">
+                                                <div class="element-badges">
+                                                    <t t-foreach="product.luc_khi_element_ids" t-as="element">
+                                                        <span t-att-class="'element-badge element-' + element.code.lower()"
+                                                              t-att-title="element.name">
+                                                            <t t-esc="element.code"/>
+                                                        </span>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                            <t t-if="product.website_ribbon_id">
+                                                <div class="product-ribbon" t-att-style="'background-color: ' + product.website_ribbon_id.bg_color">
+                                                    <t t-esc="product.website_ribbon_id.html"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <div class="product-info">
+                                            <h3 class="product-title">
+                                                <a t-att-href="product.website_url" t-esc="product.name"/>
+                                            </h3>
+                                            <div class="product-price">
+                                                <t t-if="product.list_price">
+                                                    <span class="price-current">
+                                                        <t t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                    </span>
+                                                </t>
+                                                <t t-if="product.compare_list_price">
+                                                    <span class="price-compare">
+                                                        <t t-esc="product.compare_list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                    </span>
+                                                </t>
+                                            </div>
+                                            <div class="product-rating">
+                                                <div class="rating-stars">
+                                                    <t t-set="rating" t-value="product.website_rating or 0"/>
+                                                    <t t-foreach="range(5)" t-as="star">
+                                                        <i t-att-class="'fa fa-star' + (star &lt; rating and '-o' or '')"/>
+                                                    </t>
+                                                </div>
+                                                <span class="rating-count">(<t t-esc="product.website_rating_count or 0"/>)</span>
+                                            </div>
+                                            <div class="product-actions">
+                                                <button class="btn btn-primary add-to-cart" t-att-data-product-id="product.id">
+                                                    <i class="fa fa-cart-plus"/> Thêm vào giỏ
+                                                </button>
+                                                <button class="btn btn-outline-secondary wishlist-btn" t-att-data-product-id="product.id">
+                                                    <i class="fa fa-heart"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <!-- Pagination -->
+                            <t t-if="pager">
+                                <div class="pagination-wrapper">
+                                    <t t-call="website.pager"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Category Tree Template -->
+        <template id="luc_khi_shop.category_tree" name="Lục Khí Shop - Category Tree">
+            <ul class="category-list">
+                <t t-foreach="categories" t-as="category">
+                    <li class="category-item" t-att-data-category-id="category.id">
+                        <a t-att-href="category.website_url" class="category-link">
+                            <t t-esc="category.name"/>
+                            <span class="category-count">(<t t-esc="category.product_count"/>)</span>
+                        </a>
+                        <t t-if="category.child_ids">
+                            <ul class="subcategory-list">
+                                <t t-foreach="category.child_ids" t-as="subcategory">
+                                    <li class="subcategory-item">
+                                        <a t-att-href="subcategory.website_url" class="subcategory-link">
+                                            <t t-esc="subcategory.name"/>
+                                            <span class="subcategory-count">(<t t-esc="subcategory.product_count"/>)</span>
+                                        </a>
+                                    </li>
+                                </t>
+                            </ul>
+                        </t>
+                    </li>
+                </t>
+            </ul>
+        </template>
+
+        <!-- Product Detail Template -->
+        <template id="luc_khi_shop.product_detail" name="Lục Khí Shop - Chi tiết sản phẩm">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'product'"/>
+                <div class="container">
+                    <div class="row">
+                        <!-- Product Images -->
+                        <div class="col-lg-6">
+                            <div class="product-gallery">
+                                <div class="main-image">
+                                    <img t-att-src="product.image_1920 or '/web/image/product.template/' + str(product.id) + '/image_1920'"
+                                         t-att-alt="product.name"
+                                         class="img-fluid"/>
+                                </div>
+                                <t t-if="product.product_image_ids">
+                                    <div class="thumbnail-gallery">
+                                        <t t-foreach="product.product_image_ids" t-as="image">
+                                            <img t-att-src="'/web/image/product.image/' + str(image.id) + '/image_1920'"
+                                                 t-att-alt="image.name"
+                                                 class="thumbnail"/>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="col-lg-6">
+                            <div class="product-detail-info">
+                                <h1 class="product-title" t-esc="product.name"/>
+
+                                <!-- Lục Khí Elements -->
+                                <t t-if="product.luc_khi_element_ids">
+                                    <div class="product-elements">
+                                        <h4>Ngũ Hành phù hợp:</h4>
+                                        <div class="element-tags">
+                                            <t t-foreach="product.luc_khi_element_ids" t-as="element">
+                                                <span t-att-class="'element-tag element-' + element.code.lower()">
+                                                    <t t-esc="element.name"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <!-- Price -->
+                                <div class="product-price-detail">
+                                    <t t-if="product.list_price">
+                                        <span class="price-current">
+                                            <t t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                        </span>
+                                    </t>
+                                    <t t-if="product.compare_list_price">
+                                        <span class="price-compare">
+                                            <t t-esc="product.compare_list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                        </span>
+                                    </t>
+                                </div>
+
+                                <!-- Rating -->
+                                <div class="product-rating-detail">
+                                    <div class="rating-stars">
+                                        <t t-set="rating" t-value="product.website_rating or 0"/>
+                                        <t t-foreach="range(5)" t-as="star">
+                                            <i t-att-class="'fa fa-star' + (star &lt; rating and '-o' or '')"/>
+                                        </t>
+                                    </div>
+                                    <span class="rating-text">
+                                        <t t-esc="product.website_rating or 0"/> / 5
+                                        (<t t-esc="product.website_rating_count or 0"/> đánh giá)
+                                    </span>
+                                </div>
+
+                                <!-- Stock Status -->
+                                <div class="stock-status">
+                                    <t t-if="product.qty_available &gt; 0">
+                                        <span class="in-stock">
+                                            <i class="fa fa-check-circle"/> Còn hàng
+                                            (<t t-esc="product.qty_available"/> sản phẩm)
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="out-of-stock">
+                                            <i class="fa fa-times-circle"/> Hết hàng
+                                        </span>
+                                    </t>
+                                </div>
+
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-section">
+                                    <div class="quantity-selector">
+                                        <button class="btn btn-outline-secondary qty-btn" id="qtyMinus">-</button>
+                                        <input type="number" class="form-control qty-input" id="quantity" value="1" min="1"/>
+                                        <button class="btn btn-outline-secondary qty-btn" id="qtyPlus">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-lg add-to-cart-btn" t-att-data-product-id="product.id">
+                                        <i class="fa fa-cart-plus"/> Thêm vào giỏ hàng
+                                    </button>
+                                    <button class="btn btn-outline-danger wishlist-btn" t-att-data-product-id="product.id">
+                                        <i class="fa fa-heart"/> Yêu thích
+                                    </button>
+                                </div>
+
+                                <!-- Product Description -->
+                                <div class="product-description">
+                                    <h4>Mô tả sản phẩm</h4>
+                                    <div t-field="product.website_description"/>
+                                </div>
+
+                                <!-- Product Specifications -->
+                                <t t-if="product.product_template_attribute_value_ids">
+                                    <div class="product-specifications">
+                                        <h4>Thông số kỹ thuật</h4>
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <t t-foreach="product.product_template_attribute_value_ids" t-as="attribute_value">
+                                                    <tr>
+                                                        <td><strong t-esc="attribute_value.attribute_id.name"/>:</strong></td>
+                                                        <td t-esc="attribute_value.name"/>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Products -->
+                    <t t-if="related_products">
+                        <div class="related-products-section">
+                            <h3 class="section-title">Sản phẩm liên quan</h3>
+                            <div class="related-products-grid">
+                                <t t-foreach="related_products" t-as="related_product">
+                                    <div class="related-product-card">
+                                        <div class="product-image">
+                                            <a t-att-href="related_product.website_url">
+                                                <img t-att-src="related_product.image_1920 or '/web/image/product.template/' + str(related_product.id) + '/image_1920'"
+                                                     t-att-alt="related_product.name"/>
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h4>
+                                                <a t-att-href="related_product.website_url" t-esc="related_product.name"/>
+                                            </h4>
+                                            <div class="price">
+                                                <t t-esc="related_product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <!-- Shopping Cart Template -->
+        <template id="luc_khi_shop.cart" name="Lục Khí Shop - Giỏ hàng">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'cart'"/>
+                <div class="container">
+                    <h1 class="cart-title">Giỏ hàng của bạn</h1>
+
+                    <t t-if="cart_order and cart_order.order_line">
+                        <div class="row">
+                            <!-- Cart Items -->
+                            <div class="col-lg-8">
+                                <div class="cart-items">
+                                    <t t-foreach="cart_order.order_line" t-as="line">
+                                        <div class="cart-item">
+                                            <div class="item-image">
+                                                <img t-att-src="line.product_id.image_1920 or '/web/image/product.template/' + str(line.product_id.id) + '/image_1920'"
+                                                     t-att-alt="line.product_id.name"/>
+                                            </div>
+                                            <div class="item-details">
+                                                <h4 class="item-title">
+                                                    <a t-att-href="line.product_id.website_url" t-esc="line.product_id.name"/>
+                                                </h4>
+                                                <div class="item-price">
+                                                    <span class="unit-price">
+                                                        <t t-esc="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                    </span>
+                                                    <span class="quantity">x <t t-esc="line.product_uom_qty"/></span>
+                                                    <span class="line-total">
+                                                        <t t-esc="line.price_total" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                    </span>
+                                                </div>
+                                                <div class="item-controls">
+                                                    <div class="quantity-controls">
+                                                        <button class="btn btn-sm btn-outline-secondary qty-minus" t-att-data-line-id="line.id">-</button>
+                                                        <input type="number" class="form-control form-control-sm qty-input"
+                                                               t-att-value="line.product_uom_qty" min="1" t-att-data-line-id="line.id"/>
+                                                        <button class="btn btn-sm btn-outline-secondary qty-plus" t-att-data-line-id="line.id">+</button>
+                                                    </div>
+                                                    <button class="btn btn-sm btn-outline-danger remove-item" t-att-data-line-id="line.id">
+                                                        <i class="fa fa-trash"/> Xóa
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Cart Summary -->
+                            <div class="col-lg-4">
+                                <div class="cart-summary">
+                                    <h4>Tóm tắt đơn hàng</h4>
+                                    <div class="summary-row">
+                                        <span>Tạm tính:</span>
+                                        <span t-esc="cart_order.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Thuế VAT:</span>
+                                        <span t-esc="cart_order.amount_tax" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    </div>
+                                    <div class="summary-row total-row">
+                                        <span><strong>Tổng cộng:</strong></span>
+                                        <span><strong t-esc="cart_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></strong></span>
+                                    </div>
+                                    <a href="/shop/checkout" class="btn btn-primary btn-lg btn-block">
+                                        Tiến hành thanh toán
+                                    </a>
+                                    <a href="/shop" class="btn btn-outline-secondary btn-block">
+                                        Tiếp tục mua sắm
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">
+                                <i class="fa fa-shopping-cart"/>
+                            </div>
+                            <h3>Giỏ hàng trống</h3>
+                            <p>Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+                            <a href="/shop" class="btn btn-primary">Bắt đầu mua sắm</a>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <!-- Checkout Template -->
+        <template id="luc_khi_shop.checkout" name="Lục Khí Shop - Thanh toán">
+            <t t-call="website.layout">
+                <t t-set="pageName" t-value="'checkout'"/>
+                <div class="container">
+                    <h1 class="checkout-title">Thanh toán</h1>
+
+                    <form action="/shop/confirm_order" method="post" id="checkoutForm">
+                        <div class="row">
+                            <!-- Billing Information -->
+                            <div class="col-lg-8">
+                                <div class="checkout-section">
+                                    <h3>Thông tin thanh toán</h3>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">Họ và tên *</label>
+                                                <input type="text" class="form-control" id="name" name="name" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">Email *</label>
+                                                <input type="email" class="form-control" id="email" name="email" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="phone">Số điện thoại *</label>
+                                                <input type="tel" class="form-control" id="phone" name="phone" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="company">Công ty</label>
+                                                <input type="text" class="form-control" id="company" name="company"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="street">Địa chỉ *</label>
+                                        <input type="text" class="form-control" id="street" name="street" required="required"/>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="city">Thành phố *</label>
+                                                <input type="text" class="form-control" id="city" name="city" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="state">Tỉnh/Thành *</label>
+                                                <select class="form-control" id="state" name="state_id" required="required">
+                                                    <option value="">Chọn tỉnh/thành</option>
+                                                    <t t-foreach="states" t-as="state">
+                                                        <option t-att-value="state.id" t-esc="state.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="zip">Mã bưu điện</label>
+                                                <input type="text" class="form-control" id="zip" name="zip"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Shipping Method -->
+                                <div class="checkout-section">
+                                    <h3>Phương thức giao hàng</h3>
+                                    <div class="shipping-methods">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="shipping_method" id="standard" value="standard" checked="checked"/>
+                                            <label class="form-check-label" for="standard">
+                                                <strong>Giao hàng tiêu chuẩn</strong><br/>
+                                                <small>3-5 ngày làm việc - Miễn phí</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="shipping_method" id="express" value="express"/>
+                                            <label class="form-check-label" for="express">
+                                                <strong>Giao hàng nhanh</strong><br/>
+                                                <small>1-2 ngày làm việc - 50.000₫</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Method -->
+                                <div class="checkout-section">
+                                    <h3>Phương thức thanh toán</h3>
+                                    <div class="payment-methods">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked="checked"/>
+                                            <label class="form-check-label" for="cod">
+                                                <strong>Thanh toán khi nhận hàng (COD)</strong><br/>
+                                                <small>Thanh toán bằng tiền mặt khi nhận hàng</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="bank" value="bank"/>
+                                            <label class="form-check-label" for="bank">
+                                                <strong>Chuyển khoản ngân hàng</strong><br/>
+                                                <small>Thanh toán qua chuyển khoản</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="vnpay" value="vnpay"/>
+                                            <label class="form-check-label" for="vnpay">
+                                                <strong>VNPay</strong><br/>
+                                                <small>Thanh toán điện tử qua VNPay</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Summary -->
+                            <div class="col-lg-4">
+                                <div class="order-summary-sticky">
+                                    <h4>Tóm tắt đơn hàng</h4>
+                                    <div class="order-items">
+                                        <t t-foreach="cart_order.order_line" t-as="line">
+                                            <div class="order-item">
+                                                <div class="item-info">
+                                                    <span class="item-name" t-esc="line.product_id.name"/>
+                                                    <span class="item-qty">x<t t-esc="line.product_uom_qty"/></span>
+                                                </div>
+                                                <span class="item-price">
+                                                    <t t-esc="line.price_total" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                </span>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <hr/>
+                                    <div class="summary-row">
+                                        <span>Tạm tính:</span>
+                                        <span t-esc="cart_order.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Phí giao hàng:</span>
+                                        <span id="shippingFee">0₫</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Thuế VAT:</span>
+                                        <span t-esc="cart_order.amount_tax" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    </div>
+                                    <div class="summary-row total-row">
+                                        <span><strong>Tổng cộng:</strong></span>
+                                        <span><strong id="totalAmount" t-esc="cart_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></strong></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                        Đặt hàng
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

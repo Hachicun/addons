@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Lục Khí Elements -->
+        <record id="luc_khi_element_kim" model="luc_khi.element">
+            <field name="name">Kim - Kim loại</field>
+            <field name="code">KIM</field>
+            <field name="description">Ngũ hành Kim đại diện cho sự mạnh mẽ, quyết đoán và khả năng tổ chức tốt. Những người thuộc hành Kim thường có tính cách kiên định, cẩn trọng và có khả năng lãnh đạo.</field>
+            <field name="color">#FFD700</field>
+            <field name="vietnamese_description">Hành Kim tượng trưng cho sự tinh tế, kiên cường và khả năng thích ứng. Trong Lục Khí, Kim giúp cân bằng năng lượng, tăng cường sự tự tin và khả năng ra quyết định.</field>
+            <field name="benefits">Tăng cường sự tự tin, cải thiện khả năng lãnh đạo, hỗ trợ ra quyết định đúng đắn</field>
+            <field name="recommended_for">Người cần tăng cường sự tự tin, lãnh đạo, người hay do dự</field>
+            <field name="contra_indicated">Người quá cứng nhắc, cần linh hoạt hơn</field>
+        </record>
+
+        <record id="luc_khi_element_moc" model="luc_khi.element">
+            <field name="name">Mộc - Cây cối</field>
+            <field name="code">MOC</field>
+            <field name="description">Ngũ hành Mộc đại diện cho sự sáng tạo, linh hoạt và hướng tới sự phát triển. Những người thuộc hành Mộc thường có khả năng sáng tạo cao và thích khám phá.</field>
+            <field name="color">#228B22</field>
+            <field name="vietnamese_description">Hành Mộc tượng trưng cho sự phát triển, sáng tạo và khả năng thích ứng. Trong Lục Khí, Mộc giúp kích thích sự sáng tạo, tăng cường khả năng học hỏi và phát triển bản thân.</field>
+            <field name="benefits">Kích thích sáng tạo, tăng khả năng học hỏi, hỗ trợ phát triển cá nhân</field>
+            <field name="recommended_for">Người sáng tạo, học sinh sinh viên, người muốn phát triển bản thân</field>
+            <field name="contra_indicated">Người quá bận rộn, cần tập trung hơn</field>
+        </record>
+
+        <record id="luc_khi_element_thuy" model="luc_khi.element">
+            <field name="name">Thủy - Nước</field>
+            <field name="code">THUY</field>
+            <field name="description">Ngũ hành Thủy đại diện cho sự thông minh, khả năng thích nghi và giao tiếp khéo léo. Những người thuộc hành Thủy thường có khả năng phân tích tốt và linh hoạt.</field>
+            <field name="color">#4169E1</field>
+            <field name="vietnamese_description">Hành Thủy tượng trưng cho sự linh hoạt, thông minh và khả năng thích ứng. Trong Lục Khí, Thủy giúp cải thiện khả năng giao tiếp, tăng cường trí tuệ và sự linh hoạt trong suy nghĩ.</field>
+            <field name="benefits">Cải thiện giao tiếp, tăng cường trí tuệ, hỗ trợ khả năng thích ứng</field>
+            <field name="recommended_for">Người giao tiếp kém, cần tăng khả năng phân tích, người muốn linh hoạt hơn</field>
+            <field name="contra_indicated">Người quá thụ động, cần chủ động hơn</field>
+        </record>
+
+        <record id="luc_khi_element_hoa" model="luc_khi.element">
+            <field name="name">Hỏa - Lửa</field>
+            <field name="code">HOA</field>
+            <field name="description">Ngũ hành Hỏa đại diện cho năng lượng, đam mê và khả năng truyền cảm hứng. Những người thuộc hành Hỏa thường đầy nhiệt huyết và có khả năng lãnh đạo đám đông.</field>
+            <field name="color">#DC143C</field>
+            <field name="vietnamese_description">Hành Hỏa tượng trưng cho nhiệt huyết, đam mê và khả năng truyền cảm hứng. Trong Lục Khí, Hỏa giúp tăng cường năng lượng, cải thiện khả năng lãnh đạo và tạo động lực cho người khác.</field>
+            <field name="benefits">Tăng cường năng lượng, cải thiện lãnh đạo, tạo động lực</field>
+            <field name="recommended_for">Người thiếu năng lượng, lãnh đạo, người muốn tạo ảnh hưởng</field>
+            <field name="contra_indicated">Người quá nóng tính, cần bình tĩnh hơn</field>
+        </record>
+
+        <record id="luc_khi_element_tho" model="luc_khi.element">
+            <field name="name">Thổ - Đất</field>
+            <field name="code">THO</field>
+            <field name="description">Ngũ hành Thổ đại diện cho sự ổn định, đáng tin cậy và khả năng tạo nền tảng vững chắc. Những người thuộc hành Thổ thường có tính cách thực tế và kiên trì.</field>
+            <field name="color">#8B4513</field>
+            <field name="vietnamese_description">Hành Thổ tượng trưng cho sự ổn định, kiên trì và khả năng xây dựng nền tảng vững chắc. Trong Lục Khí, Thổ giúp tăng cường sự ổn định, cải thiện khả năng kiên trì và tạo sự an toàn.</field>
+            <field name="benefits">Tăng cường ổn định, cải thiện kiên trì, tạo sự an toàn</field>
+            <field name="recommended_for">Người thiếu ổn định, cần kiên trì, người muốn xây dựng nền tảng</field>
+            <field name="contra_indicated">Người quá bảo thủ, cần đổi mới hơn</field>
+        </record>
+
+        <record id="luc_khi_element_phong" model="luc_khi.element">
+            <field name="name">Phong - Gió</field>
+            <field name="code">PHONG</field>
+            <field name="description">Phong đại diện cho sự tự do, yêu thích thay đổi và khả năng kết nối tốt với người khác. Phong giúp mang lại sự linh hoạt và khả năng thích ứng với hoàn cảnh.</field>
+            <field name="color">#87CEEB</field>
+            <field name="vietnamese_description">Phong tượng trưng cho sự tự do, linh hoạt và khả năng kết nối. Trong Lục Khí, Phong giúp tăng cường sự linh hoạt, cải thiện khả năng thích ứng và mở rộng mối quan hệ xã hội.</field>
+            <field name="benefits">Tăng cường linh hoạt, cải thiện thích ứng, mở rộng quan hệ</field>
+            <field name="recommended_for">Người cần linh hoạt hơn, muốn mở rộng quan hệ, người thích thay đổi</field>
+            <field name="contra_indicated">Người quá bấp bênh, cần ổn định hơn</field>
+        </record>
+
+        <!-- Product Categories -->
+        <record id="product_category_luc_khi_crystals" model="luc_khi.product.category">
+            <field name="name">Đá quý Lục Khí</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_kim')), (4, ref('luc_khi_element_moc')), (4, ref('luc_khi_element_thuy')), (4, ref('luc_khi_element_hoa')), (4, ref('luc_khi_element_tho'))]"/>
+            <field name="luc_khi_description">Bộ sưu tập đá quý tự nhiên được chọn lọc theo ngũ hành Lục Khí</field>
+            <field name="luc_khi_benefits">Cân bằng năng lượng, tăng cường sức khỏe tinh thần, hỗ trợ phát triển cá nhân</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="product_category_luc_khi_incense" model="luc_khi.product.category">
+            <field name="name">Trầm hương Lục Khí</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_moc')), (4, ref('luc_khi_element_hoa')), (4, ref('luc_khi_element_phong'))]"/>
+            <field name="luc_khi_description">Trầm hương tự nhiên giúp thanh lọc không gian và cân bằng năng lượng</field>
+            <field name="luc_khi_benefits">Thanh lọc không gian, cân bằng năng lượng, thư giãn tinh thần</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="product_category_luc_khi_books" model="luc_khi.product.category">
+            <field name="name">Sách Lục Khí</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_thuy')), (4, ref('luc_khi_element_moc'))]"/>
+            <field name="luc_khi_description">Tài liệu và sách hướng dẫn về Lục Khí và ngũ hành</field>
+            <field name="luc_khi_benefits">Nâng cao kiến thức, phát triển trí tuệ, hiểu biết bản thân</field>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="product_category_luc_khi_tools" model="luc_khi.product.category">
+            <field name="name">Công cụ thực hành</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_kim')), (4, ref('luc_khi_element_tho'))]"/>
+            <field name="luc_khi_description">Công cụ hỗ trợ thực hành Lục Khí hàng ngày</field>
+            <field name="luc_khi_benefits">Hỗ trợ thực hành, duy trì thói quen, tăng hiệu quả</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <!-- Sample Products -->
+        <record id="product_template_citrine_crystal" model="product.template">
+            <field name="name">Đá Citrine tự nhiên - Hành Hỏa</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_crystals"/>
+            <field name="list_price">450000</field>
+            <field name="standard_price">300000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Đá Citrine tự nhiên - Viên đá của năng lượng và sự giàu có</strong></p>
+                <p>Đá Citrine thuộc hành Hỏa trong ngũ hành, mang lại năng lượng tích cực, tăng cường sự tự tin và thu hút tài lộc. Viên đá này được chọn lọc kỹ càng từ nguồn gốc tự nhiên, mang đến cho bạn sự cân bằng năng lượng hoàn hảo.</p>
+                <h4>Lợi ích chính:</h4>
+                <ul>
+                    <li>Tăng cường năng lượng và sự tự tin</li>
+                    <li>Thu hút tài lộc và cơ hội</li>
+                    <li>Cân bằng cảm xúc, giảm stress</li>
+                    <li>Hỗ trợ tiêu hóa và chuyển hóa năng lượng</li>
+                </ul>
+                <h4>Cách sử dụng:</h4>
+                <p>Đeo trên người, đặt ở góc tài vận, hoặc thiền định với đá để tăng cường năng lượng.</p>
+            </field>
+            <field name="description_sale">Đá Citrine tự nhiên cao cấp, kích thước 2-3cm, thuộc hành Hỏa, mang lại năng lượng tích cực và tài lộc.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_hoa'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_crystals"/>
+            <field name="luc_khi_benefits">Tăng cường năng lượng, thu hút tài lộc, cân bằng cảm xúc, giảm stress</field>
+            <field name="luc_khi_usage_guide">Đeo trên người, đặt ở góc tài vận, thiền định hàng ngày</field>
+            <field name="luc_khi_energy_level">Cao</field>
+            <field name="luc_khi_recommended_for">Người cần tăng năng lượng, thu hút tài lộc, giảm stress</field>
+            <field name="weight">0.05</field>
+            <field name="volume">0.000008</field>
+        </record>
+
+        <record id="product_template_amethyst_crystal" model="product.template">
+            <field name="name">Đá Amethyst tự nhiên - Hành Thủy</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_crystals"/>
+            <field name="list_price">380000</field>
+            <field name="standard_price">250000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Đá Amethyst tự nhiên - Viên đá của trí tuệ và bình an</strong></p>
+                <p>Đá Amethyst thuộc hành Thủy trong ngũ hành, giúp tăng cường trí tuệ, mang lại sự bình an và hỗ trợ giấc ngủ chất lượng. Viên đá tím này là biểu tượng của sự tinh khiết và trí tuệ.</p>
+                <h4>Lợi ích chính:</h4>
+                <ul>
+                    <li>Tăng cường trí tuệ và khả năng tập trung</li>
+                    <li>Mang lại sự bình an và thư giãn</li>
+                    <li>Cải thiện chất lượng giấc ngủ</li>
+                    <li>Hỗ trợ chữa lành cảm xúc</li>
+                </ul>
+                <h4>Cách sử dụng:</h4>
+                <p>Đặt dưới gối khi ngủ, đeo trên người, hoặc dùng trong thiền định để tăng cường trí tuệ.</p>
+            </field>
+            <field name="description_sale">Đá Amethyst tự nhiên cao cấp, kích thước 2-3cm, thuộc hành Thủy, hỗ trợ trí tuệ và giấc ngủ.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_thuy'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_crystals"/>
+            <field name="luc_khi_benefits">Tăng cường trí tuệ, mang lại bình an, cải thiện giấc ngủ, chữa lành cảm xúc</field>
+            <field name="luc_khi_usage_guide">Đặt dưới gối, đeo trên người, dùng trong thiền định</field>
+            <field name="luc_khi_energy_level">Trung bình</field>
+            <field name="luc_khi_recommended_for">Người cần tăng trí tuệ, có vấn đề giấc ngủ, cần bình an tinh thần</field>
+            <field name="weight">0.04</field>
+            <field name="volume">0.000006</field>
+        </record>
+
+        <record id="product_template_rose_quartz_crystal" model="product.template">
+            <field name="name">Đá Rose Quartz tự nhiên - Hành Thổ</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_crystals"/>
+            <field name="list_price">320000</field>
+            <field name="standard_price">200000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Đá Rose Quartz tự nhiên - Viên đá của tình yêu và lòng nhân ái</strong></p>
+                <p>Đá Rose Quartz thuộc hành Thổ trong ngũ hành, mang lại năng lượng tình yêu, lòng nhân ái và sự chữa lành cảm xúc. Viên đá hồng này giúp mở rộng trái tim và tăng cường mối quan hệ.</p>
+                <h4>Lợi ích chính:</h4>
+                <ul>
+                    <li>Mở rộng trái tim và tăng cường tình yêu</li>
+                    <li>Chữa lành vết thương cảm xúc</li>
+                    <li>Tăng cường lòng nhân ái và sự tha thứ</li>
+                    <li>Cân bằng năng lượng tim mạch</li>
+                </ul>
+                <h4>Cách sử dụng:</h4>
+                <p>Đeo trên người, đặt ở phòng khách, hoặc dùng trong thiền định để chữa lành cảm xúc.</p>
+            </field>
+            <field name="description_sale">Đá Rose Quartz tự nhiên cao cấp, kích thước 2-3cm, thuộc hành Thổ, hỗ trợ tình yêu và chữa lành cảm xúc.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_tho'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_crystals"/>
+            <field name="luc_khi_benefits">Mở rộng trái tim, chữa lành cảm xúc, tăng lòng nhân ái, cân bằng năng lượng tim</field>
+            <field name="luc_khi_usage_guide">Đeo trên người, đặt ở phòng khách, dùng trong thiền định</field>
+            <field name="luc_khi_energy_level">Trung bình</field>
+            <field name="luc_khi_recommended_for">Người cần chữa lành cảm xúc, muốn tăng cường tình yêu, cần lòng nhân ái hơn</field>
+            <field name="weight">0.03</field>
+            <field name="volume">0.000005</field>
+        </record>
+
+        <record id="product_template_incense_sticks" model="product.template">
+            <field name="name">Trầm hương tự nhiên - Bộ 20 que</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_incense"/>
+            <field name="list_price">150000</field>
+            <field name="standard_price">100000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Trầm hương tự nhiên cao cấp - Thanh lọc không gian</strong></p>
+                <p>Bộ trầm hương tự nhiên được làm từ gỗ trầm nguyên chất, giúp thanh lọc không gian, cân bằng năng lượng và tạo sự thư giãn. Mỗi que trầm cháy trong 45-60 phút, mang lại hương thơm tinh tế và dễ chịu.</p>
+                <h4>Lợi ích chính:</h4>
+                <ul>
+                    <li>Thanh lọc không khí và năng lượng tiêu cực</li>
+                    <li>Tạo sự thư giãn và bình an</li>
+                    <li>Hỗ trợ thiền định và tập trung</li>
+                    <li>Mang lại hương thơm tự nhiên</li>
+                </ul>
+                <h4>Cách sử dụng:</h4>
+                <p>Đốt 1-2 que mỗi ngày trong không gian sống, văn phòng hoặc phòng thiền.</p>
+            </field>
+            <field name="description_sale">Trầm hương tự nhiên cao cấp, bộ 20 que, cháy 45-60 phút/que, hương thơm tinh tế.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_moc')), (4, ref('luc_khi_element_hoa'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_incense"/>
+            <field name="luc_khi_benefits">Thanh lọc không khí, tạo thư giãn, hỗ trợ thiền định, hương thơm tự nhiên</field>
+            <field name="luc_khi_usage_guide">Đốt 1-2 que/ngày trong không gian sống hoặc văn phòng</field>
+            <field name="luc_khi_energy_level">Thấp</field>
+            <field name="luc_khi_recommended_for">Người cần thanh lọc không gian, thư giãn, thiền định</field>
+            <field name="weight">0.1</field>
+            <field name="volume">0.00002</field>
+        </record>
+
+        <record id="product_template_luc_khi_book" model="product.template">
+            <field name="name">Sách "Lục Khí - Hành trình khám phá bản thân"</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_books"/>
+            <field name="list_price">180000</field>
+            <field name="standard_price">120000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Sách "Lục Khí - Hành trình khám phá bản thân"</strong></p>
+                <p>Cuốn sách toàn diện về Lục Khí và ngũ hành, giúp bạn hiểu rõ bản thân, cân bằng năng lượng và phát triển cá nhân. Với hơn 200 trang, sách bao gồm lý thuyết, bài tập thực hành và ví dụ thực tế.</p>
+                <h4>Nội dung chính:</h4>
+                <ul>
+                    <li>Cơ bản về ngũ hành và Lục Khí</li>
+                    <li>Phân tích tính cách theo ngũ hành</li>
+                    <li>Bài tập cân bằng năng lượng</li>
+                    <li>Ứng dụng thực tế trong cuộc sống</li>
+                    <li>Ví dụ và case study</li>
+                </ul>
+                <h4>Đối tượng phù hợp:</h4>
+                <p>Người mới bắt đầu tìm hiểu Lục Khí, người muốn phát triển bản thân, chuyên gia tư vấn.</p>
+            </field>
+            <field name="description_sale">Sách hướng dẫn Lục Khí toàn diện, 200+ trang, lý thuyết và bài tập thực hành.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_thuy')), (4, ref('luc_khi_element_moc'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_books"/>
+            <field name="luc_khi_benefits">Hiểu rõ bản thân, cân bằng năng lượng, phát triển cá nhân, tăng trí tuệ</field>
+            <field name="luc_khi_usage_guide">Đọc và thực hành bài tập hàng ngày</field>
+            <field name="luc_khi_energy_level">Thấp</field>
+            <field name="luc_khi_recommended_for">Người mới tìm hiểu Lục Khí, muốn phát triển bản thân</field>
+            <field name="weight">0.4</field>
+            <field name="volume">0.0005</field>
+        </record>
+
+        <record id="product_template_meditation_cushion" model="product.template">
+            <field name="name">Đệm thiền Lục Khí - Gòn tự nhiên</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_luc_khi_tools"/>
+            <field name="list_price">250000</field>
+            <field name="standard_price">180000</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+            <field name="website_description">
+                <p><strong>Đệm thiền Lục Khí - Hỗ trợ thực hành hàng ngày</strong></p>
+                <p>Đệm thiền được thiết kế đặc biệt cho thực hành Lục Khí, với chất liệu gòn tự nhiên cao cấp, mang lại sự êm ái và hỗ trợ tư thế thiền đúng cách. Kích thước phù hợp cho người Việt Nam.</p>
+                <h4>Tính năng nổi bật:</h4>
+                <ul>
+                    <li>Chất liệu gòn tự nhiên cao cấp</li>
+                    <li>Thiết kế hỗ trợ tư thế thiền đúng</li>
+                    <li>Kích thước phù hợp người Việt (35x35x10cm)</li>
+                    <li>Dễ vệ sinh và bảo quản</li>
+                    <li>Mang lại sự ổn định khi thiền</li>
+                </ul>
+                <h4>Cách sử dụng:</h4>
+                <p>Sử dụng hàng ngày cho thiền định, yoga hoặc thực hành Lục Khí.</p>
+            </field>
+            <field name="description_sale">Đệm thiền gòn tự nhiên, kích thước 35x35x10cm, hỗ trợ tư thế thiền đúng.</field>
+            <field name="luc_khi_element_ids" eval="[(4, ref('luc_khi_element_tho')), (4, ref('luc_khi_element_kim'))]"/>
+            <field name="luc_khi_category_id" ref="product_category_luc_khi_tools"/>
+            <field name="luc_khi_benefits">Hỗ trợ tư thế thiền đúng, tăng sự ổn định, thư giãn tinh thần</field>
+            <field name="luc_khi_usage_guide">Sử dụng hàng ngày cho thiền định và thực hành Lục Khí</field>
+            <field name="luc_khi_energy_level">Thấp</field>
+            <field name="luc_khi_recommended_for">Người thực hành thiền, yoga, Lục Khí hàng ngày</field>
+            <field name="weight">0.8</field>
+            <field name="volume">0.001</field>
+        </record>
+    </data>
+</odoo>

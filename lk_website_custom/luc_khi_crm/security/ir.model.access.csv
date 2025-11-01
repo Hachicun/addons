@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_luc_khi_contact_form_user,luc_khi.contact.form user,model_luc_khi_contact_form,base.group_user,1,0,0,0
+access_luc_khi_contact_form_manager,luc_khi.contact.form manager,model_luc_khi_contact_form,sales_team.group_sale_manager,1,1,1,1

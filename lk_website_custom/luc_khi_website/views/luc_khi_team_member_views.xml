@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Team Member List View -->
+        <record id="view_luc_khi_team_member_tree" model="ir.ui.view">
+            <field name="name">luc_khi.team.member.list</field>
+            <field name="model">luc_khi.team.member</field>
+            <field name="arch" type="xml">
+                <list string="Team Members">
+                    <field name="sequence" widget="handle"/>
+                    <field name="photo" widget="image"/>
+                    <field name="name"/>
+                    <field name="position"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="is_published"/>
+                    <field name="featured"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Team Member Form View -->
+        <record id="view_luc_khi_team_member_form" model="ir.ui.view">
+            <field name="name">luc_khi.team.member.form</field>
+            <field name="model">luc_khi.team.member</field>
+            <field name="arch" type="xml">
+                <form string="Team Member">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_published" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="is_published" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                            <button name="toggle_featured" type="object" class="oe_stat_button" icon="fa-star">
+                                <field name="featured" widget="boolean_button" options='{"terminology": {"active": "Featured", "inactive": "Not Featured"}}'/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Member Name"/>
+                            </h1>
+                            <field name="position" placeholder="Position"/>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="photo" widget="image"/>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="zalo"/>
+                            </group>
+                            <group>
+                                <field name="is_published"/>
+                                <field name="featured"/>
+                                <field name="sequence"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Biography">
+                                <field name="bio" placeholder="Member biography..."/>
+                            </page>
+                            <page string="Expertise">
+                                <group>
+                                    <field name="expertise" placeholder="Areas of expertise..."/>
+                                    <field name="certifications" placeholder="Certifications..."/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Team Member Kanban View -->
+        <record id="view_luc_khi_team_member_kanban" model="ir.ui.view">
+            <field name="name">luc_khi.team.member.kanban</field>
+            <field name="model">luc_khi.team.member</field>
+            <field name="arch" type="xml">
+                <kanban string="Team Members">
+                    <field name="name"/>
+                    <field name="position"/>
+                    <field name="photo"/>
+                    <field name="email"/>
+                    <field name="is_published"/>
+                    <field name="featured"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('luc_khi.team.member', 'photo', record.id.raw_value)" 
+                                         t-att-alt="record.name.value" class="o_image_64_cover"/>
+                                </div>
+                                <div class="o_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="position"/>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#" tabindex="-1">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Team Member Action -->
+        <record id="action_luc_khi_team_member" model="ir.actions.act_window">
+            <field name="name">Team Members</field>
+            <field name="res_model">luc_khi.team.member</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add your first team member
+                </p>
+                <p>
+                    Team members are displayed on the About page and can be featured 
+                    to highlight key personnel.
+                </p>
+            </field>
+        </record>
+
+        <!-- Team Member Menu Item -->
+        <menuitem id="menu_luc_khi_team_member"
+                  name="Team Members"
+                  parent="menu_luc_khi_website_page"
+                  action="action_luc_khi_team_member"
+                  sequence="20"/>
+    </data>
+</odoo>

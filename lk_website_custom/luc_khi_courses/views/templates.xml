@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Courses Listing Template -->
+        <template id="courses" name="Courses Listing">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row mb-5">
+                                <div class="col-lg-8">
+                                    <h1 class="display-5">Khóa học Lục Khí</h1>
+                                    <p class="lead text-muted">Khám phá các khóa học phù hợp với hành trình sức khỏe của bạn</p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <!-- Search and Filters -->
+                                    <div class="card shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tìm kiếm &amp; Lọc</h5>
+                                            <form method="GET" class="mb-3">
+                                                <div class="mb-3">
+                                                    <input type="text" name="search" class="form-control" 
+                                                           placeholder="Tìm kiếm khóa học..." t-att-value="search"/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <select name="category" class="form-select">
+                                                        <option value="">Tất cả danh mục</option>
+                                                        <t t-foreach="categories" t-as="cat">
+                                                            <option t-att-value="cat.slug" 
+                                                                    t-att-selected="cat.slug == current_category"
+                                                                    t-esc="cat.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <select name="level" class="form-select">
+                                                        <option value="">Tất cả cấp độ</option>
+                                                        <t t-foreach="level_options" t-as="level_opt">
+                                                            <option t-att-value="level_opt[0]" 
+                                                                    t-att-selected="level_opt[0] == current_level"
+                                                                    t-esc="level_opt[1]"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Courses Grid -->
+                            <div class="row g-4" t-if="courses">
+                                <t t-foreach="courses" t-as="course">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="card h-100 shadow-sm course-card">
+                                            <img t-if="course.image" t-att-src="course.image_1024" 
+                                                 class="card-img-top" t-att-alt="course.name"/>
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="mb-2">
+                                                    <span class="badge bg-primary me-2" t-esc="dict(course._fields['level'].selection).get(course.level)"/>
+                                                    <span class="badge bg-info" t-if="course.featured">Nổi bật</span>
+                                                </div>
+                                                <h5 class="card-title" t-esc="course.name"/>
+                                                <p class="card-text text-muted flex-grow-1" 
+                                                   t-esc="course.short_description or course.description[:100] + '...'"/>
+                                                
+                                                <div class="course-meta mb-3">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <small class="text-muted">
+                                                            <i class="fa fa-users me-1"/>
+                                                            <span t-esc="course.student_count"/> học viên
+                                                        </small>
+                                                        <small class="text-muted">
+                                                            <i class="fa fa-star me-1"/>
+                                                            <span t-esc="course.rating or 0"/>
+                                                        </small>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="text-primary fw-bold h5 mb-0">
+                                                            <span t-if="course.price > 0" t-esc="'{:,.0f} ₫'.format(course.price)"/>
+                                                            <span t-if="course.price == 0">Miễn phí</span>
+                                                        </span>
+                                                        <span class="badge bg-secondary" t-if="course.duration_hours">
+                                                            <span t-esc="course.duration_hours"/> giờ
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mt-auto">
+                                                    <a t-att-href="'/course/' + course.slug" 
+                                                       class="btn btn-outline-primary w-100">Xem chi tiết</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            
+                            <!-- No Courses Message -->
+                            <div class="text-center py-5" t-if="not courses">
+                                <div class="empty-state">
+                                    <i class="fa fa-graduation-cap fa-4x text-muted mb-3"/>
+                                    <h3>Không tìm thấy khóa học</h3>
+                                    <p class="text-muted">Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác.</p>
+                                    <a href="/courses" class="btn btn-primary">Xem tất cả khóa học</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Course Detail Template -->
+        <template id="course_detail" name="Course Detail">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <!-- Course Header -->
+                    <section class="py-5 bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                                            <li class="breadcrumb-item"><a href="/courses">Khóa học</a></li>
+                                            <li class="breadcrumb-item active" t-esc="course.name"/>
+                                        </ol>
+                                    </nav>
+                                    
+                                    <h1 class="display-4 mb-3" t-esc="course.name"/>
+                                    <p class="lead text-muted mb-4" t-esc="course.short_description"/>
+                                    
+                                    <div class="course-meta mb-4">
+                                        <div class="row g-3">
+                                            <div class="col-md-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-layer-group me-2 text-primary"/>
+                                                    <div>
+                                                        <small class="text-muted d-block">Cấp độ</small>
+                                                        <span t-esc="dict(course._fields['level'].selection).get(course.level)"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-users me-2 text-primary"/>
+                                                    <div>
+                                                        <small class="text-muted d-block">Học viên</small>
+                                                        <span t-esc="course.student_count"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-star me-2 text-primary"/>
+                                                    <div>
+                                                        <small class="text-muted d-block">Đánh giá</small>
+                                                        <span t-esc="course.rating or 0"/>/5
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" t-if="course.duration_hours">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-clock me-2 text-primary"/>
+                                                    <div>
+                                                        <small class="text-muted d-block">Thời lượng</small>
+                                                        <span t-esc="course.duration_hours"/> giờ
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="course-tags mb-4" t-if="course.tag_ids">
+                                        <t t-foreach="course.tag_ids" t-as="tag">
+                                            <span class="badge bg-secondary me-2" t-esc="tag.name"/>
+                                        </t>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                    <div class="card shadow-sm sticky-top" style="top: 20px;">
+                                        <img t-if="course.image" t-att-src="course.image_1024" 
+                                             class="card-img-top" t-att-alt="course.name"/>
+                                        <div class="card-body">
+                                            <div class="text-center mb-4">
+                                                <div class="price-display h3 text-primary mb-2">
+                                                    <span t-if="course.price > 0" t-esc="'{:,.0f} ₫'.format(course.price)"/>
+                                                    <span t-if="course.price == 0">Miễn phí</span>
+                                                </div>
+                                                <small class="text-muted" t-if="course.category_id">
+                                                    Danh mục: <span t-esc="course.category_id.name"/>
+                                                </small>
+                                            </div>
+                                            
+                                            <div class="d-grid gap-2">
+                                                <t t-if="has_access and is_enrolled">
+                                                    <a t-att-href="course.slide_channel_id.website_url if course.slide_channel_id else '#'" 
+                                                       class="btn btn-primary btn-lg">
+                                                        <i class="fa fa-play me-2"/>Bắt đầu học
+                                                    </a>
+                                                </t>
+                                                <t t-elif="has_access and not is_enrolled">
+                                                    <form t-att-action="'/course/' + course.slug + '/enroll'" method="POST">
+                                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                                            <i class="fa fa-user-plus me-2"/>Đăng ký ngay
+                                                        </button>
+                                                    </form>
+                                                </t>
+                                                <t t-else="">
+                                                    <button class="btn btn-outline-primary btn-lg w-100" disabled="disabled">
+                                                        <i class="fa fa-lock me-2"/>Yêu cầu đăng nhập
+                                                    </button>
+                                                </t>
+                                                
+                                                <a href="/contact" class="btn btn-outline-secondary">
+                                                    <i class="fa fa-question-circle me-2"/>Tư vấn miễn phí
+                                                </a>
+                                            </div>
+                                            
+                                            <!-- Course Features -->
+                                            <div class="mt-4">
+                                                <h6>Khóa học bao gồm:</h6>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-2">
+                                                        <i class="fa fa-check text-success me-2"/>
+                                                        Video bài giảng chất lượng cao
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fa fa-check text-success me-2"/>
+                                                        Tài liệu học tập đi kèm
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fa fa-check text-success me-2"/>
+                                                        Bài kiểm tra kiến thức
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fa fa-check text-success me-2"/>
+                                                        Chứng chỉ hoàn thành
+                                                    </li>
+                                                    <li class="mb-2">
+                                                        <i class="fa fa-check text-success me-2"/>
+                                                        Hỗ trợ trọn đời
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Course Content -->
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="course-content">
+                                        <div class="mb-5">
+                                            <h3>Mô tả khóa học</h3>
+                                            <div t-raw="course.description"/>
+                                        </div>
+                                        
+                                        <div class="mb-5" t-if="course.learning_objectives">
+                                            <h3>Mục tiêu học tập</h3>
+                                            <div t-raw="course.learning_objectives"/>
+                                        </div>
+                                        
+                                        <div class="mb-5" t-if="course.prerequisites">
+                                            <h3>Yêu cầu đầu vào</h3>
+                                            <div t-raw="course.prerequisites"/>
+                                        </div>
+                                        
+                                        <!-- Instructors -->
+                                        <div class="mb-5" t-if="course.instructor_ids">
+                                            <h3>Giảng viên</h3>
+                                            <div class="row g-4">
+                                                <t t-foreach="course.instructor_ids" t-as="instructor">
+                                                    <div class="col-md-6">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="d-flex align-items-center">
+                                                                    <img t-if="instructor.image_1920" 
+                                                                         t-att-src="instructor.image_128" 
+                                                                         class="rounded-circle me-3" 
+                                                                         style="width: 60px; height: 60px; object-fit: cover;"/>
+                                                                    <div>
+                                                                        <h6 class="mb-1" t-esc="instructor.name"/>
+                                                                        <p class="text-muted mb-0 small" t-esc="instructor.function or 'Giảng viên'"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                    <!-- Video Preview -->
+                                    <div class="card shadow-sm mb-4" t-if="course.video_url">
+                                        <div class="ratio ratio-16x9">
+                                            <iframe t-att-src="course.video_url" 
+                                                    title="Course Preview" 
+                                                    allowfullscreen=""/>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Related Courses -->
+                                    <div class="card shadow-sm" t-if="related_courses">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Khóa học liên quan</h5>
+                                            <div class="list-group list-group-flush">
+                                                <t t-foreach="related_courses" t-as="related">
+                                                    <a t-att-href="'/course/' + related.slug" 
+                                                       class="list-group-item list-group-item-action">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1" t-esc="related.name"/>
+                                                            <small class="text-primary">
+                                                                <span t-if="related.price > 0" t-esc="'{:,.0f} ₫'.format(related.price)"/>
+                                                                <span t-if="related.price == 0">Miễn phí</span>
+                                                            </small>
+                                                        </div>
+                                                        <p class="mb-1 small text-muted" 
+                                                           t-esc="related.short_description[:50] + '...'"/>
+                                                        <small class="text-muted">
+                                                            <span t-esc="dict(related._fields['level'].selection).get(related.level)"/>
+                                                        </small>
+                                                    </a>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- My Courses Template -->
+        <template id="my_courses" name="My Courses">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row mb-5">
+                                <div class="col-lg-8">
+                                    <h1 class="display-5">Khóa học của tôi</h1>
+                                    <p class="lead text-muted">Quản lý và theo dõi tiến độ học tập của bạn</p>
+                                </div>
+                                <div class="col-lg-4 text-end">
+                                    <a href="/courses" class="btn btn-outline-primary">
+                                        <i class="fa fa-plus me-2"/>Khám phá thêm khóa học
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-4" t-if="courses">
+                                <t t-foreach="courses" t-as="course">
+                                    <div class="col-lg-6">
+                                        <div class="card shadow-sm">
+                                            <div class="row g-0">
+                                                <div class="col-md-4">
+                                                    <img t-if="course.image" t-att-src="course.image_256" 
+                                                         class="img-fluid rounded-start h-100" 
+                                                         style="object-fit: cover;" t-att-alt="course.name"/>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" t-esc="course.name"/>
+                                                        <p class="card-text text-muted small" 
+                                                           t-esc="course.short_description or course.description[:80] + '...'"/>
+                                                        
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <span class="badge bg-primary" 
+                                                                  t-esc="dict(course._fields['level'].selection).get(course.level)"/>
+                                                            <small class="text-muted">
+                                                                <i class="fa fa-users me-1"/>
+                                                                <span t-esc="course.student_count"/> học viên
+                                                            </small>
+                                                        </div>
+                                                        
+                                                        <div class="d-grid gap-2">
+                                                            <a t-att-href="course.slide_channel_id.website_url if course.slide_channel_id else '#'" 
+                                                               class="btn btn-primary">
+                                                                <i class="fa fa-play me-2"/>Tiếp tục học
+                                                            </a>
+                                                            <small class="text-muted text-center">
+                                                                <i class="fa fa-clock me-1"/>
+                                                                Lần học gần nhất: Hôm nay
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            
+                            <!-- No Courses Message -->
+                            <div class="text-center py-5" t-if="not courses">
+                                <div class="empty-state">
+                                    <i class="fa fa-graduation-cap fa-4x text-muted mb-3"/>
+                                    <h3>Bạn chưa đăng ký khóa học nào</h3>
+                                    <p class="text-muted">Khám phá các khóa học của chúng tôi và bắt đầu hành trình học tập ngay hôm nay.</p>
+                                    <a href="/courses" class="btn btn-primary btn-lg">Xem khóa học</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Category Courses Template -->
+        <template id="category_courses" name="Category Courses">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row mb-5">
+                                <div class="col-lg-8">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                                            <li class="breadcrumb-item"><a href="/courses">Khóa học</a></li>
+                                            <li class="breadcrumb-item active" t-esc="category.name"/>
+                                        </ol>
+                                    </nav>
+                                    
+                                    <h1 class="display-5" t-esc="category.name"/>
+                                    <p class="lead text-muted" t-esc="category.description"/>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-4" t-if="courses">
+                                <t t-foreach="courses" t-as="course">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <img t-if="course.image" t-att-src="course.image_1024" 
+                                                 class="card-img-top" t-att-alt="course.name"/>
+                                            <div class="card-body">
+                                                <h5 class="card-title" t-esc="course.name"/>
+                                                <p class="card-text text-muted" 
+                                                   t-esc="course.short_description or course.description[:100] + '...'"/>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="badge bg-primary" 
+                                                          t-esc="dict(course._fields['level'].selection).get(course.level)"/>
+                                                    <span class="text-primary fw-bold">
+                                                        <span t-if="course.price > 0" t-esc="'{:,.0f} ₫'.format(course.price)"/>
+                                                        <span t-if="course.price == 0">Miễn phí</span>
+                                                    </span>
+                                                </div>
+                                                <a t-att-href="'/course/' + course.slug" 
+                                                   class="btn btn-outline-primary mt-2 w-100">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

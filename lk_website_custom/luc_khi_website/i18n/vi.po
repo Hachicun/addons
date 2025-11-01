@@ -1,0 +1,136 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* luc_khi_website
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-29 07:00+0000\n"
+"PO-Revision-Date: 2025-10-29 07:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__content
+msgid "Page Content"
+msgstr "Nội dung trang"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__name
+msgid "Page Name"
+msgstr "Tên trang"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__page_key
+msgid "Page Key"
+msgstr "Mã trang"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__is_published
+msgid "Published"
+msgstr "Đã xuất bản"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__seo_title
+msgid "SEO Title"
+msgstr "Tiêu đề SEO"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_website_page__seo_description
+msgid "SEO Description"
+msgstr "Mô tả SEO"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__name
+msgid "Name"
+msgstr "Họ và tên"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__position
+msgid "Position"
+msgstr "Chức vụ"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__bio
+msgid "Biography"
+msgstr "Tiểu sử"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__photo
+msgid "Photo"
+msgstr "Ảnh"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__email
+msgid "Email"
+msgstr "Email"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__phone
+msgid "Phone"
+msgstr "Điện thoại"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__zalo
+msgid "Zalo"
+msgstr "Zalo"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__expertise
+msgid "Areas of Expertise"
+msgstr "Lĩnh vực chuyên môn"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__certifications
+msgid "Certifications"
+msgstr "Chứng chỉ"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__is_published
+msgid "Published"
+msgstr "Đã xuất bản"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__featured
+msgid "Featured Member"
+msgstr "Thành viên nổi bật"
+
+#. module: luc_khi_website
+#: model:ir.model.fields,field_description:luc_khi_website.field_luc_khi_team_member__sequence
+msgid "Sequence"
+msgstr "Thứ tự"
+
+#. module: luc_khi_website
+#: model:ir.ui.menu,name:luc_khi_website.menu_luc_khi_website_page
+msgid "Website Pages"
+msgstr "Trang website"
+
+#. module: luc_khi_website
+#: model:ir.ui.menu,name:luc_khi_website.menu_luc_khi_team_member
+msgid "Team Members"
+msgstr "Thành viên đội ngũ"
+
+#. module: luc_khi_website
+#: model:ir.actions.act_window,name:luc_khi_website.action_luc_khi_website_page
+msgid "Website Pages"
+msgstr "Trang website"
+
+#. module: luc_khi_website
+#: model:ir.actions.act_window,name:luc_khi_website.action_luc_khi_team_member
+msgid "Team Members"
+msgstr "Thành viên đội ngũ"
+
+#. module: luc_khi_website
+#: model:ir.model,name:luc_khi_website.model_luc_khi_website_page
+msgid "Lục Khí Website Page"
+msgstr "Trang Website Lục Khí"
+
+#. module: luc_khi_website
+#: model:ir.model,name:luc_khi_website.model_luc_khi_team_member
+msgid "Lục Khí Team Member"
+msgstr "Thành viên đội ngũ Lục Khí"

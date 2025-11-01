@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email Templates -->
+        <record id="email_template_contact_auto_reply" model="mail.template">
+            <field name="name">Lục Khí Contact Form Auto Reply</field>
+            <field name="model_id" ref="model_luc_khi_contact_form"/>
+            <field name="subject">Cảm ơn bạn đã liên hệ với Lục Khí</field>
+            <field name="email_from">${object.company_id.email or 'noreply@luc-khi.vn'}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="body_html"><![CDATA[
+<div>Cảm ơn ${object.name} đã liên hệ. Chúng tôi sẽ phản hồi trong 24 giờ.</div>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

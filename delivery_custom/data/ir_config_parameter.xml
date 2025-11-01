@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Track123 API Key System Parameter -->
+        <record id="track123_api_key" model="ir.config_parameter">
+            <field name="key">track123.api_key</field>
+            <field name="value"></field>
+        </record>
+        
+        <!-- Track123 Webhook URL System Parameter -->
+        <record id="track123_webhook_url" model="ir.config_parameter">
+            <field name="key">track123.webhook_url</field>
+            <field name="value">/delivery_custom/track123/webhook</field>
+        </record>
+    </data>
+</odoo>

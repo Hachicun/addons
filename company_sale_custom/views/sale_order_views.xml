@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit the standard Sale Order list view to tweak column order/labels -->
+    <record id="view_sale_order_list_company_custom" model="ir.ui.view">
+        <field name="name">sale.order.list.company.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <!-- Set custom title to highlight customization -->
+            <xpath expr="//list" position="attributes">
+                <attribute name="string">Sales Orders · Made by Dai 2025</attribute>
+            </xpath>
+
+            <!-- Remove default state column placement -->
+            <xpath expr="//field[@name='state']" position="replace"/>
+
+            <!-- Insert state badge right after the order name -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="state"
+                    widget="badge"
+                    optional="show"
+                    decoration-success="state == 'sale'"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'sent'"
+                    decoration-danger="state == 'cancel'"/>
+            </xpath>
+
+            <!-- Tidy customer column label and ensure it always shows -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="string">Customer</attribute>
+                <attribute name="optional">show</attribute>
+            </xpath>
+
+            <!-- Highlight total column footer -->
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="sum">Total Amount</attribute>
+            </xpath>
+
+            <!-- Show delivery status summary next to financial totals -->
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="delivery_status_display" optional="show"/>
+                <field name="payment_status" optional="show"
+                       widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-danger="payment_status == 'not_paid'"
+                       decoration-muted="payment_status == 'no_invoice'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Payment Status on the form view as an informational field -->
+    <record id="view_sale_order_form_company_custom_payment" model="ir.ui.view">
+        <field name="name">sale.order.form.company.custom.payment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Replace the standard Create Invoice action with guarded method -->
+            <xpath expr="//form/header/button[@id='create_invoice']" position="replace">
+                <button id="create_invoice" name="action_view_sale_advance_payment_inv_guarded"
+                        string="Create Invoice" type="object" class="btn-primary" data-hotkey="q"
+                        invisible="invoice_status != 'to invoice'"/>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']" position="before">
+                <group>
+                    <field name="payment_status" readonly="1"
+                           widget="badge"
+                           decoration-success="payment_status == 'paid'"
+                           decoration-danger="payment_status == 'not_paid'"
+                           decoration-muted="payment_status == 'no_invoice'"/>
+                    <field name="delivery_status_display" readonly="1"/>
+                </group>
+            </xpath>
+            <!-- Ensure computed counters are present for visibility of custom pages -->
+            <xpath expr="//sheet/notebook/page[@name='order_lines']" position="before">
+                <field name="related_invoice_total_count" invisible="1"/>
+            </xpath>
+
+            <!-- Add Delivery tab after Order Lines -->
+            <xpath expr="//sheet/notebook/page[@name='order_lines']" position="after">
+                <page string="Delivery" name="delivery_tab" invisible="delivery_count == 0">
+                    <field name="picking_ids"
+                           domain="[('picking_type_code','=','outgoing')]"
+                           options="{'no_create': True, 'no_create_edit': True}"
+                           context="{'tree_view_ref': 'company_sale_custom.view_stock_picking_tree_on_sale_order', 'list_view_ref': 'company_sale_custom.view_stock_picking_tree_on_sale_order'}"/>
+                </page>
+            </xpath>
+
+            <!-- Add Invoice tab after Delivery -->
+            <xpath expr="//sheet/notebook/page[@name='delivery_tab']" position="after">
+                <page string="Invoices" name="invoice_tab" invisible="invoice_count == 0">
+                    <field name="invoice_ids"
+                           options="{'no_create': True, 'no_create_edit': True}"
+                           context="{'list_view_ref': 'company_sale_custom.view_account_move_tree_on_sale_order'}"/>
+                </page>
+            </xpath>
+
+            <!-- Add Related Invoices tab after Invoices -->
+            <xpath expr="//sheet/notebook/page[@name='invoice_tab']" position="after">
+                <page string="Related Invoices" name="related_invoices_tab" invisible="related_invoice_total_count == 0">
+                    <group>
+                        <field name="recent_related_invoice_ids" readonly="1" nolabel="1">
+                            <list create="false" edit="false" delete="false" class="o_list_compact">
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="invoice_date"/>
+                                <field name="amount_total"/>
+                                <field name="payment_state"/>
+                                <field name="state"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group>
+                        <button name="action_view_related_invoices" type="object" string="View Related Invoices" class="oe_highlight oe_link"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Manufacturing tab after Delivery; appears only if there are related MOs -->
+            <xpath expr="//sheet/notebook/page[@name='delivery_tab']" position="after">
+                <page string="Manufacturing" name="manufacturing_tab" invisible="mo_count == 0">
+                    <field name="mo_ids" options="{'no_create': True}"
+                           tree_open_action="mrp.action_mrp_production_form"
+                           context="{'form_view_ref': 'mrp.mrp_production_form_view'}">
+                        <list>
+                            <button name="action_open_form" type="object" icon="fa-external-link" title="Open"/>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="product_qty"/>
+                            <field name="state"/>
+                            <field name="reservation_state"/>
+                            <field name="date_start"/>
+                            <field name="date_finished"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <!-- Hide any other tabs than the four specified -->
+            <xpath expr="//sheet/notebook/page[@name='other_information']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/notebook/page[@name='customer_signature']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Dedicated picking tree for the Delivery tab on sale order -->
+    <record id="view_stock_picking_tree_on_sale_order" model="ir.ui.view">
+        <field name="name">stock.picking.tree.on.sale.order</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <list sample="1">
+                <field name="name"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"
+                       decoration-info="state == 'assigned'"
+                       decoration-muted="state == 'draft'"
+                       decoration-warning="state not in ('draft','cancel','done','assigned')"/>
+                <field name="carrier_status" widget="selection_badge" optional="show"/>
+                <field name="carrier_partner_id" optional="show"/>
+                <field name="shipping_fee" optional="show"/>
+                <field name="tracking_code" optional="show"/>
+                <field name="tracking_link" widget="url" optional="show"/>
+                <field name="scheduled_date"/>
+                <field name="date_done"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Lightweight invoice list for the Invoices tab on sale order -->
+    <record id="view_account_move_tree_on_sale_order" model="ir.ui.view">
+        <field name="name">account.move.tree.on.sale.order</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <list sample="1">
+                <field name="name"/>
+                <field name="move_type"/>
+                <field name="state"/>
+                <field name="payment_state"/>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <field name="amount_total"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Extend Sales Order search with Payment/Delivery Status and Tags filters -->
+    <record id="sale_order_search_filters_company_custom" model="ir.ui.view">
+        <field name="name">sale.order.search.company.custom.filters</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group string="Payment Status" expand="0">
+                    <filter string="Paid" name="payment_status_paid" domain="[('payment_status', '=', 'paid')]"/>
+                    <filter string="Not Paid" name="payment_status_not_paid" domain="[('payment_status', '=', 'not_paid')]"/>
+                    <filter string="No Invoice" name="payment_status_no_invoice" domain="[('payment_status', '=', 'no_invoice')]"/>
+                </group>
+
+                <group string="Delivery Status" expand="0">
+                    <filter string="Fully Delivered" name="delivery_status_full" domain="[('delivery_status', '=', 'full')]"/>
+                    <filter string="Partially Delivered" name="delivery_status_partial" domain="[('delivery_status', '=', 'partial')]"/>
+                    <filter string="Started" name="delivery_status_started" domain="[('delivery_status', '=', 'started')]"/>
+                    <filter string="Not Delivered" name="delivery_status_pending" domain="[('delivery_status', '=', 'pending')]"/>
+                </group>
+
+                <separator/>
+                <!-- Sales Tags selector -->
+                <field name="tag_ids" filter_domain="[('tag_ids','in', self)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

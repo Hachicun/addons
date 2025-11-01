@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Product Template Form View Extension -->
+        <record id="luc_khi_product_template_form_view" model="ir.ui.view">
+            <field name="name">luc_khi.product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='sales']/group/group[1]" position="after">
+                    <group string="Lục Khí" name="luc_khi_group">
+                        <field name="luc_khi_element_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="luc_khi_category_id"/>
+                        <field name="luc_khi_benefits"/>
+                        <field name="luc_khi_usage_guide"/>
+                        <field name="luc_khi_energy_level"/>
+                        <field name="luc_khi_recommended_for"/>
+                        <field name="luc_khi_contra_indicated"/>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='sales']/group/group[2]" position="after">
+                    <group string="Khuyến nghị Lục Khí" name="luc_khi_recommendations">
+                        <field name="luc_khi_recommended_products" widget="many2many"/>
+                        <field name="luc_khi_alternative_products" widget="many2many"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Template Tree View Extension -->
+        <record id="luc_khi_product_template_tree_view" model="ir.ui.view">
+            <field name="name">luc_khi.product.template.tree</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="luc_khi_category_id"/>
+                    <field name="luc_khi_element_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Template Search View Extension -->
+        <record id="luc_khi_product_template_search_view" model="ir.ui.view">
+            <field name="name">luc_khi.product.template.search</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field name="luc_khi_category_id"/>
+                    <field name="luc_khi_element_ids"/>
+                </xpath>
+                <xpath expr="//filter[@name='services']" position="after">
+                    <separator/>
+                    <filter string="Ngũ Hành - Kim" name="element_kim" domain="[('luc_khi_element_ids.code', '=', 'KIM')]"/>
+                    <filter string="Ngũ Hành - Mộc" name="element_moc" domain="[('luc_khi_element_ids.code', '=', 'MOC')]"/>
+                    <filter string="Ngũ Hành - Thủy" name="element_thuy" domain="[('luc_khi_element_ids.code', '=', 'THUY')]"/>
+                    <filter string="Ngũ Hành - Hỏa" name="element_hoa" domain="[('luc_khi_element_ids.code', '=', 'HOA')]"/>
+                    <filter string="Ngũ Hành - Thổ" name="element_tho" domain="[('luc_khi_element_ids.code', '=', 'THO')]"/>
+                    <separator/>
+                    <filter string="Có phân tích Lục Khí" name="has_luc_khi_analysis" domain="[('luc_khi_element_ids', '!=', False)]"/>
+                </xpath>
+                <xpath expr="//group" position="inside">
+                    <filter string="Danh mục Lục Khí" name="groupby_luc_khi_category" context="{'group_by': 'luc_khi_category_id'}"/>
+                    <filter string="Ngũ Hành" name="groupby_elements" context="{'group_by': 'luc_khi_element_ids'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Category Form View Extension -->
+        <record id="luc_khi_product_category_form_view" model="ir.ui.view">
+            <field name="name">luc_khi.product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="luc_khi_element_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="luc_khi_description"/>
+                    <field name="luc_khi_benefits"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Category Tree View Extension -->
+        <record id="luc_khi_product_category_tree_view" model="ir.ui.view">
+            <field name="name">luc_khi.product.category.tree</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_list_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="luc_khi_element_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sales Order Form View Extension -->
+        <record id="luc_khi_sale_order_form_view" model="ir.ui.view">
+            <field name="name">luc_khi.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='other_information']" position="inside">
+                    <group string="Phân tích Lục Khí" name="luc_khi_analysis">
+                        <field name="luc_khi_profile_analysis"/>
+                        <field name="luc_khi_recommended_products" widget="many2many"/>
+                        <field name="luc_khi_energy_balance"/>
+                        <field name="luc_khi_notes"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sales Order Tree View Extension -->
+        <record id="luc_khi_sale_order_tree_view" model="ir.ui.view">
+            <field name="name">luc_khi.sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="luc_khi_profile_analysis"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Menu Items -->
+        <menuitem id="luc_khi_shop_menu" name="Lục Khí Shop" parent="sale.sale_menu_root" sequence="20"/>
+
+        <menuitem id="luc_khi_products_menu" name="Sản phẩm Lục Khí" parent="luc_khi_shop_menu" action="product.product_template_action" sequence="1"/>
+
+        <menuitem id="luc_khi_categories_menu" name="Danh mục Lục Khí" parent="luc_khi_shop_menu" action="product.product_category_action_form" sequence="2"/>
+
+        <menuitem id="luc_khi_orders_menu" name="Đơn hàng Lục Khí" parent="luc_khi_shop_menu" action="sale.action_orders" sequence="3"/>
+
+        <!-- Action for Lục Khí Products -->
+        <record id="action_luc_khi_products" model="ir.actions.act_window">
+            <field name="name">Sản phẩm Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">list,form,kanban</field>
+            <field name="domain">[('luc_khi_element_ids', '!=', False)]</field>
+            <field name="context">{'default_type': 'consu', 'search_default_filter_to_sell': 1}</field>
+            <field name="help">Quản lý các sản phẩm Lục Khí với thông tin ngũ hành và phân tích năng lượng</field>
+        </record>
+
+        <!-- Action for Lục Khí Categories -->
+        <record id="action_luc_khi_categories" model="ir.actions.act_window">
+            <field name="name">Danh mục Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.category</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('luc_khi_element_ids', '!=', False)]</field>
+            <field name="context">{'default_luc_khi_element_ids': []}</field>
+            <field name="help">Quản lý các danh mục sản phẩm theo ngũ hành Lục Khí</field>
+        </record>
+
+        <!-- Action for Lục Khí Orders -->
+        <record id="action_luc_khi_orders" model="ir.actions.act_window">
+            <field name="name">Đơn hàng Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list,form,calendar,pivot,graph</field>
+            <field name="domain">[('luc_khi_profile_analysis', '!=', False)]</field>
+            <field name="context">{'search_default_my_sale_orders_filter': 1}</field>
+            <field name="help">Quản lý đơn hàng với phân tích Lục Khí của khách hàng</field>
+        </record>
+    </data>
+</odoo>

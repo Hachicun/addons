@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Blog Listing Template -->
+        <template id="blog_listing" name="Blog Listing">
+            <t t-call="website.layout">
+                <t t-set="head">
+                    <meta name="description" t-att-content="category.meta_description if category else 'Khám phá kiến thức về Lục Khí và phát triển bản thân qua các bài viết chuyên sâu'"/>
+                    <meta name="keywords" t-att-content="category.meta_keywords if category else 'Lục Khí, blog, kiến thức, phát triển bản thân, phong thủy, y học'"/>
+                    <meta name="title" t-att-content="category.meta_title if category else 'Blog Lục Khí - Khám phá kiến thức cổ xưa'"/>
+                    <meta property="og:title" t-att-content="category.meta_title if category else 'Blog Lục Khí - Khám phá kiến thức cổ xưa'"/>
+                    <meta property="og:description" t-att-content="category.meta_description if category else 'Khám phá kiến thức về Lục Khí và phát triển bản thân qua các bài viết chuyên sâu'"/>
+                    <meta property="og:type" content="website"/>
+                    <meta property="og:url" t-att-content="request.httprequest.url"/>
+                    <meta name="twitter:card" content="summary_large_image"/>
+                    <meta name="twitter:title" t-att-content="category.meta_title if category else 'Blog Lục Khí - Khám phá kiến thức cổ xưa'"/>
+                    <meta name="twitter:description" t-att-content="category.meta_description if category else 'Khám phá kiến thức về Lục Khí và phát triển bản thân qua các bài viết chuyên sâu'"/>
+                </t>
+                <div id="wrap" class="oe_structure oe_empty">
+                    <!-- Blog Header -->
+                    <section class="blog-header bg-light py-5">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <h1 class="display-4 fw-bold text-primary">
+                                        <t t-if="category">
+                                            <span t-field="category.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            Blog Lục Khí
+                                        </t>
+                                    </h1>
+                                    <p class="lead text-muted">
+                                        <t t-if="category">
+                                            <span t-field="category.description"/>
+                                        </t>
+                                        <t t-else="">
+                                            Khám phá kiến thức về Lục Khí và phát triển bản thân
+                                        </t>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="blog-search">
+                                        <form class="d-flex" action="/blog/search" method="GET">
+                                            <input class="form-control me-2" type="search" name="search" 
+                                                   placeholder="Tìm kiếm bài viết..." 
+                                                   t-att-value="search_query or ''"/>
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fa fa-search"/>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Blog Content -->
+                    <section class="blog-content py-5">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Main Content -->
+                                <div class="col-lg-8">
+                                    <!-- Search Results Header -->
+                                    <div t-if="search_query" class="alert alert-info mb-4">
+                                        <i class="fa fa-info-circle me-2"/>
+                                        Tìm thấy <strong t-esc="search_count"/> bài viết cho từ khóa 
+                                        "<strong t-esc="search_query"/>" 
+                                        <a href="/blog" class="float-end">Xóa bộ lọc</a>
+                                    </div>
+
+                                    <!-- Blog Posts Grid -->
+                                    <div class="blog-posts-grid">
+                                        <div t-if="not posts" class="text-center py-5">
+                                            <i class="fa fa-file-text-o fa-3x text-muted mb-3"/>
+                                            <h4 class="text-muted">Chưa có bài viết nào</h4>
+                                            <p class="text-muted">Vui lòng quay lại sau nhé!</p>
+                                        </div>
+
+                                        <div class="row">
+                                            <div t-foreach="posts" t-as="post" class="col-md-6 mb-4">
+                                                <div class="card blog-post-card h-100">
+                                                    <!-- Featured Image -->
+                                                    <div t-if="post.featured_image" class="card-img-top">
+                                                        <img t-att-src="'/web/image/blog.post/%s/featured_image' % post.id"
+                                                             t-att-alt="post.name"
+                                                             class="img-fluid w-100"
+                                                             style="height: 200px; object-fit: cover;"/>
+                                                    </div>
+                                                    <div t-else="" class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                                                         style="height: 200px;">
+                                                        <i class="fa fa-image fa-3x text-muted"/>
+                                                    </div>
+
+                                                    <div class="card-body d-flex flex-column">
+                                                        <!-- Category Badge -->
+                                                        <div t-if="post.luc_khi_category_id" class="mb-2">
+                                                            <span class="badge bg-primary" 
+                                                                  t-att-style="'background-color: %s !important' % (post.luc_khi_category_id.color or '#007bff')">
+                                                                <span t-field="post.luc_khi_category_id.name"/>
+                                                            </span>
+                                                        </div>
+
+                                                        <!-- Title -->
+                                                        <h5 class="card-title">
+                                                            <a t-attf-href="/blog/{post.blog_id.id}/{post.vietnamese_slug or post.id}"
+                                                               class="text-decoration-none text-dark">
+                                                                <span t-field="post.name"/>
+                                                            </a>
+                                                        </h5>
+
+                                                        <!-- Summary -->
+                                                        <p class="card-text text-muted flex-grow-1">
+                                                            <span t-field="post.summary"/>
+                                                        </p>
+
+                                                        <!-- Meta Info -->
+                                                        <div class="blog-meta text-muted small">
+                                                            <span class="me-3">
+                                                                <i class="fa fa-calendar me-1"/>
+                                                                <span t-field="post.post_date"/>
+                                                            </span>
+                                                            <span class="me-3">
+                                                                <i class="fa fa-clock-o me-1"/>
+                                                                <span t-esc="post.reading_time"/> phút đọc
+                                                            </span>
+                                                            <span class="me-3">
+                                                                <i class="fa fa-eye me-1"/>
+                                                                <span t-field="post.view_count"/>
+                                                            </span>
+                                                            <span t-if="post.like_count > 0">
+                                                                <i class="fa fa-heart me-1"/>
+                                                                <span t-field="post.like_count"/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pagination -->
+                                    <div t-if="has_more" class="text-center mt-4">
+                                        <a t-attf-href="/blog/category/{category.id if category else ''}/page/{current_page + 1}"
+                                           class="btn btn-outline-primary">
+                                            Xem thêm bài viết
+                                            <i class="fa fa-arrow-right ms-2"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Sidebar -->
+                                <div class="col-lg-4">
+                                    <!-- Categories Widget -->
+                                    <div class="card mb-4">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fa fa-folder me-2"/>
+                                                Danh mục
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div t-if="not categories" class="text-muted">
+                                                Chưa có danh mục nào
+                                            </div>
+                                            <ul t-else="" class="list-unstyled">
+                                                <li t-foreach="categories" t-as="cat" class="mb-2">
+                                                    <a t-attf-href="/blog/category/{cat.id}"
+                                                       class="text-decoration-none d-flex justify-content-between align-items-center">
+                                                        <span>
+                                                            <i class="fa fa-folder-o me-2"/>
+                                                            <span t-field="cat.name"/>
+                                                        </span>
+                                                        <span class="badge bg-secondary">
+                                                            <span t-field="cat.post_count"/>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Featured Posts Widget -->
+                                    <div t-if="featured_posts" class="card mb-4">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h5 class="mb-0">
+                                                <i class="fa fa-star me-2"/>
+                                                Bài viết nổi bật
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div t-foreach="featured_posts" t-as="featured_post" class="mb-3">
+                                                <div class="d-flex">
+                                                    <div t-if="featured_post.featured_image" class="me-3">
+                                                        <img t-att-src="'/web/image/blog.post/%s/featured_image/80x80' % featured_post.id"
+                                                             t-att-alt="featured_post.name"
+                                                             class="rounded"
+                                                             style="width: 80px; height: 80px; object-fit: cover;"/>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1">
+                                                            <a t-attf-href="/blog/{featured_post.blog_id.id}/{featured_post.vietnamese_slug or featured_post.id}"
+                                                               class="text-decoration-none text-dark">
+                                                                <span t-field="featured_post.name"/>
+                                                            </a>
+                                                        </h6>
+                                                        <small class="text-muted">
+                                                            <span t-field="featured_post.post_date"/>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Newsletter Widget -->
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fa fa-envelope me-2"/>
+                                                Đăng ký nhận tin
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-muted">
+                                                Nhận các bài viết mới nhất về Lục Khí qua email
+                                            </p>
+                                            <form class="newsletter-form">
+                                                <div class="mb-3">
+                                                    <input type="email" class="form-control"
+                                                           placeholder="Email của bạn..." required="required"/>
+                                                </div>
+                                                <button type="submit" class="btn btn-success w-100">
+                                                    Đăng ký
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Blog Post Detail Template -->
+        <template id="blog_post_detail" name="Blog Post Detail">
+            <t t-call="website.layout">
+                <t t-set="head">
+                    <meta name="description" t-att-content="post.meta_description or post.summary"/>
+                    <meta name="keywords" t-att-content="post.meta_keywords"/>
+                    <meta name="title" t-att-content="post.meta_title or post.name"/>
+                    <meta property="og:title" t-att-content="post.meta_title or post.name"/>
+                    <meta property="og:description" t-att-content="post.meta_description or post.summary"/>
+                    <meta property="og:type" content="article"/>
+                    <meta property="og:url" t-att-content="request.httprequest.url"/>
+                    <meta property="article:published_time" t-att-content="post.post_date.isoformat()"/>
+                    <meta property="article:author" t-att-content="post.author_id.name"/>
+                    <meta t-if="post.featured_image" property="og:image" t-att-content="request.httprequest.url_root + 'web/image/blog.post/' + str(post.id) + '/featured_image'"/>
+                    <meta name="twitter:card" content="summary_large_image"/>
+                    <meta name="twitter:title" t-att-content="post.meta_title or post.name"/>
+                    <meta name="twitter:description" t-att-content="post.meta_description or post.summary"/>
+                    <meta t-if="post.featured_image" name="twitter:image" t-att-content="request.httprequest.url_root + 'web/image/blog.post/' + str(post.id) + '/featured_image'"/>
+                    <link rel="canonical" t-att-href="request.httprequest.url"/>
+                </t>
+                <div id="wrap" class="oe_structure oe_empty">
+                    <!-- Blog Post Header -->
+                    <section class="blog-post-header bg-light py-5">
+                        <div class="container">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="/">Trang chủ</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/blog">Blog</a>
+                                    </li>
+                                    <li t-if="post.luc_khi_category_id" class="breadcrumb-item">
+                                        <a t-attf-href="/blog/category/{post.luc_khi_category_id.id}">
+                                            <span t-field="post.luc_khi_category_id.name"/>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <span t-field="post.name"/>
+                                    </li>
+                                </ol>
+                            </nav>
+
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto text-center">
+                                    <!-- Category Badge -->
+                                    <div t-if="post.luc_khi_category_id" class="mb-3">
+                                        <span class="badge bg-primary fs-6 px-3 py-2"
+                                              t-att-style="'background-color: %s !important' % (post.luc_khi_category_id.color or '#007bff')">
+                                            <span t-field="post.luc_khi_category_id.name"/>
+                                        </span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h1 class="display-5 fw-bold mb-4">
+                                        <span t-field="post.name"/>
+                                    </h1>
+
+                                    <!-- Meta Info -->
+                                    <div class="blog-post-meta text-muted mb-4">
+                                        <span class="me-3">
+                                            <i class="fa fa-user me-1"/>
+                                            <span t-field="post.author_id.name"/>
+                                        </span>
+                                        <span class="me-3">
+                                            <i class="fa fa-calendar me-1"/>
+                                            <span t-field="post.post_date"/>
+                                        </span>
+                                        <span class="me-3">
+                                            <i class="fa fa-clock-o me-1"/>
+                                            <span t-esc="post.reading_time"/> phút đọc
+                                        </span>
+                                        <span class="me-3">
+                                            <i class="fa fa-eye me-1"/>
+                                            <span t-field="post.view_count"/> lượt xem
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Blog Post Content -->
+                    <section class="blog-post-content py-5">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Main Content -->
+                                <div class="col-lg-8 mx-auto">
+                                    <!-- Featured Image -->
+                                    <div t-if="post.featured_image" class="blog-post-image mb-4">
+                                        <img t-att-src="'/web/image/blog.post/%s/featured_image' % post.id"
+                                             t-att-alt="post.name"
+                                             class="img-fluid rounded"/>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="blog-post-body">
+                                        <div t-field="post.content" class="oe_structure"/>
+                                    </div>
+
+                                    <!-- Tags -->
+                                    <div t-if="post.tag_ids" class="blog-post-tags mt-4">
+                                        <h6>Tags:</h6>
+                                        <span t-foreach="post.tag_ids" t-as="tag" class="me-2">
+                                            <span class="badge bg-secondary">
+                                                <span t-field="tag.name"/>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <!-- Social Sharing -->
+                                    <div class="blog-post-social mt-4 pt-4 border-top">
+                                        <h6>Chia sẻ bài viết:</h6>
+                                        <div class="social-buttons">
+                                            <a href="#" class="btn btn-primary btn-sm me-2">
+                                                <i class="fa fa-facebook"/>
+                                            </a>
+                                            <a href="#" class="btn btn-info btn-sm me-2">
+                                                <i class="fa fa-twitter"/>
+                                            </a>
+                                            <a href="#" class="btn btn-success btn-sm me-2">
+                                                <i class="fa fa-whatsapp"/>
+                                            </a>
+                                            <a href="#" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-envelope"/>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Like Button -->
+                                    <div class="blog-post-like mt-3">
+                                        <button class="btn btn-outline-danger like-btn" 
+                                                t-att-data-post-id="post.id">
+                                            <i class="fa fa-heart me-2"/>
+                                            Thích (<span t-field="post.like_count"/>)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Related Posts -->
+                    <section t-if="related_posts" class="blog-related-posts py-5 bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto">
+                                    <h3 class="text-center mb-4">Bài viết liên quan</h3>
+                                    <div class="row">
+                                        <div t-foreach="related_posts" t-as="related_post" class="col-md-6 mb-4">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">
+                                                        <a t-attf-href="/blog/{related_post.blog_id.id}/{related_post.vietnamese_slug or related_post.id}"
+                                                           class="text-decoration-none text-dark">
+                                                            <span t-field="related_post.name"/>
+                                                        </a>
+                                                    </h6>
+                                                    <p class="card-text text-muted small">
+                                                        <span t-field="related_post.post_date"/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Blog Search Template -->
+        <template id="blog_search" name="Blog Search">
+            <t t-call="luc_khi_blog.blog_listing">
+                <!-- Search results will be displayed in the listing template -->
+            </t>
+        </template>
+
+        <!-- Blog RSS Template -->
+        <template id="blog_rss" name="Blog RSS Feed">
+            <rss version="2.0">
+                <channel>
+                    <title>Blog Lục Khí</title>
+                    <link t-esc="base_url + 'blog'"/>
+                    <description>Khám phá kiến thức về Lục Khí và phát triển bản thân</description>
+                    <language>vi</language>
+                    
+                    <item t-foreach="posts" t-as="post">
+                        <title t-esc="post.name"/>
+                        <link t-esc="base_url + 'blog/' + str(post.blog_id.id) + '/' + (post.vietnamese_slug or str(post.id))"/>
+                        <description t-esc="post.summary or post.name"/>
+                        <pubDate t-esc="post.post_date.strftime('%a, %d %b %Y %H:%M:%S GMT')"/>
+                        <guid t-esc="base_url + 'blog/' + str(post.blog_id.id) + '/' + (post.vietnamese_slug or str(post.id))"/>
+                    </item>
+                </channel>
+            </rss>
+        </template>
+    </data>
+</odoo>

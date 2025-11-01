@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Contact Form List View -->
+        <record id="luc_khi_contact_form_tree" model="ir.ui.view">
+            <field name="name">luc_khi.contact.form.list</field>
+            <field name="model">luc_khi.contact.form</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="contact_reason"/>
+                    <field name="state"/>
+                    <field name="priority"/>
+                    <field name="assigned_to"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Contact Form Form View -->
+        <record id="luc_khi_contact_form_form" model="ir.ui.view">
+            <field name="name">luc_khi.contact.form.form</field>
+            <field name="model">luc_khi.contact.form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button name="action_assign_to_me" string="Phụ trách" type="object" class="btn-primary"/>
+                        <button name="action_mark_responded" string="Đã phản hồi" type="object" invisible="state != 'in_progress'"/>
+                        <button name="action_close" string="Đóng" type="object" invisible="state != 'responded'"/>
+                        <button name="action_convert_to_lead" string="Chuyển thành Lead" type="object" invisible="state != 'responded'"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="contact_reason"/>
+                                <field name="subject"/>
+                            </group>
+                            <group>
+                                <field name="assigned_to"/>
+                                <field name="priority"/>
+                                <field name="preferred_contact_method"/>
+                                <field name="preferred_contact_time"/>
+                            </group>
+                        </group>
+                        <field name="message"/>
+                        <notebook>
+                            <page string="Quan tâm">
+                                <group>
+                                    <field name="interested_elements" widget="many2many_tags"/>
+                                    <field name="interested_courses" widget="many2many"/>
+                                    <field name="interested_products" widget="many2many"/>
+                                </group>
+                            </page>
+                            <page string="Theo dõi">
+                                <group>
+                                    <field name="response_date"/>
+                                    <field name="resolution_date"/>
+                                    <field name="lead_id"/>
+                                </group>
+                                <field name="followup_notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Contact Form Action -->
+        <record id="action_luc_khi_contact_form" model="ir.actions.act_window">
+            <field name="name">Form liên hệ Lục Khí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">luc_khi.contact.form</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_state': 'draft'}</field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="luc_khi_crm_menu" name="Lục Khí CRM" parent="crm.crm_menu_root" sequence="20"/>
+        <menuitem id="luc_khi_contact_forms_menu" name="Form liên hệ" parent="luc_khi_crm_menu" action="action_luc_khi_contact_form"/>
+    </data>
+</odoo>

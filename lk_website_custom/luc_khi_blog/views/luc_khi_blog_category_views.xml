@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Blog Category List View -->
+        <record id="view_luc_khi_blog_category_tree" model="ir.ui.view">
+            <field name="name">luc_khi.blog.category.list</field>
+            <field name="model">luc_khi.blog.category</field>
+            <field name="arch" type="xml">
+                <list string="Blog Categories">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="post_count"/>
+                    <field name="color"/>
+                    <field name="website_published"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Blog Category Form View -->
+        <record id="view_luc_khi_blog_category_form" model="ir.ui.view">
+            <field name="name">luc_khi.blog.category.form</field>
+            <field name="model">luc_khi.blog.category</field>
+            <field name="arch" type="xml">
+                <form string="Blog Category">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_posts" type="object" class="oe_stat_button" icon="fa-file-text">
+                                <field name="post_count" widget="statinfo" string="Posts"/>
+                            </button>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                                <field name="color" widget="color"/>
+                            </group>
+                            <group>
+                                <field name="website_published"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+
+                        <group string="Description">
+                            <field name="description" nolabel="1" placeholder="Category description..."/>
+                        </group>
+
+                        <group string="SEO Settings">
+                            <group>
+                                <field name="meta_title" placeholder="SEO Title (optional)"/>
+                                <field name="meta_keywords" placeholder="SEO Keywords (optional)"/>
+                            </group>
+                            <group>
+                                <field name="meta_description" nolabel="1" placeholder="SEO Description (optional)"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Blog Category Kanban View -->
+        <record id="view_luc_khi_blog_category_kanban" model="ir.ui.view">
+            <field name="name">luc_khi.blog.category.kanban</field>
+            <field name="model">luc_khi.blog.category</field>
+            <field name="arch" type="xml">
+                <kanban string="Blog Categories">
+                    <field name="name"/>
+                    <field name="post_count"/>
+                    <field name="color"/>
+                    <field name="website_published"/>
+                    <field name="active"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click #{!record.active.raw_value ? 'o_kanban_disabled' : ''}">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_manage_toggle_section">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_body">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_kanban_title">
+                                            <strong t-esc="record.name.value"/>
+                                        </div>
+                                        <div class="o_kanban_text-muted">
+                                            <span t-esc="record.post_count.value"/> posts
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section o_kanban_manage_view">
+                                        <a t-if="record.post_count.value > 0" type="object" name="action_view_posts" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-eye"/> View Posts
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_bottom_section">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="website_published" widget="toggle_button"/>
+                                        <field name="active" widget="toggle_button"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Blog Category Search View -->
+        <record id="view_luc_khi_blog_category_search" model="ir.ui.view">
+            <field name="name">luc_khi.blog.category.search</field>
+            <field name="model">luc_khi.blog.category</field>
+            <field name="arch" type="xml">
+                <search string="Blog Categories">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <filter string="Published" name="published" domain="[('website_published', '=', True)]"/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Published" name="group_published" context="{'group_by': 'website_published'}"/>
+                        <filter string="Active" name="group_active" context="{'group_by': 'active'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Blog Category Action -->
+        <record id="action_luc_khi_blog_category" model="ir.actions.act_window">
+            <field name="name">Blog Categories</field>
+            <field name="res_model">luc_khi.blog.category</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first blog category!
+                </p>
+                <p>
+                    Blog categories help organize your content and make it easier for visitors to find relevant posts.
+                </p>
+            </field>
+        </record>
+
+        <!-- Blog Category Menu Item -->
+        <menuitem id="menu_luc_khi_blog_category"
+                  name="Categories"
+                  parent="website.menu_website_configuration"
+                  action="action_luc_khi_blog_category"
+                  sequence="10"/>
+    </data>
+</odoo>

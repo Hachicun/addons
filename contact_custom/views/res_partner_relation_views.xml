@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_res_partner_relation_list" model="ir.ui.view">
+    <field name="name">res.partner.relation.list</field>
+    <field name="model">res.partner.relation</field>
+    <field name="arch" type="xml">
+      <list editable="bottom">
+        <field name="related_partner_id"/>
+        <field name="relation_type"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_res_partner_relation_form" model="ir.ui.view">
+    <field name="name">res.partner.relation.form</field>
+    <field name="model">res.partner.relation</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="partner_id" readonly="1"/>
+            <field name="related_partner_id"/>
+            <field name="relation_type"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_res_partner_relation" model="ir.actions.act_window">
+    <field name="name">Partner Relations</field>
+    <field name="res_model">res.partner.relation</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

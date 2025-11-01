@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Course List View -->
+        <record id="view_luc_khi_course_tree" model="ir.ui.view">
+            <field name="name">luc_khi.course.list</field>
+            <field name="model">luc_khi.course</field>
+            <field name="arch" type="xml">
+                <list string="Courses">
+                    <field name="sequence" widget="handle"/>
+                    <field name="image" widget="image"/>
+                    <field name="name"/>
+                    <field name="level"/>
+                    <field name="category_id"/>
+                    <field name="price"/>
+                    <field name="student_count"/>
+                    <field name="rating"/>
+                    <field name="is_published"/>
+                    <field name="featured"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Course Form View -->
+        <record id="view_luc_khi_course_form" model="ir.ui.view">
+            <field name="name">luc_khi.course.form</field>
+            <field name="model">luc_khi.course</field>
+            <field name="arch" type="xml">
+                <form string="Course">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_website" type="object" class="oe_stat_button" icon="fa-globe">
+                                <span class="o_stat_text">View on Website</span>
+                            </button>
+                            <button name="action_create_slide_channel" type="object" class="oe_stat_button" icon="fa-slideshare">
+                                <span class="o_stat_text">Slide Channel</span>
+                            </button>
+                            <button name="toggle_published" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="is_published" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                            <button name="toggle_featured" type="object" class="oe_stat_button" icon="fa-star">
+                                <field name="featured" widget="boolean_button" options='{"terminology": {"active": "Featured", "inactive": "Not Featured"}}'/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Course Name"/>
+                            </h1>
+                            <field name="short_description" placeholder="Short description..."/>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="image" widget="image"/>
+                                <field name="video_url"/>
+                                <field name="level"/>
+                                <field name="sequence"/>
+                                <field name="duration_hours"/>
+                                <field name="difficulty_level"/>
+                            </group>
+                            <group>
+                                <field name="price"/>
+                                <field name="currency_id"/>
+                                <field name="category_id"/>
+                                <field name="is_published"/>
+                                <field name="featured"/>
+                                <field name="access_mode"/>
+                                <field name="slide_channel_id"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Content">
+                                <field name="description" placeholder="Course description..."/>
+                                <field name="learning_objectives" placeholder="Learning objectives..."/>
+                                <field name="prerequisites" placeholder="Prerequisites..."/>
+                            </page>
+                            <page string="Instructors">
+                                <field name="instructor_ids" widget="many2many_tags"/>
+                            </page>
+                            <page string="Tags">
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </page>
+                            <page string="SEO">
+                                <group>
+                                    <field name="seo_title"/>
+                                    <field name="seo_description"/>
+                                    <field name="seo_keywords"/>
+                                    <field name="slug"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Course Kanban View -->
+        <record id="view_luc_khi_course_kanban" model="ir.ui.view">
+            <field name="name">luc_khi.course.kanban</field>
+            <field name="model">luc_khi.course</field>
+            <field name="arch" type="xml">
+                <kanban string="Courses" default_group_by="category_id">
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="level"/>
+                    <field name="price"/>
+                    <field name="student_count"/>
+                    <field name="rating"/>
+                    <field name="is_published"/>
+                    <field name="featured"/>
+                    <field name="category_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('luc_khi.course', 'image', record.id.raw_value)" 
+                                         t-att-alt="record.name.value" class="o_image_64_cover"/>
+                                </div>
+                                <div class="o_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="level"/>
+                                        <span class="badge bg-primary" t-if="record.featured.value">Featured</span>
+                                    </div>
+                                    <div class="o_kanban_record_bottom_info">
+                                        <div class="text-muted">
+                                            <i class="fa fa-users me-1"/>
+                                            <field name="student_count"/> students
+                                        </div>
+                                        <div class="text-primary fw-bold">
+                                            <field name="price"/> VND
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#" tabindex="-1">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Course Search View -->
+        <record id="view_luc_khi_course_search" model="ir.ui.view">
+            <field name="name">luc_khi.course.search</field>
+            <field name="model">luc_khi.course</field>
+            <field name="arch" type="xml">
+                <search string="Courses">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="level"/>
+                    <field name="tag_ids"/>
+                    <filter string="Published" name="published" domain="[('is_published', '=', True)]"/>
+                    <filter string="Featured" name="featured" domain="[('featured', '=', True)]"/>
+                    <separator/>
+                    <filter string="Basic Level" name="basic" domain="[('level', '=', 'basic')]"/>
+                    <filter string="Intermediate Level" name="intermediate" domain="[('level', 'in', ['intermediate_1', 'intermediate_2', 'intermediate_3'])]"/>
+                    <filter string="Advanced Level" name="advanced" domain="[('level', '=', 'advanced')]"/>
+                    <separator/>
+                    <filter string="Free Courses" name="free" domain="[('price', '=', 0)]"/>
+                    <filter string="Paid Courses" name="paid" domain="[('price', '>', 0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                        <filter string="Level" name="group_level" context="{'group_by': 'level'}"/>
+                        <filter string="Published" name="group_published" context="{'group_by': 'is_published'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Course Action -->
+        <record id="action_luc_khi_course" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">luc_khi.course</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="search_view_id" ref="view_luc_khi_course_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+                <p>
+                    Courses are the main learning content in Lục Khí platform.
+                    Each course can have videos, documents, and quizzes through slide channels.
+                </p>
+            </field>
+        </record>
+
+        <!-- Course Menu Item -->
+        <menuitem id="menu_luc_khi_course"
+                  name="Courses"
+                  parent="website.menu_website_configuration"
+                  action="action_luc_khi_course"
+                  sequence="15"/>
+    </data>
+</odoo>

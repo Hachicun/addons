@@ -1,0 +1,308 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* luc_khi_blog
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-29 07:00+0000\n"
+"PO-Revision-Date: 2025-10-29 07:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__name
+msgid "Category Name"
+msgstr "Tên danh mục"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__description
+msgid "Description"
+msgstr "Mô tả"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__sequence
+msgid "Sequence"
+msgstr "Thứ tự"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__active
+msgid "Active"
+msgstr "Kích hoạt"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__meta_title
+msgid "Meta Title"
+msgstr "Tiêu đề Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__meta_description
+msgid "Meta Description"
+msgstr "Mô tả Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__meta_keywords
+msgid "Meta Keywords"
+msgstr "Từ khóa Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__post_ids
+msgid "Blog Posts"
+msgstr "Bài viết blog"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__post_count
+msgid "Post Count"
+msgstr "Số bài viết"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__website_published
+msgid "Published on Website"
+msgstr "Đã xuất bản trên website"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_luc_khi_blog_category__color
+msgid "Color"
+msgstr "Màu sắc"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__luc_khi_category_id
+msgid "Lục Khí Category"
+msgstr "Danh mục Lục Khí"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__meta_title
+msgid "Meta Title"
+msgstr "Tiêu đề Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__meta_description
+msgid "Meta Description"
+msgstr "Mô tả Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__meta_keywords
+msgid "Meta Keywords"
+msgstr "Từ khóa Meta"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__related_course_ids
+msgid "Related Courses"
+msgstr "Khóa học liên quan"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__summary
+msgid "Summary"
+msgstr "Tóm tắt"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__featured_image
+msgid "Featured Image"
+msgstr "Hình ảnh nổi bật"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__reading_time
+msgid "Reading Time (minutes)"
+msgstr "Thời gian đọc (phút)"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__is_featured
+msgid "Featured Post"
+msgstr "Bài viết nổi bật"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__view_count
+msgid "View Count"
+msgstr "Số lượt xem"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__like_count
+msgid "Like Count"
+msgstr "Số lượt thích"
+
+#. module: luc_khi_blog
+#: model:ir.model.fields,field_description:luc_khi_blog.field_blog_post__vietnamese_slug
+msgid "Vietnamese Slug"
+msgstr "Slug tiếng Việt"
+
+#. module: luc_khi_blog
+#: model:ir.model,name:luc_khi_blog.model_luc_khi_blog_category
+msgid "Lục Khí Blog Category"
+msgstr "Danh mục Blog Lục Khí"
+
+#. module: luc_khi_blog
+#: model:ir.actions.act_window,name:luc_khi_blog.action_luc_khi_blog_category
+#: model:ir.ui.menu,name:luc_khi_blog.menu_luc_khi_blog_category
+msgid "Blog Categories"
+msgstr "Danh mục Blog"
+
+#. module: luc_khi_blog
+#: model:ir.actions.act_window,name:luc_khi_blog.action_blog_post_luc_khi
+#: model:ir.ui.menu,name:luc_khi_blog.menu_luc_khi_blog_post
+msgid "Blog Posts"
+msgstr "Bài viết Blog"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_form
+msgid "SEO Settings"
+msgstr "Cài đặt SEO"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_form
+msgid "Category description..."
+msgstr "Mô tả danh mục..."
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_form
+msgid "SEO Title (optional)"
+msgstr "Tiêu đề SEO (tùy chọn)"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_form
+msgid "SEO Keywords (optional)"
+msgstr "Từ khóa SEO (tùy chọn)"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_form
+msgid "SEO Description (optional)"
+msgstr "Mô tả SEO (tùy chọn)"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_kanban
+msgid "Posts"
+msgstr "Bài viết"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_search
+msgid "Published"
+msgstr "Đã xuất bản"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_search
+msgid "Archived"
+msgstr "Đã lưu trữ"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.view_luc_khi_blog_category_kanban
+msgid "View Posts"
+msgstr "Xem bài viết"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Blog Lục Khí"
+msgstr "Blog Lục Khí"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Khám phá kiến thức về Lục Khí và phát triển bản thân"
+msgstr "Khám phá kiến thức về Lục Khí và phát triển bản thân"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Tìm kiếm bài viết..."
+msgstr "Tìm kiếm bài viết..."
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Chưa có bài viết nào"
+msgstr "Chưa có bài viết nào"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Vui lòng quay lại sau nhé!"
+msgstr "Vui lòng quay lại sau nhé!"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "phút đọc"
+msgstr "phút đọc"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Danh mục"
+msgstr "Danh mục"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Chưa có danh mục nào"
+msgstr "Chưa có danh mục nào"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Bài viết nổi bật"
+msgstr "Bài viết nổi bật"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Đăng ký nhận tin"
+msgstr "Đăng ký nhận tin"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Nhận các bài viết mới nhất về Lục Khí qua email"
+msgstr "Nhận các bài viết mới nhất về Lục Khí qua email"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Email của bạn..."
+msgstr "Email của bạn..."
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Đăng ký"
+msgstr "Đăng ký"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_listing
+msgid "Xem thêm bài viết"
+msgstr "Xem thêm bài viết"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_post_detail
+msgid "lượt xem"
+msgstr "lượt xem"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_post_detail
+msgid "Tags:"
+msgstr "Tags:"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_post_detail
+msgid "Chia sẻ bài viết:"
+msgstr "Chia sẻ bài viết:"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_post_detail
+msgid "Thích"
+msgstr "Thích"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.blog_post_detail
+msgid "Bài viết liên quan"
+msgstr "Bài viết liên quan"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.action_luc_khi_blog_category
+msgid "Create your first blog category!"
+msgstr "Tạo danh mục blog đầu tiên của bạn!"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.action_luc_khi_blog_category
+msgid "Blog categories help organize your content and make it easier for visitors to find relevant posts."
+msgstr "Danh mục blog giúp tổ chức nội dung và giúp khách truy cập dễ dàng tìm thấy các bài viết liên quan."
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.action_blog_post_luc_khi
+msgid "Create your first blog post!"
+msgstr "Tạo bài viết blog đầu tiên của bạn!"
+
+#. module: luc_khi_blog
+#: model:ir.ui.view,arch_db:luc_khi_blog.action_blog_post_luc_khi
+msgid "Blog posts are great for sharing news, updates, and insights with your audience. Use Lục Khí categories to organize your content effectively."
+msgstr "Bài viết blog rất tuyệt vời để chia sẻ tin tức, cập nhật và thông tin chi tiết với khán giả của bạn. Sử dụng danh mục Lục Khí để tổ chức nội dung một cách hiệu quả."

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Homepage Template -->
+        <template id="homepage" name="Homepage">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <!-- Hero Section -->
+                    <section class="hero-section bg-primary text-white py-5">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6">
+                                    <h1 class="display-4 fw-bold mb-4">Lục Khí</h1>
+                                    <p class="lead mb-4">Hệ thống tri thức và phương pháp thực hành giúp con người tự hiểu, tự điều chỉnh sức khỏe theo nguyên lý Đông Y hiện đại hóa.</p>
+                                    <div class="d-flex gap-3">
+                                        <a href="/courses" class="btn btn-light btn-lg">Khám phá khóa học</a>
+                                        <a href="/about" class="btn btn-outline-light btn-lg">Tìm hiểu thêm</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="/luc_khi_website/static/src/img/hero-image.jpg" alt="Lục Khí" class="img-fluid rounded"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured Courses Section -->
+                    <section class="py-5" t-if="featured_courses">
+                        <div class="container">
+                            <div class="text-center mb-5">
+                                <h2 class="display-5">Khóa học nổi bật</h2>
+                                <p class="lead text-muted">Các khóa học được nhiều học viên quan tâm</p>
+                            </div>
+                            <div class="row g-4">
+                                <t t-foreach="featured_courses" t-as="course">
+                                    <div class="col-md-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img t-if="course.image" t-att-src="course.image_1024" class="card-img-top" t-att-alt="course.name"/>
+                                            <div class="card-body">
+                                                <h5 class="card-title" t-esc="course.name"/>
+                                                <p class="card-text text-muted" t-esc="course.short_description or course.description[:100] + '...'"/>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="badge bg-primary" t-esc="course.level"/>
+                                                    <span class="text-primary fw-bold" t-esc="course.price and '{:,.0f} ₫'.format(course.price) or 'Miễn phí'"/>
+                                                </div>
+                                                <a t-att-href="'/course/' + str(course.id)" class="btn btn-outline-primary mt-2 w-100">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="/courses" class="btn btn-primary btn-lg">Xem tất cả khóa học</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Latest Blog Posts Section -->
+                    <section class="py-5 bg-light" t-if="latest_posts">
+                        <div class="container">
+                            <div class="text-center mb-5">
+                                <h2 class="display-5">Bài viết mới nhất</h2>
+                                <p class="lead text-muted">Kiến thức và chia sẻ từ Lục Khí</p>
+                            </div>
+                            <div class="row g-4">
+                                <t t-foreach="latest_posts" t-as="post">
+                                    <div class="col-md-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img t-if="post.cover_image" t-att-src="post.cover_image_1024" class="card-img-top" t-att-alt="post.name"/>
+                                            <div class="card-body">
+                                                <h5 class="card-title" t-esc="post.name"/>
+                                                <p class="card-text text-muted small" t-esc="post.post_date.strftime('%d/%m/%Y')"/>
+                                                <p class="card-text" t-esc="post.subtitle or post.content[:100] + '...'"/>
+                                                <a t-att-href="'/blog/' + post.website_url" class="btn btn-outline-primary">Đọc thêm</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="/blog" class="btn btn-primary btn-lg">Xem tất cả bài viết</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured Products Section -->
+                    <section class="py-5" t-if="featured_products">
+                        <div class="container">
+                            <div class="text-center mb-5">
+                                <h2 class="display-5">Sản phẩm nổi bật</h2>
+                                <p class="lead text-muted">Sách và dịch vụ chất lượng từ Lục Khí</p>
+                            </div>
+                            <div class="row g-4">
+                                <t t-foreach="featured_products" t-as="product">
+                                    <div class="col-md-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img t-if="product.image_1920" t-att-src="product.image_1024" class="card-img-top" t-att-alt="product.name"/>
+                                            <div class="card-body">
+                                                <h5 class="card-title" t-esc="product.name"/>
+                                                <p class="card-text text-muted" t-esc="product.description_sale[:100] + '...'"/>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="badge bg-info" t-esc="product.luc_khi_type or 'Sản phẩm'"/>
+                                                    <span class="text-primary fw-bold" t-esc="product.list_price and '{:,.0f} ₫'.format(product.list_price) or 'Liên hệ'"/>
+                                                </div>
+                                                <a t-att-href="'/shop/product/' + product.website_url" class="btn btn-outline-primary mt-2 w-100">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="/shop" class="btn btn-primary btn-lg">Xem tất cả sản phẩm</a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- About Page Template -->
+        <template id="about" name="About Page">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto text-center">
+                                    <h1 class="display-4 mb-4">Về Lục Khí</h1>
+                                    <p class="lead text-muted mb-5">
+                                        Lục Khí là hệ thống tri thức và phương pháp thực hành giúp con người tự hiểu, 
+                                        tự điều chỉnh sức khỏe theo nguyên lý Đông Y hiện đại hóa.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-lg-4">
+                                    <div class="text-center">
+                                        <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fs-2 mb-3" style="width: 3rem; height: 3rem;">
+                                            <i class="fa fa-book"/>
+                                        </div>
+                                        <h3>Tầm nhìn</h3>
+                                        <p>Trở thành nền tảng tri thức Đông Y hiện đại hóa hàng đầu Việt Nam, giúp hàng triệu người Việt Nam cải thiện sức khỏe.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-center">
+                                        <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fs-2 mb-3" style="width: 3rem; height: 3rem;">
+                                            <i class="fa fa-heart"/>
+                                        </div>
+                                        <h3>Sứ mệnh</h3>
+                                        <p>Phổ biến kiến thức Đông Y hiện đại hóa, giúp người Việt tự chăm sóc sức khỏe thể chất và tinh thần.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-center">
+                                        <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fs-2 mb-3" style="width: 3rem; height: 3rem;">
+                                            <i class="fa fa-star"/>
+                                        </div>
+                                        <h3>Giá trị cốt lõi</h3>
+                                        <p>Chính trực - Chuyên nghiệp - Hiệu quả - Luôn đặt sức khỏe và lợi ích của học viên lên hàng đầu.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Team Section -->
+                    <section class="py-5 bg-light" t-if="team_members">
+                        <div class="container">
+                            <div class="text-center mb-5">
+                                <h2 class="display-5">Đội ngũ của chúng tôi</h2>
+                                <p class="lead text-muted">Những chuyên gia tận tâm với sứ mệnh phổ biến kiến thức Lục Khí</p>
+                            </div>
+                            <div class="row g-4">
+                                <t t-foreach="team_members" t-as="member">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="card h-100 shadow-sm">
+                                            <img t-if="member.photo" t-att-src="member.photo_1024" class="card-img-top" t-att-alt="member.name"/>
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title" t-esc="member.name"/>
+                                                <p class="text-muted" t-esc="member.position"/>
+                                                <div class="bio-content small text-muted" t-raw="member.bio"/>
+                                                <div class="mt-3">
+                                                    <a t-if="member.email" t-att-href="'mailto:' + member.email" class="btn btn-outline-primary btn-sm me-2">
+                                                        <i class="fa fa-envelope"/>
+                                                    </a>
+                                                    <a t-if="member.zalo" t-att-href="'https://zalo.me/' + member.zalo" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fa fa-phone"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Contact Page Template -->
+        <template id="contact" name="Contact Page">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto">
+                                    <div class="text-center mb-5">
+                                        <h1 class="display-4">Liên hệ với chúng tôi</h1>
+                                        <p class="lead text-muted">Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn</p>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card shadow-sm">
+                                                <div class="card-body">
+                                                    <h4>Thông tin liên hệ</h4>
+                                                    <p><strong>Địa chỉ:</strong> 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+                                                    <p><strong>Điện thoại:</strong> (028) 1234 5678</p>
+                                                    <p><strong>Email:</strong> info@luckhi.vn</p>
+                                                    <p><strong>Zalo:</strong> 0909 123 456</p>
+                                                    
+                                                    <div class="mt-4">
+                                                        <h5>Giờ làm việc</h5>
+                                                        <p>Thứ 2 - Thứ 6: 8:00 - 18:00</p>
+                                                        <p>Thứ 7: 8:00 - 12:00</p>
+                                                        <p>Chủ nhật: Nghỉ</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="card shadow-sm">
+                                                <div class="card-body">
+                                                    <h4>Gửi tin nhắn</h4>
+                                                    <form method="POST" action="/contact">
+                                                        <div class="mb-3">
+                                                            <label for="name" class="form-label">Họ và tên *</label>
+                                                            <input type="text" class="form-control" id="name" name="name" required=""/>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="email" class="form-label">Email *</label>
+                                                            <input type="email" class="form-control" id="email" name="email" required=""/>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="phone" class="form-label">Điện thoại</label>
+                                                            <input type="tel" class="form-control" id="phone" name="phone"/>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="message" class="form-label">Tin nhắn *</label>
+                                                            <textarea class="form-control" id="message" name="message" rows="5" required=""></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary w-100">Gửi tin nhắn</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Custom Page Template -->
+        <template id="custom_page" name="Custom Page">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto">
+                                    <h1 t-esc="page.title"/>
+                                    <div class="mt-4" t-raw="page.content"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Team Member Profile Template -->
+        <template id="team_member" name="Team Member Profile">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <img t-if="member.photo" t-att-src="member.photo_512" class="img-fluid rounded-circle mb-4" t-att-alt="member.name"/>
+                                </div>
+                                <div class="col-lg-8">
+                                    <h1 t-esc="member.name"/>
+                                    <h3 class="text-muted mb-4" t-esc="member.position"/>
+                                    <div class="bio-content mb-4" t-raw="member.bio"/>
+                                    
+                                    <div class="row" t-if="member.expertise">
+                                        <div class="col-md-6">
+                                            <h5>Chuyên môn</h5>
+                                            <p t-esc="member.expertise"/>
+                                        </div>
+                                        <div class="col-md-6" t-if="member.certifications">
+                                            <h5>Chứng chỉ</h5>
+                                            <p t-esc="member.certifications"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <a t-if="member.email" t-att-href="'mailto:' + member.email" class="btn btn-primary me-2">
+                                            <i class="fa fa-envelope me-2"/>Email
+                                        </a>
+                                        <a t-if="member.phone" t-att-href="'tel:' + member.phone" class="btn btn-outline-primary me-2">
+                                            <i class="fa fa-phone me-2"/>Điện thoại
+                                        </a>
+                                        <a t-if="member.zalo" t-att-href="'https://zalo.me/' + member.zalo" class="btn btn-outline-primary">
+                                            <i class="fa fa-phone me-2"/>Zalo
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

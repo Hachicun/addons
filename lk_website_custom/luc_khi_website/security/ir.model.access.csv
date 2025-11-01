@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_luc_khi_website_page_user,luc_khi.website.page.user,model_luc_khi_website_page,base.group_user,1,0,0,0
+access_luc_khi_website_page_manager,luc_khi.website.page.manager,model_luc_khi_website_page,base.group_user,1,1,1,1
+access_luc_khi_team_member_user,luc_khi.team.member.user,model_luc_khi_team_member,base.group_user,1,0,0,0
+access_luc_khi_team_member_manager,luc_khi.team.member.manager,model_luc_khi_team_member,base.group_user,1,1,1,1

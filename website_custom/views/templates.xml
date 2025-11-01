@@ -1,0 +1,18 @@
+<odoo>
+  <!-- Frontend page template -->
+  <template id="landing_page" name="Landing Page">
+    <t t-call="website.layout">
+      <div class="container mt-5">
+        <h1 class="display-5" t-esc="title"/>
+        <p class="text-muted" t-esc="subtitle"/>
+        <div class="mt-4">
+          <a class="btn btn-primary" href="/">
+            Back to Home
+          </a>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- Optional: add to website sitemap/menu with website.menu records if needed -->
+</odoo>

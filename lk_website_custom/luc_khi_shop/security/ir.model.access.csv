@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_luc_khi_product_category_user,luc_khi.product.category user,model_luc_khi_product_category,base.group_user,1,0,0,0
+access_luc_khi_product_category_portal,luc_khi.product.category portal,model_luc_khi_product_category,base.group_portal,1,0,0,0
+access_luc_khi_product_category_public,luc_khi.product.category public,model_luc_khi_product_category,base.group_public,1,0,0,0
+access_luc_khi_product_category_manager,luc_khi.product.category manager,model_luc_khi_product_category,sales_team.group_sale_manager,1,1,1,1
+
+access_luc_khi_product_user,luc_khi.product user,model_luc_khi_product,base.group_user,1,0,0,0
+access_luc_khi_product_portal,luc_khi.product portal,model_luc_khi_product,base.group_portal,1,0,0,0
+access_luc_khi_product_public,luc_khi.product public,model_luc_khi_product,base.group_public,1,0,0,0
+access_luc_khi_product_manager,luc_khi.product manager,model_luc_khi_product,sales_team.group_sale_manager,1,1,1,1
+
+access_luc_khi_order_user,luc_khi.order user,model_luc_khi_order,base.group_user,1,0,0,0
+access_luc_khi_order_portal,luc_khi.order portal,model_luc_khi_order,base.group_portal,1,0,0,0
+access_luc_khi_order_public,luc_khi.order public,model_luc_khi_order,base.group_public,1,0,0,0
+access_luc_khi_order_manager,luc_khi.order manager,model_luc_khi_order,sales_team.group_sale_manager,1,1,1,1
+
+access_luc_khi_element_user,luc_khi.element user,model_luc_khi_element,base.group_user,1,0,0,0
+access_luc_khi_element_portal,luc_khi.element portal,model_luc_khi_element,base.group_portal,1,0,0,0
+access_luc_khi_element_public,luc_khi.element public,model_luc_khi_element,base.group_public,1,0,0,0
+access_luc_khi_element_manager,luc_khi.element manager,model_luc_khi_element,sales_team.group_sale_manager,1,1,1,1

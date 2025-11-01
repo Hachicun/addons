@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Blog Categories -->
+        <record id="blog_category_luc_khi_co_ban" model="luc_khi.blog.category">
+            <field name="name">Lục Khí Cơ Bản</field>
+            <field name="description">Các bài viết giới thiệu về kiến thức cơ bản của Lục Khí</field>
+            <field name="sequence">10</field>
+            <field name="color">#007bff</field>
+            <field name="website_published">True</field>
+            <field name="active">True</field>
+            <field name="meta_title">Lục Khí Cơ Bản - Học Lục Khí từ đầu</field>
+            <field name="meta_description">Tìm hiểu kiến thức cơ bản về Lục Khí, các nguyên lý nền tảng và cách áp dụng vào cuộc sống.</field>
+            <field name="meta_keywords">lục khí cơ bản, học lục khí, kiến thức lục khí</field>
+        </record>
+
+        <record id="blog_category_phong_thuy" model="luc_khi.blog.category">
+            <field name="name">Phong Thủy Lục Khí</field>
+            <field name="description">Ứng dụng Lục Khí trong phong thủy và thiết kế không gian sống</field>
+            <field name="sequence">20</field>
+            <field name="color">#28a745</field>
+            <field name="website_published">True</field>
+            <field name="active">True</field>
+            <field name="meta_title">Phong Thủy Lục Khí - Cách Bố Trí Không Gian</field>
+            <field name="meta_description">Ứng dụng Lục Khí vào phong thủy nhà ở, văn phòng để mang lại may mắn và tài lộc.</field>
+            <field name="meta_keywords">phong thủy lục khí, phong thủy nhà ở, bố trí không gian</field>
+        </record>
+
+        <record id="blog_category_y_hoc" model="luc_khi.blog.category">
+            <field name="name">Y Học Lục Khí</field>
+            <field name="description">Ứng dụng Lục Khí trong y học cổ truyền và chăm sóc sức khỏe</field>
+            <field name="sequence">30</field>
+            <field name="color">#dc3545</field>
+            <field name="website_published">True</field>
+            <field name="active">True</field>
+            <field name="meta_title">Y Học Lục Khí - Chăm Sóc Sức Khỏe</field>
+            <field name="meta_description">Khám phá ứng dụng Lục Khí trong y học cổ truyền để chăm sóc sức khỏe thể chất và tinh thần.</field>
+            <field name="meta_keywords">y học lục khí, sức khỏe lục khí, y học cổ truyền</field>
+        </record>
+
+        <record id="blog_category_phat_trien_ban_than" model="luc_khi.blog.category">
+            <field name="name">Phát Triển Bản Thân</field>
+            <field name="description">Sử dụng Lục Khí để phát triển bản thân và nâng cao chất lượng cuộc sống</field>
+            <field name="sequence">40</field>
+            <field name="color">#ffc107</field>
+            <field name="website_published">True</field>
+            <field name="active">True</field>
+            <field name="meta_title">Phát Triển Bản Thân qua Lục Khí</field>
+            <field name="meta_description">Sử dụng nguyên lý Lục Khí để phát triển bản thân, nâng cao trí tuệ và chất lượng cuộc sống.</field>
+            <field name="meta_keywords">phát triển bản thân, lục khí cuộc sống, nâng cao bản thân</field>
+        </record>
+
+        <!-- Blog Posts -->
+        <record id="blog_post_gioi_thieu_luc_khi" model="blog.post">
+            <field name="name">Giới Thiệu Tổng Quan Về Lục Khí</field>
+            <field name="subtitle">Khám phá hệ thống triết học cổ xưa và ứng dụng trong cuộc sống hiện đại</field>
+            <field name="content"><![CDATA[
+                <h2>Lục Khí là gì?</h2>
+                <p>Lục Khí là một hệ thống triết học cổ xưa của phương Đông, dựa trên sự tương tác và cân bằng của sáu loại khí cơ bản: Kim, Mộc, Thủy, Hỏa, Thổ và Phong. Hệ thống này không chỉ là lý thuyết mà còn là phương pháp thực tiễn để hiểu và cải thiện cuộc sống.</p>
+                
+                <h3>Nguồn gốc lịch sử</h3>
+                <p>Lục Khí có nguồn gốc từ Trung Hoa cổ đại, phát triển hàng ngàn năm qua thông qua quan sát tự nhiên và kinh nghiệm thực tiễn. Các nhà hiền triết xưa đã nhận thấy rằng mọi vật chất và hiện tượng trong vũ trụ đều được tạo thành từ sự kết hợp của sáu loại khí này.</p>
+                
+                <h3>Sáu loại khí cơ bản</h3>
+                <ul>
+                    <li><strong>Kim:</strong> Tượng trưng cho sự cứng rắn, sắc bén, cấu trúc</li>
+                    <li><strong>Mộc:</strong> Tượng trưng cho sự phát triển, linh hoạt, sáng tạo</li>
+                    <li><strong>Thủy:</strong> Tượng trưng cho sự linh hoạt, thích nghi, thông minh</li>
+                    <li><strong>Hỏa:</strong> Tượng trưng cho sự nhiệt huyết, đam mê, năng lượng</li>
+                    <li><strong>Thổ:</strong> Tượng trưng cho sự ổn định, nuôi dưỡng, vững chãi</li>
+                    <li><strong>Phong:</strong> Tượng trưng cho sự tự do, thay đổi, giao tiếp</li>
+                </ul>
+                
+                <h3>Ứng dụng trong cuộc sống</h3>
+                <p>Hiểu biết về Lục Khí giúp chúng ta:</p>
+                <ul>
+                    <li>Cân bằng sức khỏe thể chất và tinh thần</li>
+                    <li>Cải thiện các mối quan hệ xã hội</li>
+                    <li>Tối ưu hóa không gian sống và làm việc</li>
+                    <li>Phát triển năng lực bản thân</li>
+                    <li>Đưa ra quyết định tốt hơn</li>
+                </ul>
+                
+                <h3>Lời kết</h3>
+                <p>Lục Khí không chỉ là triết học mà còn là công cụ hữu ích để cải thiện chất lượng cuộc sống. Bằng cách hiểu và áp dụng đúng nguyên lý Lục Khí, chúng ta có thể đạt được sự cân bằng và hài hòa trong mọi khía cạnh của cuộc sống.</p>
+            ]]></field>
+            <field name="summary">Lục Khí là hệ thống triết học cổ xưa dựa trên sự cân bằng của sáu loại khí cơ bản. Bài viết này giới thiệu tổng quan về nguồn gốc, nguyên lý và ứng dụng của Lục Khí trong cuộc sống hiện đại.</field>
+            <field name="luc_khi_category_id" ref="blog_category_luc_khi_co_ban"/>
+            <field name="is_featured">True</field>
+            <field name="website_published">True</field>
+            <field name="meta_title">Giới Thiệu Lục Khí - Hệ Thống Triết Học Cổ Xưa</field>
+            <field name="meta_description">Tìm hiểu về Lục Khí, hệ thống triết học cổ xưa dựa trên sự cân bằng của sáu loại khí cơ bản và ứng dụng trong cuộc sống hiện đại.</field>
+            <field name="meta_keywords">lục khí là gì, giới thiệu lục khí, triết học lục khí</field>
+        </record>
+
+        <record id="blog_post_phong_thuy_nha_o" model="blog.post">
+            <field name="name">Phong Thủy Nhà Ở Theo Lục Khí</field>
+            <field name="subtitle">Cách bố trí không gian sống theo nguyên lý Lục Khí để mang lại may mắn</field>
+            <field name="content"><![CDATA[
+                <h2>Tầm quan trọng của phong thủy nhà ở</h2>
+                <p>Phong thủy nhà ở theo Lục Khí là nghệ thuật sắp xếp không gian sống để tạo ra sự hài hòa giữa con người và môi trường. Một ngôi nhà được bố trí đúng theo nguyên lý Lục Khí sẽ mang lại năng lượng tích cực, sức khỏe và tài lộc cho gia chủ.</p>
+                
+                <h3>Nguyên tắc cơ bản</h3>
+                <p>Trong phong thủy Lục Khí, mỗi loại khí tương ứng với các hướng và không gian khác nhau trong nhà:</p>
+                <ul>
+                    <li><strong>Kim:</strong> Phía Tây, không gian làm việc, phòng đọc sách</li>
+                    <li><strong>Mộc:</strong> Phía Đông, phòng khách, khu vực sinh hoạt chung</li>
+                    <li><strong>Thủy:</strong> Phía Bắc, phòng ngủ, khu vực nghỉ ngơi</li>
+                    <li><strong>Hỏa:</strong> Phía Nam, phòng bếp, khu vực nấu nướng</li>
+                    <li><strong>Thổ:</strong> Trung tâm nhà, khu vực ổn định</li>
+                    <li><strong>Phong:</strong> Các cửa ra vào, không gian giao tiếp</li>
+                </ul>
+                
+                <h3>Bố trí từng phòng</h3>
+                
+                <h4>Phòng khách</h4>
+                <p>Phòng khách nên được bố trí theo khí Mộc để tạo không gian ấm cúng và thân thiện. Sử dụng nội thất bằng gỗ, cây xanh và màu sắc tự nhiên.</p>
+                
+                <h4>Phòng ngủ</h4>
+                <p>Phòng ngủ cần sự yên tĩnh và thư giãn, phù hợp với khí Thủy. Sử dụng màu xanh dương, vật liệu mềm mại và tránh ánh sáng quá mạnh.</p>
+                
+                <h4>Phòng bếp</h4>
+                <p>Phòng bếp thuộc khí Hỏa, cần sự ấm áp và năng động. Sử dụng màu đỏ, cam và đảm bảo thông gió tốt.</p>
+                
+                <h4>Phòng làm việc</h4>
+                <p>Phòng làm việc nên theo khí Kim để tạo sự tập trung và hiệu quả. Sử dụng nội thất kim loại, màu trắng và ánh sáng đủ.</p>
+                
+                <h3>Vật phẩm phong thủy</h3>
+                <p>Các vật phẩm phong thủy theo Lục Khí giúp tăng cường năng lượng tích cực:</p>
+                <ul>
+                    <li><strong>Kim:</strong> Đồ đồng, kim loại, tượng phật</li>
+                    <li><strong>Mộc:</strong> Cây xanh, đồ gỗ, tranh phong cảnh</li>
+                    <li><strong>Thủy:</strong> Hồ cá, đài phun nước, màu xanh dương</li>
+                    <li><strong>Hỏa:</strong> Đèn, nến, màu đỏ và cam</li>
+                    <li><strong>Thổ:</strong> Đá, gốm sứ, màu vàng và nâu</li>
+                    <li><strong>Phong:</strong> Chuông gió, quạt, vật trang trí treo</li>
+                </ul>
+                
+                <h3>Lưu ý quan trọng</h3>
+                <ul>
+                    <li>Luôn giữ nhà cửa sạch sẽ và gọn gàng</li>
+                    <li>Đảm bảo ánh sáng tự nhiên đủ</li>
+                    <li>Tránh các góc nhọn và vật cản trở</li>
+                    <li>Cân bằng các loại khí trong không gian</li>
+                    <li>Thường xuyên thay đổi và làm mới không gian</li>
+                </ul>
+            ]]></field>
+            <field name="summary">Hướng dẫn chi tiết cách bố trí nhà ở theo nguyên lý Lục Khí để tạo không gian sống hài hòa, mang lại may mắn và tài lộc cho gia đình.</field>
+            <field name="luc_khi_category_id" ref="blog_category_phong_thuy"/>
+            <field name="is_featured">True</field>
+            <field name="website_published">True</field>
+            <field name="meta_title">Phong Thủy Nhà Ở Theo Lục Khí - Bố Trí Không Gian</field>
+            <field name="meta_description">Hướng dẫn chi tiết cách bố trí nhà ở theo nguyên lý Lục Khí để tạo không gian sống hài hòa, mang lại may mắn và tài lộc.</field>
+            <field name="meta_keywords">phong thủy nhà ở, lục khí nhà ở, bố trí không gian</field>
+        </record>
+
+        <record id="blog_post_suc_khoe_luc_khi" model="blog.post">
+            <field name="name">Chăm Sóc Sức Khỏe Theo Lục Khí</field>
+            <field name="subtitle">Ứng dụng nguyên lý Lục Khí để duy trì sức khỏe thể chất và tinh thần</field>
+            <field name="content"><![CDATA[
+                <h2>Sức khỏe và Lục Khí</h2>
+                <p>Theo y học cổ truyền, sức khỏe con người được quyết định bởi sự cân bằng của các loại khí trong cơ thể. Khi các khí này hài hòa, cơ thể sẽ khỏe mạnh và tinh thần minh mẫn. Ngược lại, sự mất cân bằng sẽ gây ra các vấn đề sức khỏe.</p>
+                
+                <h3>Sáu loại khí và cơ thể</h3>
+                
+                <h4>Khí Kim và hệ hô hấp</h4>
+                <p>Khí Kim liên quan đến phổi và hệ hô hấp. Khi khí Kim mạnh, bạn sẽ có hô hấp tốt, giọng nói rõ ràng. Khi yếu, dễ bị các bệnh về phổi, hen suyễn.</p>
+                <p><strong>Cách cân bằng:</strong> Thở sâu, tập yoga, ăn thực phẩm trắng (đậu, củ cải).</p>
+                
+                <h4>Khí Mộc và hệ gan</h4>
+                <p>Khí Mộc liên quan đến gan và hệ tiêu hóa. Khi khí Mộc cân bằng, gan khỏe mạnh, tiêu hóa tốt. Khi mất cân bằng, dễ bị stress, các bệnh về gan.</p>
+                <p><strong>Cách cân bằng:</strong> Ăn nhiều rau xanh, tập thể dục, ngủ đủ giấc.</p>
+                
+                <h4>Khí Thủy và hệ thận</h4>
+                <p>Khí Thủy liên quan đến thận và hệ tiết niệu. Khi khí Thủy mạnh, thận khỏe, sinh lực tốt. Khi yếu, dễ bị các bệnh về thận, suy nhược.</p>
+                <p><strong>Cách cân bằng:</strong> Uống đủ nước, ăn hải sản, tránh thức khuya.</p>
+                
+                <h4>Khí Hỏa và hệ tim</h4>
+                <p>Khí Hỏa liên quan đến tim và hệ tuần hoàn. Khi khí Hỏa cân bằng, tim khỏe mạnh, tinh thần sảng khoái. Khi quá mạnh, dễ bị cao huyết áp, stress.</p>
+                <p><strong>Cách cân bằng:</strong> Ăn thực phẩm mát, thiền định, tránh căng thẳng.</p>
+                
+                <h4>Khí Thổ và hệ tiêu hóa</h4>
+                <p>Khí Thổ liên quan đến dạ dày và hệ tiêu hóa. Khi khí Thổ mạnh, tiêu hóa tốt, cơ thể vững chãi. Khi yếu, dễ bị các bệnh về dạ dày.</p>
+                <p><strong>Cách cân bằng:</strong> Ăn đúng giờ, nhai kỹ, tránh đồ ăn cay nóng.</p>
+                
+                <h4>Khí Phong và hệ thần kinh</h4>
+                <p>Khí Phong liên quan đến hệ thần kinh và giao tiếp. Khi khí Phong cân bằng, tinh thần minh mẫn, giao tiếp tốt. Khi mất cân bằng, dễ bị lo âu, mất ngủ.</p>
+                <p><strong>Cách cân bằng:</strong> Tập hít thở, đi dạo, giao tiếp xã hội.</p>
+                
+                <h3>Chế độ ăn uống theo Lục Khí</h3>
+                
+                <h4>Thực phẩm tương ứng với từng khí</h4>
+                <ul>
+                    <li><strong>Kim:</strong> Đậu trắng, củ cải, hành, tỏi</li>
+                    <li><strong>Mộc:</strong> Rau xanh, trái cây, ngũ cốc</li>
+                    <li><strong>Thủy:</strong> Hải sản, đậu đen, rong biển</li>
+                    <li><strong>Hỏa:</strong> Ớt, gừng, thịt đỏ, rượu vang</li>
+                    <li><strong>Thổ:</strong> Khoai lang, bí đỏ, các loại hạt</li>
+                    <li><strong>Phong:</strong> Trà xanh, các loại gia vị</li>
+                </ul>
+                
+                <h3>Mùa và sức khỏe</h3>
+                <p>Mỗi mùa tương ứng với một loại khí và cần có chế độ chăm sóc sức khỏe phù hợp:</p>
+                <ul>
+                    <li><strong>Mùa xuân (Mộc):</strong> Tăng cường rau xanh, tập thể dục ngoài trời</li>
+                    <li><strong>Mùa hè (Hỏa):</strong> Ăn thực phẩm mát, tránh nắng gắt</li>
+                    <li><strong>Mùa thu (Kim):</strong> Chăm sóc đường hô hấp, ăn thực phẩm trắng</li>
+                    <li><strong>Mùa đông (Thủy):</strong> Giữ ấm, ăn thực phẩm nóng, nghỉ ngơi nhiều</li>
+                </ul>
+                
+                <h3>Lời khuyên sức khỏe</h3>
+                <ul>
+                    <li>Lắng nghe cơ thể và nhận biết các dấu hiệu mất cân bằng</li>
+                    <li>Xây dựng chế độ ăn uống cân bằng theo Lục Khí</li>
+                    <li>Tập thể dục đều đặn phù hợp với thể trạng</li>
+                    <li>Ngủ đủ giấc và đúng giờ</li>
+                    <li>Giữ tinh thần lạc quan và thư giãn</li>
+                    <li>Kiểm tra sức khỏe định kỳ</li>
+                </ul>
+            ]]></field>
+            <field name="summary">Hướng dẫn chăm sóc sức khỏe theo nguyên lý Lục Khí, bao gồm chế độ ăn uống, tập luyện và lối sống để duy trì sự cân bằng giữa thể chất và tinh thần.</field>
+            <field name="luc_khi_category_id" ref="blog_category_y_hoc"/>
+            <field name="website_published">True</field>
+            <field name="meta_title">Chăm Sóc Sức Khỏe Theo Lục Khí - Sức Khỏe Toàn Diện</field>
+            <field name="meta_description">Ứng dụng nguyên lý Lục Khí để chăm sóc sức khỏe toàn diện, cân bằng thể chất và tinh thần qua chế độ ăn uống và lối sống phù hợp.</field>
+            <field name="meta_keywords">sức khỏe lục khí, y học lục khí, chăm sóc sức khỏe</field>
+        </record>
+
+        <record id="blog_post_phat_trien_ban_than" model="blog.post">
+            <field name="name">Phát Triển Bản Thân Qua Lục Khí</field>
+            <field name="subtitle">Sử dụng nguyên lý Lục Khí để nâng cao năng lực và chất lượng cuộc sống</field>
+            <field name="content"><![CDATA[
+                <h2>Lục Khí và phát triển bản thân</h2>
+                <p>Lục Khí không chỉ là triết học mà còn là công cụ mạnh mẽ để phát triển bản thân. Bằng cách hiểu rõ đặc điểm của từng loại khí, chúng ta có thể nhận diện điểm mạnh, điểm yếu và xây dựng kế hoạch phát triển phù hợp.</p>
+                
+                <h3>Nhận diện loại khí chủ đạo</h3>
+                <p>Mỗi người có một hoặc hai loại khí chủ đạo, quyết định tính cách và năng lực tự nhiên:</p>
+                
+                <h4>Người khí Kim</h4>
+                <p><strong>Đặc điểm:</strong> Rất có tổ chức, chính xác, kiên định, có khả năng lãnh đạo tự nhiên.</p>
+                <p><strong>Điểm mạnh:</strong> Quyết đoán, có trách nhiệm, đáng tin cậy.</p>
+                <p><strong>Điểm yếu:</strong> Cứng nhắc, thiếu linh hoạt, khó thay đổi.</p>
+                <p><strong>Phát triển:</strong> Học cách linh hoạt, lắng nghe người khác, thử nghiệm ý tưởng mới.</p>
+                
+                <h4>Người khí Mộc</h4>
+                <p><strong>Đặc điểm:</strong> Sáng tạo, linh hoạt, ham học hỏi, dễ dàng thích nghi.</p>
+                <p><strong>Điểm mạnh:</strong> Nhiệt tình, giao tiếp tốt, có nhiều ý tưởng.</p>
+                <p><strong>Điểm yếu:</strong> Thiếu kiên trì, dễ bị phân tâm, khó hoàn thành dự án.</p>
+                <p><strong>Phát triển:</strong> Tập trung vào mục tiêu, xây dựng kỷ luật, hoàn thành việc đã bắt đầu.</p>
+                
+                <h4>Người khí Thủy</h4>
+                <p><strong>Đặc điểm:</strong> Thông minh, nhạy bén, có khả năng phân tích tốt, dễ dàng thích nghi.</p>
+                <p><strong>Điểm mạnh:</strong> Giải quyết vấn đề, học nhanh, linh hoạt.</p>
+                <p><strong>Điểm yếu:</strong> Thiếu quyết đoán, dễ bị ảnh hưởng, hay do dự.</p>
+                <p><strong>Phát triển:</strong> Tăng cường sự tự tin, ra quyết định nhanh hơn, kiên định với quan điểm.</p>
+                
+                <h4>Người khí Hỏa</h4>
+                <p><strong>Đặc điểm:</strong> Năng nổ, đam mê, có khả năng truyền cảm hứng, lãnh đạo bằng nhiệt huyết.</p>
+                <p><strong>Điểm mạnh:</strong> Động lực cao, truyền cảm hứng, dám chấp nhận rủi ro.</p>
+                <p><strong>Điểm yếu:</strong> Thiếu kiên nhẫn, dễ nóng giận, đôi khi quá vội vàng.</p>
+                <p><strong>Phát triển:</strong> Học cách kiên nhẫn, lắng nghe, suy nghĩ kỹ trước khi hành động.</p>
+                
+                <h4>Người khí Thổ</h4>
+                <p><strong>Đặc điểm:</strong> Ổn định, đáng tin cậy, có khả năng xây dựng nền tảng vững chắc.</p>
+                <p><strong>Điểm mạnh:</strong> Kiên định, đáng tin cậy, có khả năng tổ chức tốt.</p>
+                <p><strong>Điểm yếu:</strong> Chậm chạp, ngại thay đổi, thiếu sáng tạo.</p>
+                <p><strong>Phát triển:</strong> Cố gắng sáng tạo hơn, chấp nhận thay đổi, tăng tốc độ làm việc.</p>
+                
+                <h4>Người khí Phong</h4>
+                <p><strong>Đặc điểm:</strong> Tự do, giao tiếp tốt, có khả năng kết nối, thích sự thay đổi.</p>
+                <p><strong>Điểm mạnh:</strong> Giao tiếp xuất sắc, dễ dàng kết nối, linh hoạt.</p>
+                <p><strong>Điểm yếu:</strong> Thiếu tập trung, khó cam kết lâu dài, hay thay đổi.</p>
+                <p><strong>Phát triển:</strong> Tập trung vào mục tiêu dài hạn, xây dựng sự ổn định, hoàn thành công việc.</p>
+                
+                <h3>Kế hoạch phát triển theo Lục Khí</h3>
+                
+                <h4>Bước 1: Tự đánh giá</h4>
+                <ul>
+                    <li>Xác định loại khí chủ đạo của bạn</li>
+                    <li>Nhận diện điểm mạnh và điểm yếu</li>
+                    <li>Đánh giá các lĩnh vực cần cải thiện</li>
+                </ul>
+                
+                <h4>Bước 2: Đặt mục tiêu</h4>
+                <ul>
+                    <li>Xác định mục tiêu ngắn hạn và dài hạn</li>
+                    <li>Phân bổ mục tiêu theo từng loại khí</li>
+                    <li>Xây dựng lộ trình thực hiện</li>
+                </ul>
+                
+                <h4>Bước 3: Thực hành cân bằng</h4>
+                <ul>
+                    <li>Phát triển điểm mạnh của khí chủ đạo</li>
+                    <li>Học hỏi từ các loại khí khác</li>
+                    <li>Tạo sự cân bằng trong cuộc sống</li>
+                </ul>
+                
+                <h3>Ứng dụng trong công việc</h3>
+                
+                <h4>Lãnh đạo theo Lục Khí</h4>
+                <ul>
+                    <li><strong>Kim:</strong> Lãnh đạo bằng quy tắc và kỷ luật</li>
+                    <li><strong>Mộc:</strong> Lãnh đạo bằng sáng tạo và linh hoạt</li>
+                    <li><strong>Thủy:</strong> Lãnh đạo bằng trí tuệ và chiến lược</li>
+                    <li><strong>Hỏa:</strong> Lãnh đạo bằng đam mê và truyền cảm hứng</li>
+                    <li><strong>Thổ:</strong> Lãnh đạo bằng sự ổn định và tin tưởng</li>
+                    <li><strong>Phong:</strong> Lãnh đạo bằng giao tiếp và kết nối</li>
+                </ul>
+                
+                <h3>Lời kết</h3>
+                <p>Phát triển bản thân theo Lục Khí là hành trình liên tục để đạt được sự cân bằng và hoàn thiện. Bằng cách hiểu rõ bản chất của từng loại khí và áp dụng đúng cách, chúng ta có thể phát huy tối đa tiềm năng và đạt được thành công bền vững.</p>
+            ]]></field>
+            <field name="summary">Hướng dẫn phát triển bản thân theo nguyên lý Lục Khí, giúp nhận diện điểm mạnh, điểm yếu và xây dựng kế hoạch phát triển cá nhân hiệu quả.</field>
+            <field name="luc_khi_category_id" ref="blog_category_phat_trien_ban_than"/>
+            <field name="website_published">True</field>
+            <field name="meta_title">Phát Triển Bản Thân Qua Lục Khí - Nâng Cao Năng Lực</field>
+            <field name="meta_description">Sử dụng nguyên lý Lục Khí để phát triển bản thân, nhận diện điểm mạnh yếu và xây dựng kế hoạch phát triển cá nhân hiệu quả.</field>
+            <field name="meta_keywords">phát triển bản thân, lục khí cá nhân, nâng cao năng lực</field>
+        </record>
+
+        <!-- Blog (Main Blog) -->
+        <record id="blog_luc_khi_main" model="blog.blog">
+            <field name="name">Blog Lục Khí</field>
+            <field name="subtitle">Khám phá kiến thức Lục Khí và ứng dụng trong cuộc sống</field>
+        </record>
+
+        <!-- Update blog posts to reference the main blog and related courses -->
+        <record id="blog_post_gioi_thieu_luc_khi_blog" model="blog.post">
+            <field name="blog_id" ref="blog_luc_khi_main"/>
+            <field name="related_course_ids" eval="[(6, 0, [ref('luc_khi_courses.course_basic_intro'), ref('luc_khi_courses.course_intermediate_1')])]"/>
+        </record>
+        
+        <record id="blog_post_phong_thuy_nha_o_blog" model="blog.post">
+            <field name="blog_id" ref="blog_luc_khi_main"/>
+            <field name="related_course_ids" eval="[(6, 0, [ref('luc_khi_courses.course_meditation_basic')])]"/>
+        </record>
+        
+        <record id="blog_post_suc_khoe_luc_khi_blog" model="blog.post">
+            <field name="blog_id" ref="blog_luc_khi_main"/>
+            <field name="related_course_ids" eval="[(6, 0, [ref('luc_khi_courses.course_nutrition_healing')])]"/>
+        </record>
+        
+        <record id="blog_post_phat_trien_ban_than_blog" model="blog.post">
+            <field name="blog_id" ref="blog_luc_khi_main"/>
+            <field name="related_course_ids" eval="[(6, 0, [ref('luc_khi_courses.course_basic_intro'), ref('luc_khi_courses.course_intermediate_1')])]"/>
+        </record>
+
+    </data>
+</odoo>

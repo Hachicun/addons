@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_luc_khi_course_user,luc_khi.course.user,model_luc_khi_course,base.group_user,1,0,0,0
+access_luc_khi_course_manager,luc_khi.course.manager,model_luc_khi_course,base.group_user,1,1,1,1
+access_luc_khi_course_category_user,luc_khi.course.category.user,model_luc_khi_course_category,base.group_user,1,0,0,0
+access_luc_khi_course_category_manager,luc_khi.course.category.manager,model_luc_khi_course_category,base.group_user,1,1,1,1
+access_luc_khi_course_tag_user,luc_khi.course.tag.user,model_luc_khi_course_tag,base.group_user,1,0,0,0
+access_luc_khi_course_tag_manager,luc_khi.course.tag.manager,model_luc_khi_course_tag,base.group_user,1,1,1,1

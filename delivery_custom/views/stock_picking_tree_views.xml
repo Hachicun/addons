@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Show Carrier Status next to core state in the picking list -->
+  <record id="view_picking_tree_inherit_delivery_custom" model="ir.ui.view">
+    <field name="name">stock.picking.tree.delivery.custom</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.vpicktree"/>
+    <field name="arch" type="xml">
+      <xpath expr="//list//field[@name='state']" position="after">
+        <field name="carrier_status" optional="show"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

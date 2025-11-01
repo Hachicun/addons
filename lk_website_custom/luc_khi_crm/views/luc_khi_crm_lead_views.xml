@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- CRM Lead Form View Extension -->
+        <record id="luc_khi_crm_lead_form_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.crm.lead.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='lead']" position="inside">
+                    <group string="Lục Khí &amp; Việt Nam" name="vietnam_luc_khi">
+                        <group string="Thông tin Lục Khí" name="luc_khi_info">
+                            <field name="luc_khi_profile_analysis" widget="text"/>
+                            <field name="luc_khi_dominant_element"/>
+                            <field name="luc_khi_element_scores" widget="json"/>
+                            <field name="luc_khi_energy_level"/>
+                            <field name="luc_khi_lead_score" readonly="1"/>
+                        </group>
+                        <group string="Thông tin Việt Nam" name="vietnam_info">
+                            <field name="full_name_vietnamese"/>
+                            <field name="phone_mobile"/>
+                            <field name="phone_home"/>
+                            <field name="address_street_vietnamese"/>
+                            <field name="address_ward"/>
+                            <field name="address_district"/>
+                            <field name="address_city"/>
+                            <field name="preferred_contact_method"/>
+                            <field name="preferred_contact_time"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='internal_notes']" position="inside">
+                    <group string="Quan tâm Lục Khí" name="luc_khi_interests">
+                        <field name="interested_courses" widget="many2many"/>
+                        <field name="interested_products" widget="many2many"/>
+                        <field name="interested_blog_categories" widget="many2many"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- CRM Lead Tree View Extension -->
+        <record id="luc_khi_crm_lead_tree_inherit" model="ir.ui.view">
+            <field name="name">luc_khi.crm.lead.tree.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="luc_khi_dominant_element"/>
+                    <field name="luc_khi_lead_score"/>
+                    <field name="full_name_vietnamese"/>
+                    <field name="phone_mobile"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

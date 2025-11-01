@@ -1,0 +1,148 @@
+<odoo>
+  <!-- Sales Orders action (used as Workspace default action) -->
+  <record id="action_company_shortcuts_sale_orders" model="ir.actions.act_window">
+    <field name="name">Sales Orders</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+  </record>
+
+  <!-- Root Workspace menu, opens Sales Orders by default -->
+  <menuitem id="menu_company_workspace_root" name="Workspace" sequence="5" action="action_company_shortcuts_sale_orders"/>
+  <menuitem id="menu_company_sales_orders"
+            name="Sales Orders"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_sale_orders"
+            sequence="20"/>
+
+  <!-- CRM (Pipeline) -->
+  <record id="action_company_shortcuts_crm" model="ir.actions.act_window">
+    <field name="name">CRM</field>
+    <field name="res_model">crm.lead</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="views" eval="[(False, 'kanban'), (False, 'list'), (False, 'form')]"/>
+    <field name="context">{"default_type": "opportunity"}</field>
+  </record>
+  <menuitem id="menu_company_crm"
+            name="CRM"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_crm"
+            sequence="10"/>
+
+  <!-- Delivery Orders -->
+  <record id="action_company_shortcuts_delivery" model="ir.actions.act_window">
+    <field name="name">Delivery Orders</field>
+    <field name="res_model">stock.picking</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+    <field name="context">{"search_default_picking_type_out": 1}</field>
+  </record>
+  <menuitem id="menu_company_delivery_orders"
+            name="Delivery Orders"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_delivery"
+            sequence="30"/>
+
+  <!-- Customer Invoices -->
+  <record id="action_company_shortcuts_customer_invoices" model="ir.actions.act_window">
+    <field name="name">Customer Invoices</field>
+    <field name="res_model">account.move</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+    <field name="domain">[("move_type","in",["out_invoice","out_refund"]) ]</field>
+    <field name="context">{"default_move_type": "out_invoice"}</field>
+  </record>
+  <menuitem id="menu_company_customer_invoices"
+            name="Customer Invoices"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_customer_invoices"
+            sequence="40"/>
+
+  <!-- Vendor Bills -->
+  <record id="action_company_shortcuts_vendor_bills" model="ir.actions.act_window">
+    <field name="name">Vendor Bills</field>
+    <field name="res_model">account.move</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+    <field name="domain">[("move_type","in",["in_invoice","in_refund"]) ]</field>
+    <field name="context">{"default_move_type": "in_invoice"}</field>
+  </record>
+  <menuitem id="menu_company_vendor_bills"
+            name="Vendor Bills"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_vendor_bills"
+            sequence="50"/>
+
+  <!-- Transactions: Reconcile bank statement lines (OCA) -->
+  <record id="action_company_shortcuts_bank_transactions" model="ir.actions.act_window">
+    <field name="name">Transactions</field>
+    <field name="res_model">account.bank.statement.line</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="view_ids" eval="[(5,0,0),
+      (0,0,{'view_mode': 'kanban', 'view_id': ref('account_reconcile_oca.bank_statement_line_reconcile_view')}),
+      (0,0,{'view_mode': 'list', 'view_id': ref('account_statement_base.account_bank_statement_line_tree')}),
+      (0,0,{'view_mode': 'form', 'view_id': ref('account_reconcile_oca.bank_statement_line_form_reconcile_view')})]"/>
+    <field name="context">{'search_default_not_reconciled': True, 'view_ref': 'account_reconcile_oca.bank_statement_line_form_reconcile_view'}</field>
+  </record>
+  <menuitem id="menu_company_bank_transactions"
+            name="Transactions"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_bank_transactions"
+            sequence="60"/>
+
+  <!-- Purchase Orders -->
+  <record id="action_company_shortcuts_purchase_orders" model="ir.actions.act_window">
+    <field name="name">Purchase Orders</field>
+    <field name="res_model">purchase.order</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+  </record>
+  <menuitem id="menu_company_purchase_orders"
+            name="Purchase Orders"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_purchase_orders"
+            sequence="70"/>
+
+  <!-- Manufacturing Orders -->
+  <record id="action_company_shortcuts_manufacturing" model="ir.actions.act_window">
+    <field name="name">Manufacturing Orders</field>
+    <field name="res_model">mrp.production</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+  </record>
+  <menuitem id="menu_company_manufacturing_orders"
+            name="Manufacturing"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_manufacturing"
+            sequence="80"/>
+
+  <!-- Contacts -->
+  <record id="action_company_shortcuts_contacts" model="ir.actions.act_window">
+    <field name="name">Contacts</field>
+    <field name="res_model">res.partner</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+    <field name="domain">[("is_company","=",True)]</field>
+    <field name="context">{"search_default_customer": 1}</field>
+  </record>
+  <menuitem id="menu_company_contacts"
+            name="Contacts"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_contacts"
+            sequence="90"/>
+
+  <!-- Products -->
+  <record id="action_company_shortcuts_products" model="ir.actions.act_window">
+    <field name="name">Products</field>
+    <field name="res_model">product.product</field>
+    <field name="view_mode">list,form</field>
+    <field name="views" eval="[(False, 'list'), (False, 'form')]"/>
+    <field name="context">{"search_default_filter_to_sell": 1}</field>
+  </record>
+  <menuitem id="menu_company_products"
+            name="Products"
+            parent="menu_company_workspace_root"
+            action="action_company_shortcuts_products"
+            sequence="100"/>
+
+</odoo>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Course Categories -->
+        <record id="category_basic" model="luc_khi.course.category">
+            <field name="name">Cơ Bản</field>
+            <field name="description">Các khóa học nền tảng về Lục Khí, phù hợp cho người mới bắt đầu.</field>
+            <field name="sequence">1</field>
+            <field name="is_published">True</field>
+            <field name="seo_title">Khóa học Lục Khí Cơ Bản - Nền tảng cho người mới bắt đầu</field>
+            <field name="seo_description">Khám phá các khóa học Lục Khí cơ bản, xây dựng nền tảng vững chắc về tri thức Đông Y hiện đại.</field>
+        </record>
+
+        <record id="category_intermediate" model="luc_khi.course.category">
+            <field name="name">Trung Cấp</field>
+            <field name="description">Các khóa học nâng cao, đòi hỏi kiến thức nền tảng về Lục Khí.</field>
+            <field name="sequence">2</field>
+            <field name="is_published">True</field>
+            <field name="seo_title">Khóa học Lục Khí Trung Cấp - Nâng cao kiến thức</field>
+            <field name="seo_description">Phát triển kiến thức Lục Khí với các khóa học trung cấp, phù hợp cho người đã có nền tảng.</field>
+        </record>
+
+        <record id="category_advanced" model="luc_khi.course.category">
+            <field name="name">Nâng Cao</field>
+            <field name="description">Các khóa học chuyên sâu, dành cho người muốn trở thành chuyên gia.</field>
+            <field name="sequence">3</field>
+            <field name="is_published">True</field>
+            <field name="seo_title">Khóa học Lục Khí Nâng Cao - Trở thành chuyên gia</field>
+            <field name="seo_description">Trở thành chuyên gia Lục Khí với các khóa học nâng cao, chuyên sâu và thực hành.</field>
+        </record>
+
+        <!-- Default Course Tags -->
+        <record id="tag_health" model="luc_khi.course.tag">
+            <field name="name">Sức khỏe</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="tag_meditation" model="luc_khi.course.tag">
+            <field name="name">Thiền định</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="tag_nutrition" model="luc_khi.course.tag">
+            <field name="name">Dinh dưỡng</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="tag_exercise" model="luc_khi.course.tag">
+            <field name="name">Tập luyện</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="tag_self_healing" model="luc_khi.course.tag">
+            <field name="name">Tự chữa lành</field>
+            <field name="color">5</field>
+        </record>
+
+        <!-- Sample Courses -->
+        <record id="course_basic_intro" model="luc_khi.course">
+            <field name="name">Lục Khí Cơ Bản</field>
+            <field name="short_description">Khóa học nền tảng về hệ thống Lục Khí, giúp bạn hiểu rõ nguyên lý và cách áp dụng vào đời sống.</field>
+            <field name="description"><![CDATA[
+                <h3>Giới thiệu khóa học</h3>
+                <p>Khóa học Lục Khí Cơ Bản là bước khởi đầu hoàn hảo để bạn làm quen với hệ thống tri thức và phương pháp thực hành giúp con người tự hiểu, tự điều chỉnh sức khỏe theo nguyên lý Đông Y hiện đại hóa.</p>
+                
+                <h4>Nội dung chính:</h4>
+                <ul>
+                    <li>Giới thiệu tổng quan về Lục Khí</li>
+                    <li>Nguyên lý hoạt động của 6 loại khí trong cơ thể</li>
+                    <li>Cách nhận biết sự mất cân bằng khí</li>
+                    <li>Phương pháp điều chỉnh khí cơ bản</li>
+                    <li>Bài tập thực hành hàng ngày</li>
+                </ul>
+                
+                <h4>Kết quả đạt được:</h4>
+                <ul>
+                    <li>Hiểu rõ bản chất và nguyên lý Lục Khí</li>
+                    <li>Nhận biết được tình trạng sức khỏe của bản thân</li>
+                    <li>Áp dụng được các phương pháp điều chỉnh cơ bản</li>
+                    <li>Xây dựng nền tảng vững chắc cho các khóa học nâng cao</li>
+                </ul>
+            ]]></field>
+            <field name="level">basic</field>
+            <field name="sequence">1</field>
+            <field name="price">1500000</field>
+            <field name="duration_hours">24</field>
+            <field name="difficulty_level">3</field>
+            <field name="prerequisites">Không yêu cầu kiến thức nền tảng</field>
+            <field name="learning_objectives"><![CDATA[
+                <ul>
+                    <li>Hiểu và giải thích được nguyên lý Lục Khí</li>
+                    <li>Nhận diện được các dấu hiệu mất cân bằng khí</li>
+                    <li>Thực hành được các bài tập điều chỉnh khí cơ bản</li>
+                    <li>Áp dụng kiến thức vào chăm sóc sức khỏe hàng ngày</li>
+                </ul>
+            ]]></field>
+            <field name="is_published">True</field>
+            <field name="featured">True</field>
+            <field name="access_mode">purchased</field>
+            <field name="seo_title">Khóa học Lục Khí Cơ Bản - Nền tảng tri thức Đông Y hiện đại</field>
+            <field name="seo_description">Khóa học Lục Khí Cơ Bản giúp bạn hiểu rõ nguyên lý 6 loại khí, nhận biết mất cân bằng và tự điều chỉnh sức khỏe.</field>
+            <field name="seo_keywords">Lục Khí, cơ bản, Đông Y, sức khỏe, tự chữa lành</field>
+            <field name="category_id" ref="category_basic"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_health'), ref('tag_self_healing')])]"/>
+        </record>
+
+        <record id="course_intermediate_1" model="luc_khi.course">
+            <field name="name">Lục Khí Trung Cấp 1</field>
+            <field name="short_description">Phát triển sâu hơn về phương pháp điều chỉnh khí, tập trung vào các kỹ thuật thực hành nâng cao.</field>
+            <field name="description"><![CDATA[
+                <h3>Tiếp nối hành trình Lục Khí</h3>
+                <p>Sau khi nắm vững kiến thức cơ bản, khóa học Trung Cấp 1 sẽ giúp bạn đi sâu hơn vào các kỹ thuật điều chỉnh khí phức tạp và phương pháp thực hành chuyên sâu.</p>
+                
+                <h4>Nội dung chính:</h4>
+                <ul>
+                    <li>Kỹ thuật thở khí nâng cao</li>
+                    <li>Phương pháp tập trung khí</li>
+                    <li>Điều chỉnh khí theo mùa</li>
+                    <li>Kết hợp khí với vận động</li>
+                    <li>Chữa lành bằng khí năng</li>
+                </ul>
+            ]]></field>
+            <field name="level">intermediate_1</field>
+            <field name="sequence">2</field>
+            <field name="price">2500000</field>
+            <field name="duration_hours">32</field>
+            <field name="difficulty_level">6</field>
+            <field name="prerequisites">Đã hoàn thành khóa học Lục Khí Cơ Bản</field>
+            <field name="is_published">True</field>
+            <field name="featured">True</field>
+            <field name="access_mode">purchased</field>
+            <field name="category_id" ref="category_intermediate"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_meditation'), ref('tag_exercise')])]"/>
+        </record>
+
+        <record id="course_meditation_basic" model="luc_khi.course">
+            <field name="name">Thiền Lục Khí</field>
+            <field name="short_description">Khóa học chuyên sâu về phương pháp thiền định theo nguyên lý Lục Khí, giúp tĩnh tâm và cân bằng nội khí.</field>
+            <field name="description"><![CDATA[
+                <h3>Thiền định theo Lục Khí</h3>
+                <p>Khóa học kết hợp phương pháp thiền định truyền thống với nguyên lý Lục Khí hiện đại, giúp bạn đạt được sự tĩnh tâm sâu và cân bằng khí trong cơ thể.</p>
+                
+                <h4>Nội dung chính:</h4>
+                <ul>
+                    <li>Nguyên lý thiền và khí</li>
+                    <li>Kỹ thuật ngồi thiền đúng</li>
+                    <li>Thở khí trong thiền</li>
+                    <li>Tĩnh tâm và quan sát</li>
+                    <li>Thiền theo mùa</li>
+                </ul>
+            ]]></field>
+            <field name="level">intermediate_1</field>
+            <field name="sequence">3</field>
+            <field name="price">2000000</field>
+            <field name="duration_hours">20</field>
+            <field name="difficulty_level">5</field>
+            <field name="prerequisites">Đã có kiến thức cơ bản về Lục Khí</field>
+            <field name="is_published">True</field>
+            <field name="featured">False</field>
+            <field name="access_mode">purchased</field>
+            <field name="category_id" ref="category_intermediate"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_meditation'), ref('tag_health')])]"/>
+        </record>
+
+        <record id="course_nutrition_healing" model="luc_khi.course">
+            <field name="name">Dinh dưỡng Chữa lành</field>
+            <field name="short_description">Khám phá sức mạnh của thực phẩm trong việc cân bằng khí và chữa lành cơ thể theo nguyên lý Đông Y.</field>
+            <field name="description"><![CDATA[
+                <h3>Thực phẩm là thuốc</h3>
+                <p>Khóa học giúp bạn hiểu rõ tác dụng của thực phẩm đối với hệ thống khí trong cơ thể, cách lựa chọn và chế biến món ăn để chữa lành từ bên trong.</p>
+                
+                <h4>Nội dung chính:</h4>
+                <ul>
+                    <li>Nguyên lý dinh dưỡng theo Lục Khí</li>
+                    <li>Phân loại thực phẩm theo khí</li>
+                    <li>Món ăn theo mùa</li>
+                    <li>Chế biến giữ lại khí</li>
+                    <li>Thực đơn chữa lành</li>
+                </ul>
+            ]]></field>
+            <field name="level">intermediate_2</field>
+            <field name="sequence">4</field>
+            <field name="price">2200000</field>
+            <field name="duration_hours">28</field>
+            <field name="difficulty_level">5</field>
+            <field name="prerequisites">Đã có kiến thức cơ bản về Lục Khí</field>
+            <field name="is_published">True</field>
+            <field name="featured">False</field>
+            <field name="access_mode">purchased</field>
+            <field name="category_id" ref="category_intermediate"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_nutrition'), ref('tag_self_healing')])]"/>
+        </record>
+    </data>
+</odoo>
