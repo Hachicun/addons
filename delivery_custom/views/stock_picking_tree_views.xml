@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Show Latest Event Time and Event Detail in the picking list -->
+  <record id="view_picking_tree_inherit_delivery_custom" model="ir.ui.view">
+    <field name="name">stock.picking.tree.delivery.custom</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.vpicktree"/>
+    <field name="arch" type="xml">
+      <xpath expr="//list//field[@name='state']" position="after">
+        <field name="eventTime" optional="show"/>
+        <field name="eventDetail" optional="show"/>
+      </xpath>
+    </field>
+  </record>
+  
+  <!-- Add Track123 button to list view -->
+  <record id="action_track123_batch_tracking" model="ir.actions.server">
+    <field name="name">Track123</field>
+    <field name="model_id" ref="stock.model_stock_picking"/>
+    <field name="binding_model_id" ref="stock.model_stock_picking"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">
+if records:
+    action = records.action_track123_batch_tracking()
+else:
+    action = env['stock.picking'].action_track123_batch_tracking()
+    </field>
+  </record>
+</odoo>

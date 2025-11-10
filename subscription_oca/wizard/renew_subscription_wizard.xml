@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="renew_subscription_wizard_view_form" model="ir.ui.view">
+        <field name="name">renew.subscription.wizard.view.form</field>
+        <field name="model">renew.subscription.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Gia hạn Subscription">
+                <sheet>
+                    <group>
+                        <field name="subscription_id" readonly="1"/>
+                        <field name="renewal_periods" required="1"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <p>
+                            Khi gia hạn, hệ thống sẽ tạo ngay <strong>N SO draft + N Invoice draft</strong> 
+                            với ngày giao hàng (commitment_date) tương ứng trong tương lai.
+                        </p>
+                        <p>
+                            Bạn có thể review và chỉnh sửa các SO/Invoice trước khi confirm/post.
+                        </p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_renew" string="Gia hạn" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
+

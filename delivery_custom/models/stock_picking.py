@@ -1,0 +1,723 @@
+import json
+import logging
+import requests
+import hashlib
+import hmac
+from datetime import datetime
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
+
+
+class StockPicking(models.Model):
+    _inherit = "stock.picking"
+
+    # Track123 event information
+    eventTime = fields.Datetime(string="Latest Event Time", help="Latest tracking event timestamp from Track123 (with time)")
+    eventDetail = fields.Text(string="Latest Event Detail", help="Latest tracking event description from Track123")
+
+    # Recipient overrideable fields (default from partner_id)
+    recipient_name = fields.Char(string="Recipient Name")
+    recipient_state_id = fields.Many2one("res.country.state", string="State")
+    recipient_city = fields.Char(string="City")
+    recipient_street = fields.Char(string="Street")
+    recipient_street2 = fields.Char(string="Street2")
+    recipient_country_id = fields.Many2one("res.country", string="Country")
+
+    # Carrier partner and tracking
+    carrier_partner_id = fields.Many2one(
+        "res.partner",
+        string="Carrier",
+        help="Logistics provider as a partner record.",
+    )
+    tracking_code = fields.Char(string="Tracking Code")
+    tracking_link = fields.Char(string="Tracking Link")
+    shipping_fee = fields.Monetary(string="Shipping Fee")
+    currency_id = fields.Many2one(
+        related="company_id.currency_id", store=True, readonly=True
+    )
+
+    # Link to vendor bills
+    vendor_bill_count = fields.Integer(string="Vendor Bills", compute="_compute_vendor_bill_count")
+    vendor_bill_ids = fields.One2many(
+        "account.move", "picking_id", string="Vendor Bills",
+        help="Vendor bills linked to this delivery.")
+
+    def _compute_vendor_bill_count(self):
+        Move = self.env['account.move'].sudo()
+        for picking in self:
+            picking.vendor_bill_count = Move.search_count([
+                ('move_type', '=', 'in_invoice'),
+                '|', ('picking_id', '=', picking.id), ('invoice_origin', '=', picking.name),
+            ])
+
+    def _prefill_recipient_from_partner(self, partner):
+        return {
+            'recipient_name': partner.name or False,
+            'recipient_state_id': partner.state_id.id if partner.state_id else False,
+            'recipient_city': partner.city or False,
+            'recipient_street': partner.street or False,
+            'recipient_street2': partner.street2 or False,
+            'recipient_country_id': partner.country_id.id if partner.country_id else False,
+        }
+
+    @api.onchange("partner_id")
+    def _onchange_partner_id_fill_recipient(self):
+        for picking in self:
+            partner = picking.partner_id
+            if partner:
+                vals = self._prefill_recipient_from_partner(partner)
+                for k, v in vals.items():
+                    setattr(picking, k, v)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for rec, vals in zip(records, vals_list):
+            # If recipient fields not provided, initialize from partner
+            recipient_keys = {
+                'recipient_name', 'recipient_state_id', 'recipient_city',
+                'recipient_street', 'recipient_street2', 'recipient_country_id'
+            }
+            if rec.partner_id and not any(key in vals for key in recipient_keys):
+                rec.write(self._prefill_recipient_from_partner(rec.partner_id))
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        # If partner changed and no explicit recipient overrides provided, refresh recipient from partner
+        if 'partner_id' in vals:
+            recipient_keys = {
+                'recipient_name', 'recipient_state_id', 'recipient_city',
+                'recipient_street', 'recipient_street2', 'recipient_country_id'
+            }
+            if not any(key in vals for key in recipient_keys):
+                for rec in self:
+                    if rec.partner_id:
+                        rec.write(self._prefill_recipient_from_partner(rec.partner_id))
+        return res
+
+    @api.onchange("carrier_partner_id", "tracking_code")
+    def _onchange_tracking_link(self):
+        for picking in self:
+            base = (picking.carrier_partner_id and picking.carrier_partner_id.website) or ""
+            code = picking.tracking_code or ""
+            picking.tracking_link = f"{base}{code}" if base or code else False
+
+    def action_create_vendor_bill(self):
+        self.ensure_one()
+        picking = self
+        if picking.vendor_bill_count:
+            # Prevent duplicate creation; guide user to open existing bills
+            raise UserError(_("This delivery is already linked to at least one vendor bill."))
+        if not self.env['ir.module.module'].sudo().search([('name', '=', 'account'), ('state', '=', 'installed')], limit=1):
+            raise UserError(_("The Accounting app is not installed."))
+
+        vendor = picking.carrier_partner_id
+        if not vendor:
+            raise UserError(_("Please set a Carrier to use as Vendor for the bill."))
+
+        company = picking.company_id
+        journal = self.env['account.journal'].search([
+            ('type', '=', 'purchase'),
+            ('company_id', '=', company.id),
+        ], limit=1)
+
+        # Find delivery product by common names
+        Product = self.env['product.product']
+        product = Product.search([
+            ('name', 'in', ['Delivery services', 'Dịch vụ vận chuyển']),
+            ('purchase_ok', '=', True)
+        ], limit=1)
+        if not product:
+            # Create a simple service product for delivery services
+            product = Product.create({
+                'name': 'Delivery services',
+                'purchase_ok': True,
+                'sale_ok': False,
+                'detailed_type': 'service',
+            })
+
+        # Determine expense account
+        expense_account = False
+        if product:
+            expense_account = product.property_account_expense_id or product.categ_id.property_account_expense_categ_id
+        if not expense_account:
+            expense_account = self.env['account.account'].search([
+                ('company_id', '=', company.id),
+                ('internal_group', '=', 'expense')
+            ], limit=1)
+        if not expense_account and not product:
+            raise UserError(_("No expense account found to create vendor bill line. Please configure an expense account or a delivery product."))
+
+        price = picking.shipping_fee or 0.0
+        line_vals = {
+            'name': _('Delivery service charge for %s', picking.name),
+            'quantity': 1.0,
+            'price_unit': price,
+        }
+        if product:
+            line_vals['product_id'] = product.id
+        if expense_account:
+            line_vals['account_id'] = expense_account.id
+
+        move_vals = {
+            'move_type': 'in_invoice',
+            'partner_id': vendor.id,
+            'invoice_origin': picking.name,
+            'picking_id': picking.id,
+            'invoice_line_ids': [(0, 0, line_vals)],
+            'company_id': company.id,
+        }
+        if journal:
+            move_vals['journal_id'] = journal.id
+
+        move = self.env['account.move'].create(move_vals)
+
+        action = self.env.ref('account.action_move_in_invoice_type').read()[0]
+        action.update({
+            'views': [(self.env.ref('account.view_move_form').id, 'form')],
+            'res_id': move.id,
+            'domain': [('id', '=', move.id)],
+            'context': {'default_move_type': 'in_invoice'},
+            'target': 'current',
+        })
+        return action
+
+    def action_open_vendor_bills(self):
+        self.ensure_one()
+        Move = self.env['account.move']
+        domain = [('move_type', '=', 'in_invoice'), '|', ('picking_id', '=', self.id), ('invoice_origin', '=', self.name)]
+        bills = Move.search(domain, limit=2)
+        action = self.env.ref('account.action_move_in_invoice_type').read()[0]
+        if len(bills) == 1:
+            form = self.env.ref('account.view_move_form')
+            action.update({
+                'views': [(form.id, 'form')],
+                'res_id': bills.id,
+                'domain': [('id', '=', bills.id)],
+                'context': {'default_move_type': 'in_invoice'},
+                'target': 'current',
+            })
+        else:
+            action.update({
+                'domain': domain,
+                'context': {'default_move_type': 'in_invoice', 'search_default_draft': 1},
+            })
+        return action
+
+    def _get_track123_api_key(self):
+        """Get Track123 API key from system parameters"""
+        api_key = self.env['ir.config_parameter'].sudo().get_param('track123.api_key')
+        if not api_key:
+            raise UserError(_("Track123 API key is not configured. Please set it in Settings > Technical > System Parameters with key 'track123.api_key'"))
+        return api_key
+
+    def _call_track123_api(self, endpoint, data):
+        """Make API call to Track123"""
+        api_key = self._get_track123_api_key()
+        url = f"https://api.track123.com/gateway/open-api/tk/v2.1/{endpoint}"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Track123-Api-Secret': api_key
+        }
+        
+        try:
+            _logger.info(f"Track123 API request to {url}: {data}")
+            response = requests.post(url, json=data, headers=headers, timeout=30)
+            response.raise_for_status()
+            result = response.json()
+            _logger.info(f"Track123 API response: {result}")
+            return result
+        except requests.exceptions.RequestException as e:
+            _logger.error(f"Track123 API call failed: {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                try:
+                    error_detail = e.response.json()
+                    _logger.error(f"Track123 API error response: {error_detail}")
+                except:
+                    _logger.error(f"Track123 API error response text: {e.response.text}")
+            raise UserError(_("Failed to connect to Track123 API: %s") % str(e))
+
+    def action_track123_register(self):
+        """Register tracking with Track123 and immediately get tracking info"""
+        self.ensure_one()
+        
+        if not self.tracking_code:
+            raise UserError(_("Tracking code is required to register with Track123"))
+        
+        # Register tracking - must be array directly, not wrapped in object
+        # Note: courierCode empty string or omitted = auto-detect carrier
+        register_data = [
+            {
+                "trackNo": self.tracking_code,
+                "courierCode": ""  # Empty string = auto-detect carrier
+            }
+        ]
+        
+        try:
+            result = self._call_track123_api('track/import', register_data)
+            _logger.info(f"Track123 registration result: {result}")
+            
+            # Check registration result
+            # Track123 success code is '00000', not '0'
+            if result.get('code') == '00000':
+                # Success - check if tracking was accepted
+                accepted = result.get('data', {}).get('accepted', [])
+                rejected = result.get('data', {}).get('rejected', [])
+                
+                if accepted:
+                    _logger.info(f"Tracking {self.tracking_code} registered successfully")
+                    message = _('Tracking registered successfully with Track123')
+                    get_tracking = True
+                elif rejected:
+                    error_msg = rejected[0].get('error', {}).get('msg', 'Unknown error')
+                    _logger.warning(f"Tracking {self.tracking_code} rejected: {error_msg}")
+                    
+                    # Check if tracking already exists - common error messages
+                    already_exists_keywords = [
+                        'already', 'imported', 'exists', 'duplicate',
+                        'đã được', 'tồn tại'  # Vietnamese keywords
+                    ]
+                    is_already_exists = any(keyword in error_msg.lower() for keyword in already_exists_keywords)
+                    
+                    if is_already_exists:
+                        _logger.info(f"Tracking {self.tracking_code} already exists, fetching tracking info instead")
+                        message = _('Tracking already registered. Fetching latest tracking info...')
+                        get_tracking = True
+                    else:
+                        # Other rejection error - still try to get tracking but show error
+                        message = _('Tracking registration issue: %s. Attempting to fetch info...') % error_msg
+                        get_tracking = True
+                else:
+                    message = _('Tracking registered with Track123')
+                    get_tracking = True
+                
+                # Try to get tracking info
+                if get_tracking:
+                    try:
+                        changed = self.action_track123_get_tracking(auto_register=False)
+                        if changed is True:
+                            message += '\n' + _('Có sự thay đổi trạng thái đơn hàng')
+                        elif changed is False:
+                            message += '\n' + _('Không có sự thay đổi đơn hàng')
+                    except Exception as get_error:
+                        _logger.warning(f"Could not get tracking info: {get_error}")
+                        # If registration was successful, this is OK (data may not be available yet)
+                        if not accepted and rejected:
+                            # If registration failed and get also failed, re-raise the error
+                            raise
+                
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Success'),
+                        'message': message,
+                        'type': 'success',
+                    },
+                    'context': {'reload': True}
+                }
+            else:
+                error_msg = result.get('msg', 'Unknown error')
+                raise UserError(_('Track123 API returned error: %s') % error_msg)
+            
+        except UserError:
+            raise
+        except Exception as e:
+            _logger.error(f"Track123 registration failed: {e}", exc_info=True)
+            raise UserError(_("Failed to register tracking with Track123: %s") % str(e))
+
+    def action_track123_get_tracking(self, auto_register=True):
+        """Get tracking information from Track123
+        
+        Args:
+            auto_register: If True, automatically register tracking if not registered yet
+        """
+        self.ensure_one()
+        
+        # Check if called from button (has return_action in context)
+        return_action = self.env.context.get('return_action', False)
+        
+        if not self.tracking_code:
+            raise UserError(_("Tracking code is required to get tracking information"))
+        
+        query_data = {
+            "trackNoInfos": [
+                {
+                    "trackNo": self.tracking_code
+                }
+            ]
+        }
+        
+        try:
+            result = self._call_track123_api('track/query', query_data)
+            _logger.info(f"Track123 query result for {self.tracking_code}: {result}")
+            
+            # Check response code
+            # Track123 success code is '00000', not '0'
+            if result.get('code') == '00000':
+                # Success - check if we have tracking data
+                # Note: query response format is different from import
+                # {'accepted': {'content': [...], 'totalElements': '1'}, 'rejected': []}
+                accepted = result.get('data', {}).get('accepted')
+                
+                if accepted and isinstance(accepted, dict):
+                    # Query response: accepted is object with 'content' array
+                    content = accepted.get('content', [])
+                    if content and len(content) > 0:
+                        tracking_data = content[0]
+                        # Compare with existing data
+                        changed = self._update_tracking_from_api(tracking_data, compare_with_existing=True)
+                        _logger.info(f"Updated tracking data for {self.tracking_code}")
+                        
+                        if return_action:
+                            if changed is True:
+                                message = _('Có sự thay đổi trạng thái đơn hàng')
+                                notif_type = 'success'
+                            elif changed is False:
+                                message = _('Không có sự thay đổi đơn hàng')
+                                notif_type = 'info'
+                            else:
+                                message = _('Tracking information retrieved')
+                                notif_type = 'success'
+                            
+                            # Show notification and reload form
+                            return {
+                                'type': 'ir.actions.client',
+                                'tag': 'display_notification',
+                                'params': {
+                                    'title': _('Track123'),
+                                    'message': message,
+                                    'type': notif_type,
+                                    'sticky': False,
+                                },
+                                'context': {
+                                    'reload': True,
+                                    'active_id': self.id,
+                                }
+                            }
+                        
+                        return changed
+                    else:
+                        # Check rejected - might be "trackNo not registered"
+                        rejected = result.get('data', {}).get('rejected', [])
+                        if rejected:
+                            error_info = rejected[0].get('error', {})
+                            error_msg = error_info.get('msg', 'Unknown error')
+                            error_code = error_info.get('code', '')
+                            
+                            # If tracking not registered and auto_register is True, try to register
+                            if auto_register and ('not registered' in error_msg.lower() or error_code == 'A0400'):
+                                _logger.info(f"Tracking {self.tracking_code} not registered, attempting to register...")
+                                try:
+                                    # Try to register first
+                                    register_data = [
+                                        {
+                                            "trackNo": self.tracking_code,
+                                            "courierCode": ""  # Auto-detect carrier
+                                        }
+                                    ]
+                                    register_result = self._call_track123_api('track/import', register_data)
+                                    
+                                    if register_result.get('code') == '00000':
+                                        _logger.info(f"Tracking {self.tracking_code} registered successfully, retrying query...")
+                                        # Wait a bit for registration to process, then retry query
+                                        import time
+                                        time.sleep(1)
+                                        # Retry query (without auto_register to avoid infinite loop)
+                                        # Preserve context for return_action
+                                        return self.with_context(**self.env.context).action_track123_get_tracking(auto_register=False)
+                                    else:
+                                        _logger.warning(f"Failed to register tracking {self.tracking_code}: {register_result.get('msg')}")
+                                        raise UserError(_("Track123 cannot find tracking and registration failed: %s") % error_msg)
+                                except Exception as reg_error:
+                                    _logger.warning(f"Error during auto-register: {reg_error}")
+                                    raise UserError(_("Track123 cannot find tracking: %s") % error_msg)
+                            else:
+                                _logger.warning(f"Tracking query rejected for {self.tracking_code}: {error_msg}")
+                                raise UserError(_("Track123 cannot find tracking: %s") % error_msg)
+                        else:
+                            _logger.warning(f"No tracking content found for {self.tracking_code}")
+                            raise UserError(_("No tracking data available yet. Please try again later."))
+                elif accepted and isinstance(accepted, list) and len(accepted) > 0:
+                    # Import response: accepted is array directly (fallback)
+                    tracking_data = accepted[0]
+                    changed = self._update_tracking_from_api(tracking_data, compare_with_existing=True)
+                    _logger.info(f"Updated tracking data for {self.tracking_code}")
+                    
+                    if return_action:
+                        if changed is True:
+                            message = _('Có sự thay đổi trạng thái đơn hàng')
+                            notif_type = 'success'
+                        elif changed is False:
+                            message = _('Không có sự thay đổi đơn hàng')
+                            notif_type = 'info'
+                        else:
+                            message = _('Tracking information retrieved')
+                            notif_type = 'success'
+                        
+                        # Show notification and reload form
+                        return {
+                            'type': 'ir.actions.client',
+                            'tag': 'display_notification',
+                            'params': {
+                                'title': _('Track123'),
+                                'message': message,
+                                'type': notif_type,
+                                'sticky': False,
+                            },
+                            'context': {
+                                'reload': True,
+                                'active_id': self.id,
+                            }
+                        }
+                    
+                    return changed
+                else:
+                    # Check rejected
+                    rejected = result.get('data', {}).get('rejected', [])
+                    if rejected:
+                        error_msg = rejected[0].get('error', {}).get('msg', 'Unknown error')
+                        _logger.warning(f"Tracking query rejected for {self.tracking_code}: {error_msg}")
+                        raise UserError(_("Track123 cannot find tracking: %s") % error_msg)
+                    else:
+                        _logger.warning(f"No tracking data found for {self.tracking_code}")
+                        raise UserError(_("No tracking data available yet. Please try again later."))
+            else:
+                error_msg = result.get('msg', 'Unknown error')
+                raise UserError(_('Track123 API returned error: %s') % error_msg)
+                
+        except UserError:
+            raise
+        except Exception as e:
+            _logger.error(f"Failed to get tracking from Track123: {e}", exc_info=True)
+            raise UserError(_("Failed to get tracking information from Track123: %s") % str(e))
+
+    def action_track123_batch_tracking(self):
+        """Batch track pickings - either selected records or all not done pickings
+        Updates eventTime and eventDetail for each picking with tracking_code
+        """
+        # Get pickings to track
+        # If records are selected, use them; otherwise track all not done pickings
+        if self:
+            pickings_to_track = self.filtered(lambda p: p.tracking_code and p.state != 'done')
+        else:
+            pickings_to_track = self.env['stock.picking'].search([
+                ('state', '!=', 'done'),
+                ('tracking_code', '!=', False)
+            ])
+        
+        if not pickings_to_track:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Info'),
+                    'message': _('No pickings to track. Please select pickings with tracking codes that are not done.'),
+                    'type': 'warning',
+                }
+            }
+        
+        # Track each picking
+        success_count = 0
+        error_count = 0
+        error_messages = []
+        
+        for picking in pickings_to_track:
+            try:
+                picking.action_track123_get_tracking()
+                success_count += 1
+            except Exception as e:
+                error_count += 1
+                error_msg = f"{picking.name}: {str(e)}"
+                error_messages.append(error_msg)
+                _logger.warning(f"Failed to track {picking.name}: {e}")
+        
+        # Show notification
+        if error_count == 0:
+            message = _('Successfully tracked %d picking(s).') % success_count
+            notif_type = 'success'
+        elif success_count == 0:
+            message = _('Failed to track all %d picking(s).\n%s') % (error_count, '\n'.join(error_messages[:5]))
+            notif_type = 'danger'
+        else:
+            message = _('Tracked %d picking(s) successfully, %d failed.\n%s') % (
+                success_count, error_count, '\n'.join(error_messages[:5])
+            )
+            notif_type = 'warning'
+        
+        # Show notification and reload list view
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Track123 Batch Tracking'),
+                'message': message,
+                'type': notif_type,
+                'sticky': error_count > 0,
+            },
+            'context': {'reload': True}
+        }
+
+    def _update_tracking_from_api(self, tracking_data, compare_with_existing=False):
+        """Update picking fields from Track123 API response
+        Only updates eventTime (Latest Event Time) and eventDetail (Event Detail)
+        
+        Args:
+            tracking_data: Tracking data from API
+            compare_with_existing: If True, compare with existing data and return True if changed
+        
+        Returns:
+            bool: True if data changed, False if no change, None if no data to update
+        """
+        values = {}
+        new_event_time = None
+        new_event_detail = None
+        
+        # Get latest tracking time - prefer lastTrackingTime, fallback to trackingDetails[0].eventTime, or createTime
+        last_tracking_time = tracking_data.get('lastTrackingTime')
+        event_time_str = None
+        
+        if last_tracking_time:
+            # Format: "2025-11-05 12:42:39"
+            event_time_str = last_tracking_time
+        else:
+            # Fallback to trackingDetails[0].eventTime
+            local_logistics = tracking_data.get('localLogisticsInfo', {})
+            tracking_details = local_logistics.get('trackingDetails', [])
+            if tracking_details:
+                latest_detail = tracking_details[0]  # First item is the latest
+                event_time_str = latest_detail.get('eventTime')
+            else:
+                # If no trackingDetails yet (just registered), use createTime as fallback
+                create_time = tracking_data.get('createTime')
+                if create_time:
+                    event_time_str = create_time
+                    _logger.info(f"No trackingDetails yet for {self.tracking_code}, using createTime: {create_time}")
+        
+        # Parse event time (format: "2025-11-05 12:42:39")
+        if event_time_str:
+            parsed_time = self._parse_track123_datetime(event_time_str)
+            if parsed_time:
+                new_event_time = parsed_time
+                # Only update if different
+                if not compare_with_existing or self.eventTime != parsed_time:
+                    values['eventTime'] = parsed_time
+        
+        # Get latest event detail from trackingDetails[0].eventDetail
+        local_logistics = tracking_data.get('localLogisticsInfo', {})
+        tracking_details = local_logistics.get('trackingDetails', [])
+        
+        if tracking_details:
+            latest_detail = tracking_details[0]  # First item is the latest
+            event_detail = latest_detail.get('eventDetail')
+            if event_detail:
+                new_event_detail = event_detail
+                # Only update if different
+                if not compare_with_existing or self.eventDetail != event_detail:
+                    values['eventDetail'] = event_detail
+        else:
+            # If no trackingDetails yet, set a default message
+            default_msg = _('Tracking registered, waiting for updates from carrier')
+            new_event_detail = default_msg
+            if not compare_with_existing or self.eventDetail != default_msg:
+                values['eventDetail'] = default_msg
+            _logger.info(f"No trackingDetails yet for {self.tracking_code}, using default message")
+        
+        if values:
+            self.write(values)
+            _logger.info(f"Updated tracking fields: {list(values.keys())}")
+            if compare_with_existing:
+                return True  # Data changed
+            return True
+        else:
+            if compare_with_existing:
+                # Check if we have data but no change
+                if new_event_time is not None or new_event_detail is not None:
+                    return False  # No change
+            _logger.warning(f"No tracking data to update for {self.tracking_code}")
+            return None  # No data to update
+
+    def _parse_track123_datetime(self, datetime_str):
+        """Parse Track123 datetime string (eventTime or lastTrackingTime)
+        
+        Format: "2025-11-05 12:42:39" (typically Vietnam timezone UTC+7)
+        Store directly without timezone conversion (user wants UTC+7)
+        """
+        if not datetime_str:
+            return False
+        
+        try:
+            # Parse format: "2025-11-05 12:42:39"
+            # This is typically in Vietnam timezone (UTC+7)
+            # Store directly without conversion as user wants UTC+7
+            from datetime import datetime as dt_class
+            
+            # Parse the datetime string and return directly
+            dt = dt_class.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+            
+            # Return naive datetime (stored as UTC+7 directly)
+            return dt
+            
+        except ValueError as e:
+            _logger.warning(f"Failed to parse datetime '{datetime_str}': {e}")
+            return False
+
+    def _parse_track123_utc_datetime(self, datetime_str):
+        """Parse Track123 UTC datetime (eventTimeZeroUTC) and convert to Vietnam timezone
+        
+        Track123 eventTimeZeroUTC format: "2025-10-29T04:44:41Z" (ISO 8601 UTC)
+        Convert to Vietnam timezone (Asia/Ho_Chi_Minh, UTC+7)
+        Return naive datetime for Odoo (Odoo stores datetime in UTC internally)
+        """
+        if not datetime_str:
+            return False
+        
+        try:
+            # Parse ISO 8601 UTC format: "2025-10-29T04:44:41Z"
+            # Remove 'Z' and parse
+            if datetime_str.endswith('Z'):
+                datetime_str = datetime_str[:-1]
+            
+            # Parse as datetime
+            from datetime import datetime as dt_class
+            utc_dt = dt_class.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S')
+            
+            # Odoo stores all datetime fields in UTC internally
+            # So we return the UTC datetime as-is (naive)
+            # Odoo will handle timezone conversion for display
+            return utc_dt
+            
+        except ValueError as e:
+            _logger.warning(f"Failed to parse UTC datetime '{datetime_str}': {e}")
+            return False
+
+    def process_track123_webhook(self, webhook_data):
+        """Process webhook data from Track123"""
+        try:
+            tracking_info = webhook_data.get('data', {})
+            track_no = tracking_info.get('trackNo')
+            
+            if not track_no:
+                _logger.error("Webhook data missing trackNo")
+                return False
+            
+            # Find the picking with this tracking code
+            picking = self.search([('tracking_code', '=', track_no)], limit=1)
+            if not picking:
+                _logger.warning(f"No picking found for tracking code: {track_no}")
+                return False
+            
+            # Update picking with webhook data
+            picking._update_tracking_from_api(tracking_info)
+            
+            _logger.info(f"Updated picking {picking.id} from webhook for tracking {track_no}")
+            return True
+            
+        except Exception as e:
+            _logger.error(f"Error processing Track123 webhook: {e}")
+            return False

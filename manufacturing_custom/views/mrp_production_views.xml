@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Manufacturing Order form view to add Formula field at the top -->
+    <record id="view_mrp_production_form_manufacturing_custom" model="ir.ui.view">
+        <field name="name">mrp.production.form.manufacturing.custom</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add Formula field at the top of the form, before notebook -->
+            <xpath expr="//sheet/notebook" position="before">
+                <group string="Formula">
+                    <field name="formula" widget="text" placeholder="Enter formula or manufacturing instructions..." colspan="2"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Extend partner form with business tabs while hiding legacy ones -->
+  <record id="view_partner_form_contact_custom" model="ir.ui.view">
+    <field name="name">res.partner.form.contact.custom.relate</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="arch" type="xml">
+      <!-- Ensure count fields are available early for visibility evaluation -->
+      <xpath expr="//sheet" position="inside">
+        <field name="related_invoice_total_count" invisible="1"/>
+      </xpath>
+      <!-- Inject custom tabs before the default ones -->
+      <xpath expr="//sheet/notebook/page[1]" position="before">
+        <page string="Sales" invisible="sale_order_total_count == 0">
+            <group>
+              <field name="sale_order_total_count" invisible="1"/>
+              <field name="recent_sale_order_ids" readonly="1" nolabel="1" options="{'no_create': True}" mode="list">
+                <list create="false" edit="false" delete="false">
+                  <field name="name"/>
+                  <field name="date_order"/>
+                  <field name="partner_invoice_id"/>
+                  <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  <field name="state"/>
+                  <field name="currency_id" invisible="1"/>
+                </list>
+              </field>
+            </group>
+            <group colspan="2">
+              <button name="action_view_sale_orders"
+                      type="object"
+                      string="View All Sales"
+                      class="oe_highlight oe_link"
+                      invisible="sale_order_total_count == 0"/>
+            </group>
+          </page>
+
+        <page string="Invoices" invisible="invoice_total_count == 0">
+            <group>
+              <field name="invoice_total_count" invisible="1"/>
+              <field name="recent_invoice_ids" readonly="1" nolabel="1" options="{'no_create': True}" mode="list">
+                <list create="false" edit="false" delete="false">
+                  <field name="name"/>
+                  <field name="invoice_date"/>
+                  <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  <field name="payment_state"/>
+                  <field name="state"/>
+                  <field name="currency_id" invisible="1"/>
+                </list>
+              </field>
+            </group>
+            <group colspan="2">
+              <button name="action_view_invoices"
+                      type="object"
+                      string="View All Invoices"
+                      class="oe_highlight oe_link"
+                      invisible="invoice_total_count == 0"/>
+            </group>
+          </page>
+
+        <page string="Related Invoices" invisible="related_invoice_total_count == 0">
+            <group>
+              <field name="related_invoice_total_count" invisible="1"/>
+              <field name="related_invoice_ids" readonly="1" nolabel="1" options="{'no_create': True}" mode="list">
+                <list create="false" edit="false" delete="false">
+                  <field name="name"/>
+                  <field name="partner_id"/>
+                  <field name="invoice_date"/>
+                  <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  <field name="payment_state"/>
+                  <field name="state"/>
+                  <field name="currency_id" invisible="1"/>
+                </list>
+              </field>
+            </group>
+            <group colspan="2">
+              <button name="action_view_related_invoices"
+                      type="object"
+                      string="View Related Invoices"
+                      class="oe_highlight oe_link"
+                      invisible="related_invoice_total_count == 0"/>
+            </group>
+          </page>
+
+        <page string="Delivery" invisible="delivery_total_count == 0">
+            <group>
+              <field name="delivery_total_count" invisible="1"/>
+              <field name="recent_delivery_ids" readonly="1" nolabel="1" options="{'no_create': True}" mode="list">
+                <list create="false" edit="false" delete="false">
+                  <field name="name"/>
+                  <field name="scheduled_date"/>
+                  <field name="picking_type_id"/>
+                  <field name="state"/>
+                </list>
+              </field>
+            </group>
+            <group colspan="2">
+              <button name="action_view_deliveries"
+                      type="object"
+                      string="View All Deliveries"
+                      class="oe_highlight oe_link"
+                      invisible="delivery_total_count == 0"/>
+            </group>
+          </page>
+
+        <page string="Purchase" invisible="purchase_total_count == 0">
+            <group>
+              <field name="purchase_total_count" invisible="1"/>
+              <field name="recent_purchase_ids" readonly="1" nolabel="1" options="{'no_create': True}" mode="list">
+                <list create="false" edit="false" delete="false">
+                  <field name="name"/>
+                  <field name="date_order"/>
+                  <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  <field name="state"/>
+                  <field name="currency_id" invisible="1"/>
+                </list>
+              </field>
+            </group>
+            <group colspan="2">
+              <button name="action_view_purchases"
+                      type="object"
+                      string="View All Purchases"
+                      class="oe_highlight oe_link"
+                      invisible="purchase_total_count == 0"/>
+            </group>
+          </page>
+
+        <page string="Related Contacts">
+            <group>
+              <field name="relation_ids" mode="list,form" nolabel="1" options="{'no_create': False}">
+                <list editable="bottom">
+                  <button type="object" name="action_open_related_partner" string="Open" icon="fa-external-link" class="btn-link"/>
+                  <field name="related_partner_id" options="{'no_create': False, 'no_open': False}"/>
+                  <field name="relation_type"/>
+                </list>
+                <form>
+                  <group>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="related_partner_id"/>
+                    <field name="relation_type"/>
+                  </group>
+                </form>
+              </field>
+            </group>
+        </page>
+      </xpath>
+
+      <!-- Hide legacy pages to keep interface focused -->
+      <xpath expr="//sheet/notebook/page[@name='contact_addresses']" position="attributes">
+        <attribute name="invisible">True</attribute>
+      </xpath>
+      <xpath expr="//sheet/notebook/page[@name='sales_purchases']" position="attributes">
+        <attribute name="invisible">True</attribute>
+      </xpath>
+      <xpath expr="//sheet/notebook/page[@name='internal_notes']" position="attributes">
+        <attribute name="invisible">True</attribute>
+      </xpath>
+
+      <!-- Hide Zip and Mobile fields -->
+      <xpath expr="//field[@name='zip']" position="attributes">
+        <attribute name="invisible">True</attribute>
+      </xpath>
+      <xpath expr="//field[@name='mobile']" position="attributes">
+        <attribute name="invisible">True</attribute>
+      </xpath>
+    </field>
+  </record>
+</odoo>
